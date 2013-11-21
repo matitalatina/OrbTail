@@ -1,0 +1,854 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+% Funzione cancel
+\usepackage[samesize]{cancel}
+
+% Diagrammi Albero
+%\usepackage{qtree}
+% problemi con cancel
+
+%Comandi XyPic
+\makeatletter \newcommand{\xyR}[1]{ \makeatletter \xydef@\xymatrixrowsep@{#1} \makeatother
+} % end of \xyR
+
+\makeatletter \newcommand{\xyC}[1]{ \makeatletter \xydef@\xymatrixcolsep@{#1} \makeatother
+} % end of \xyC
+
+% Footer e Header
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+% Sovrascrive parametri default
+\fancyhead{}
+\fancyfoot{}
+\lhead{OrbTail}
+\chead{Design Document}
+\rhead{Radiance}
+\rfoot{\thepage}
+
+% Il mio pseudo CSS
+\newcommand{\textdef}[1]{\textbf{\textcolor{NavyBlue}{#1}}}
+\newcommand{\textth}[1]{\textbf{\textcolor{Sephia}{#1}}}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman Helvetica Neue Light
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts true
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format pdf4
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref true
+\pdf_title "Orbtail - Design Document"
+\pdf_author "Mattia Natali, Daniele Facendola, Matteo Guarnerio"
+\pdf_subject "Orbtail - Design Document"
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2.5cm
+\topmargin 3cm
+\rightmargin 2.5cm
+\bottommargin 3cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+
+\lang italian
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{titlepage}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\lang italian
+\begin_inset Formula $\ $
+\end_inset
+
+
+\begin_inset VSpace 6cm
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\lang italian
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename Images/OrbtailPage.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\size large
+\lang italian
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\align center
+
+\size huge
+\lang italian
+Design Document
+\size default
+
+\begin_inset VSpace 4cm
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+
+\size large
+Natali, Facendola, Guarnerio
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+
+\lang italian
+\begin_inset Graphics
+	filename Images/LogoNameTeam.png
+	scale 20
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang italian
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+
+\lang italian
+Revision 1.0
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\lang italian
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{titlepage}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\lang italian
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\lang italian
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Vision statement
+\end_layout
+
+\begin_layout Subsection
+Game logline
+\end_layout
+
+\begin_layout Standard
+Guide your ship into the arena to collect as many orbs as possible.
+ Collide with opponents in order to detach theirs orbs.
+\end_layout
+
+\begin_layout Subsection
+Game synopsis
+\end_layout
+
+\begin_layout Standard
+Drive your ship inside different arenas to gather orbs left there.
+ The more the orbs collected the better.
+ Be aware because there are other players in the arena which have the same
+ goal as yours and will do anything to prevent doing the same.
+ 
+\end_layout
+
+\begin_layout Standard
+In addition you can drive your ship towards those opponents in order to
+ detach and spread some of their orbs.
+ The effectiveness of the bash determines the amount of orbs detached.
+\end_layout
+
+\begin_layout Standard
+The orbs that your ship has collected become its tail and it can be used
+ to disrupt other's game but it can be an impairment for you as well.
+\end_layout
+
+\begin_layout Standard
+As a player you can choose among different kind of ships, each of which
+ has its own pros and cons, and allows you to play the game as you desire.
+\end_layout
+
+\begin_layout Standard
+The arena is filled with special objects which can be collected as they
+ give your ship different power-ups.
+\end_layout
+
+\begin_layout Standard
+Each area has its own very mechanic which will bring various challenges
+ to the players as they will slightly change the gameplay.
+ 
+\end_layout
+
+\begin_layout Standard
+The style of the game will be plain 2D with neon effects.
+ The HUD will be clean and minimal as well.
+ The scene will be framed from above.
+\end_layout
+
+\begin_layout Section
+Audience, platform and marketing
+\end_layout
+
+\begin_layout Subsection
+Target audience
+\end_layout
+
+\begin_layout Standard
+The target for this game will be as broad as possible, so, the main audience,
+ will be the casual gamers.
+ To reach our audience, the gameplay will be fast and each match shouldn't
+ take more than a couple of minutes.
+ The player will be put through the action as soon as the game begins.
+\end_layout
+
+\begin_layout Standard
+The game will be immediate to understand and play as there won't be meaningless
+ complications whatsoever.
+\end_layout
+
+\begin_layout Standard
+To make the game as easy to understand as possible a tutorial will be provided.
+\end_layout
+
+\begin_layout Subsection
+Platform
+\end_layout
+
+\begin_layout Standard
+We think that the game will be better suited for mobile devices, but desktop
+ and notebook will be targeted as well.
+\end_layout
+
+\begin_layout Subsection
+System requirements
+\end_layout
+
+\begin_layout Standard
+We have no particular minimum requirements to suggest as the game it's well
+ suited even for lower end devices.
+\end_layout
+
+\begin_layout Standard
+By the way a basic wireless connection is required.
+\end_layout
+
+\begin_layout Subsection
+Top performers
+\end_layout
+
+\begin_layout Itemize
+Geometry wars: very different gameplay but the design will be similar.
+\end_layout
+
+\begin_layout Itemize
+Snake: the idea of touching an orb which gets attached to the tail resembles
+ snake game.
+ But the gameplay and the goal is very different.
+\end_layout
+
+\begin_layout Section
+Gameplay
+\end_layout
+
+\begin_layout Subsection
+Overview
+\end_layout
+
+\begin_layout Standard
+Before starting a match the player should accord on which arena it will
+ take place.
+ 
+\end_layout
+
+\begin_layout Standard
+The player can choose among different kind of arenas, each of which will
+ provide different challenges to him or her and one of the different game
+ modes.
+\end_layout
+
+\begin_layout Standard
+Each player will choose one of the several ship at his or her disposal.
+\end_layout
+
+\begin_layout Subsection
+Game modes
+\end_layout
+
+\begin_layout Standard
+There are different game modes:
+\end_layout
+
+\begin_layout Subsubsection
+
+\series bold
+Arcade
+\end_layout
+
+\begin_layout Standard
+The goal for this game mode is to get the highest score at the and of 5
+ minutes.
+ 
+\end_layout
+
+\begin_layout Standard
+There are different ways to increase your score:
+\end_layout
+
+\begin_layout Itemize
+Detaching orbs from other players: 10 points.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Combo: the more orbs you detach from opponents without taking any damage,
+ increase the amout of points gained by 10 for each additional detached
+ orb.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Gathering an orb: 25 points.
+\end_layout
+
+\begin_layout Itemize
+Every 10 seconds, each orb in your tail provides X points: 10 points.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Upon the game ending this effect is triggered again but provides 30 points
+ for each orb in your tail.
+\end_layout
+
+\end_deeper
+\begin_layout Subsubsection
+
+\series bold
+Elimination
+\end_layout
+
+\begin_layout Standard
+Each player starts the game with 7 orbs and the arena provides none.
+ Whenever a player runs out of orbs in his or hers own tail, he or she is
+ eliminated from the game.
+ Be aware that every 30 seconds all players lose one orb form their tails.
+\end_layout
+
+\begin_layout Standard
+The last player standing is the winner.
+\end_layout
+
+\begin_layout Subsubsection
+Longest tail
+\end_layout
+
+\begin_layout Standard
+The goal of this game mode is to reach the end of the game with the longest
+ tail.
+ The game ends when the time is over (3 minutes).
+\end_layout
+
+\begin_layout Subsection
+Ships
+\end_layout
+
+\begin_layout Standard
+Each player can choose one of different types of ships to drive.
+\end_layout
+
+\begin_layout Standard
+Each ship has different characteristics, that are:
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Speed
+\series default
+: indicates the acceleration of the ship.
+ The maximum speed achieved by each ship is fixed and equal for each ship.
+ This parameter just influences the amount of time required to achieve the
+ maximum speed.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Steering
+\series default
+: indicates how agile is the ship while steering.
+ A ship with a high steering can change direction more fluently, on the
+ other hand, ships with a low one need to perform a wider curve to reach
+ the desired direction.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Defence
+\series default
+: indicates how hard is for an enemy to detach an orb from the ship.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Offence
+\series default
+: this parameters is a measure of how many orbs the ship can detach from
+ opponents during a collision.
+ This number is influenced by both the offense
+\series bold
+ 
+\series default
+parameter, the current speed of the ship and the direction of the impact.
+\end_layout
+
+\begin_layout Standard
+Each parameter is a discrete amount ranging from 1 to 5 (maximum).
+\end_layout
+
+\begin_layout Subsubsection
+Formulas
+\end_layout
+
+\begin_layout Itemize
+Damage is calculated according to the following formula
+\begin_inset Formula 
+\[
+\begin{cases}
+Dmg\left[1-\left(Def_{b}-Off_{a}\right)\cdot12.5\%\right] & Off_{a}<Def_{b}\\
+Dmg\left[1-\left(Off_{a}-Def_{b}\right)\cdot25\%\right] & Off_{a}\geq Def_{b}
+\end{cases}
+\]
+
+\end_inset
+
+where
+\begin_inset Formula 
+\[
+\begin{array}{ccc}
+Off_{a} & = & \mbox{Offence of the attacker}\\
+Def_{b} & = & \mbox{Defence of the defender}\\
+Dmg & = & \mbox{Base damage caused by the collision}
+\end{array}
+\]
+
+\end_inset
+
+the 
+\begin_inset Formula $Dmg$
+\end_inset
+
+ is calculated according to the relative velocity of the ships involved
+ on the collision.
+ A ship is considered an 
+\emph on
+attacker
+\emph default
+ if the ship it is colliding with is in its field of view.
+ The other ship is considered the 
+\emph on
+defender
+\emph default
+.
+ Ships which are facing each other trigger two different collision events.
+\end_layout
+
+\begin_layout Subsection
+Power-ups
+\end_layout
+
+\begin_layout Standard
+Arenas are filled with special objects which can grant a power-up to whoever
+ gets them.
+\end_layout
+
+\begin_layout Standard
+The power-ups can be sustained (they have an effect for a fixed duration
+ and they fade out) or fire-and-forget (the ship can use the power once
+ and it immediately fades).
+\end_layout
+
+\begin_layout Standard
+These power-ups are:
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Magnet
+\series default
+: for a short duration the free orbs near the ship are attracted to it.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Shield
+\series default
+: for a short duration the ship is immune to any sort of damage and orbs
+ cannot detached from it.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Steal
+\series default
+: for a short duration, whenever your ship detaches orbs from an opponent,
+ those orbs are added to your tail instead.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Swap
+\series default
+: next time your ship collides with an opponent your and his tail are swapped.
+ This effect fades immediately after the swap of after some seconds.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Rocket
+\series default
+: fire a rocket against an opponent.
+ The rocket will search for it.
+ If it gets to the opponent it explodes detaching some orbs from this one.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Blast
+\series default
+: place a trap into the arena.
+ The first ship which steps into it, is affected by 'blast' and will explode
+ in a couple of seconds losing its entire tail.
+ Whenever a ship under the effect of 'charge' collides with another ship
+ this effect is transferred.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Jam: 
+\series default
+place a trap into the arena.
+ The first ship which steps into it is affected by 'jam' for a short duration.
+ While under this effect, the owner of the ship have to deal with inverted
+ driving commands as well as a disrupted vision of the field.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Grounding
+\series default
+: place a trap into the arena.
+ This first ship which steps into it is affected by 'grounding' for a short
+ duration.
+ While under this effect, the ship will move much slower than its proper
+ speed.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Discharge
+\series default
+: place a trap into the arena.
+ The first ship which steps into it is affected by 'discharge' effect and
+ cannot gather orbs from the arena for a short duration.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Blind
+\series default
+: place a trap into the arena.
+ The first ship which steps into it is affected by 'blind' for a short duration
+ and suffers from reduced visibility.
+\end_layout
+
+\begin_layout Subsubsection
+Passive power
+\end_layout
+
+\begin_layout Standard
+Every ship has one passive power which can be activated once and then enters
+ a cooldown state for 10 seconds, during this period the power cannot be
+ activated anymore.
+\end_layout
+
+\begin_layout Standard
+When activated, this power generate an impulse which makes the ship momentarily
+ faster.
+ This power can be used either to increase the damage output of the ship
+ or to escape from incoming opponents.
+\end_layout
+
+\begin_layout Subsection
+Arena
+\end_layout
+
+\begin_layout Standard
+There are different arenas the ships can fight into.
+ Each arena is a bounded 2D plane which have its own mechanics.
+\end_layout
+
+\begin_layout Standard
+In order to balance the gameplay the drop chance for each bonus depends
+ on the arena.
+\end_layout
+
+\begin_layout Subsubsection
+Hyperplane
+\end_layout
+
+\begin_layout Standard
+The arena has no bounds and behaves like a torus (going up makes your ship
+ reappear from the bottom and so on).
+\end_layout
+
+\begin_layout Subsubsection
+Blackout
+\end_layout
+
+\begin_layout Standard
+The arena is completely dark but each object into it (ships, orbs and power-ups)
+ produce some light around it.
+\end_layout
+
+\begin_layout Standard
+As long as a ship doesn't have any orbs in its tail, the ship does not produce
+ any light and becomes effectively invisible to the others players.
+\end_layout
+
+\begin_layout Subsubsection
+Borderline
+\end_layout
+
+\begin_layout Standard
+The arena has some clear border.
+ Whenever a ship trespass those borders the ship falls losing all the orbs
+ in its tail and reappearing back into the arena in one predefined spot.
+\end_layout
+
+\begin_layout Subsubsection
+Overload
+\end_layout
+
+\begin_layout Standard
+(Whenever a ship has more than 5 orbs in its tail it overloads.
+ If a ship is overloaded for more than 10 seconds it explodes losing its
+ tail.
+ Having less than 6 orbs clears the ship from the 'overloaded' effect.)
+\end_layout
+
+\begin_layout Subsubsection
+Mirror
+\end_layout
+
+\begin_layout Standard
+The ship with shortest tail has the power to change his ship with another
+ by touching it.
+ When there are more than one ship with the same tail length which is the
+ shortest one, a random ship will be chosen.
+\end_layout
+
+\begin_layout Subsection
+Controls
+\end_layout
+
+\begin_layout Subsubsection
+PC
+\end_layout
+
+\begin_layout Itemize
+Directional arrows / WASD: to change the ship's direction.
+\end_layout
+
+\begin_layout Itemize
+Spacebar: to activate power-ups.
+\end_layout
+
+\begin_layout Itemize
+Double-tap W: push.
+\end_layout
+
+\begin_layout Subsubsection
+Touch
+\end_layout
+
+\begin_layout Itemize
+Accelerometer: to change ship's direction.
+\end_layout
+
+\begin_layout Itemize
+Virtual button: to activate power-up.
+\end_layout
+
+\begin_layout Itemize
+Jerk: activate ship's passive power.
+\end_layout
+
+\end_body
+\end_document
