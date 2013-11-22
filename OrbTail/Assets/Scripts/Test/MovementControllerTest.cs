@@ -2,13 +2,10 @@
 using System.Collections;
 
 public class MovementControllerTest : MonoBehaviour {
-	public float upForce = 1f;
 	public float torqueForce = 1f;
 	public float speedForce = 1f;
 	public float maxRoll = 30f;
 	public float rollSmooth = 30f;
-	public float hoverForce = 50f;
-	public float hoverDistance = 5f;
 
 	// Use this for initialization
 	void Start () {
@@ -23,5 +20,6 @@ public class MovementControllerTest : MonoBehaviour {
 
 
 	}
+
 
 }
