@@ -21,12 +21,6 @@ public class MovementControllerTest : MonoBehaviour {
 		this.rigidbody.AddRelativeForce(Vector3.forward * Input.GetAxis("Vertical") * speedForce);
 		this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.Euler(0, this.transform.rotation.eulerAngles.y + Input.GetAxis("Horizontal") * torqueForce, -Input.GetAxis("Horizontal") * maxRoll), rollSmooth * Time.deltaTime);
 
-		if(Physics.Raycast(transform.position, Vector3.down, hoverDistance)) {
-			float realHoverForce = hoverForce * 2;
-			rigidbody.AddForce(Vector3.up * realHoverForce);
-		} else {
-			rigidbody.AddForce(Vector3.down * hoverForce / 2);
-		}
 
 	}
 
