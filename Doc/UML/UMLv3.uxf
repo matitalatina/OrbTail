@@ -1935,4 +1935,86 @@ bg=default</panel_attributes>
 bg=orange</panel_attributes>
     <additional_attributes/>
   </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>744</x>
+      <y>456</y>
+      <w>138</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>*IApproachListener*
+&lt;&lt;interface&gt;&gt;
+--
+ApproachedTo(GameObject destination, GameObject caller)
+
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>864</x>
+      <y>474</y>
+      <w>72</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;</panel_attributes>
+    <additional_attributes>60;18;18;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1644</x>
+      <y>222</y>
+      <w>126</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>*IApproachable*
+&lt;&lt;interface&gt;&gt;
+--
+ApproachTo(GameObject destination);
+IsApproaching();
+InterruptApproaching();
+
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1644</x>
+      <y>330</y>
+      <w>126</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>*OrbController*
+&lt;&lt;monobehavior&gt;&gt;
+--
+//Il controller deve aggiornare tutti i powerup
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1692</x>
+      <y>408</y>
+      <w>30</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>18;48;18;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1692</x>
+      <y>276</y>
+      <w>30</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;</panel_attributes>
+    <additional_attributes>18;54;18;18</additional_attributes>
+  </element>
 </diagram>
