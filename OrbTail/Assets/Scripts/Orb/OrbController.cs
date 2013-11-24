@@ -16,7 +16,7 @@ public class OrbController : MonoBehaviour, IApproachable {
 
 	// Use this for initialization
 	void Start () {
-	
+		prevDrag = this.rigidbody.drag;
 	}
 	
 	// Update is called once per frame
@@ -39,17 +39,17 @@ public class OrbController : MonoBehaviour, IApproachable {
 	}
 
 	public void InterruptApproaching() {
-		this.rigidbody.drag = prevDrag;
-
-		listener.ApproachedTo(target, this.gameObject);
-		listener = null;
-		target = null;
+			this.rigidbody.drag = prevDrag;
+			listener = null;
+			target = null;
 	}
 
 	private void performApproach() {
 
 		if ( Vector3.Distance(this.transform.position, target.transform.position) < distanceThreshold ) {
+			GameObject destination = target;
 			InterruptApproaching();
+			listener.ApproachedTo(destination, this.gameObject);
 			return;
 		}
 

@@ -10,7 +10,7 @@ public class DefaultWheelDriver : IWheelDriver {
 
 	public virtual float GetDirection() {
 		// TODO: to implement
-		return 0f;
+		return Input.GetAxis("Horizontal") * steeringShip / 5f;
 	}
 
 	public int GetSteering() {
