@@ -10,7 +10,7 @@ class GroupID: IGroup
     /// Returns the group's hashcode
     /// </summary>
     /// <returns>Returns the group's hashcode</returns>
-    override int GetHashCode()
+    public override int GetHashCode()
     {
 
         //TODO: implement this
@@ -23,7 +23,7 @@ class GroupID: IGroup
     /// </summary>
     /// <param name="other">The other object to test against</param>
     /// <returns>Returns true if this object is equal to 'other', false otherwise</returns>
-    override bool Equals(object other)
+    public override bool Equals(object other)
     {
 
         //TODO: implement this

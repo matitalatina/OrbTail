@@ -104,7 +104,7 @@ public class InputProxy : MonoBehaviour, IInputBroker{
 
         get
         {
-            return new List<IGroup>(fired_powerups_);
+            return new List<IGroup>(fired_powers);
         }
 
     }

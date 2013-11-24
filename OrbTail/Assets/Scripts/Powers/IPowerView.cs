@@ -20,13 +20,8 @@ public interface IPowerView
     float Readyness{ get; }
 
     /// <summary>
-    /// Delegate to be used to listen to the event
-    /// </summary>
-    delegate void DestroyedEventHandler(object sender, EventArgs e);
-
-    /// <summary>
     /// Fired when the power has been destroyed and cannot be used anymore
     /// </summary>
-    event DestroyedEventHandler EventDestroyed;
+    event EventHandler<EventArgs> EventDestroyed;
 
 }
