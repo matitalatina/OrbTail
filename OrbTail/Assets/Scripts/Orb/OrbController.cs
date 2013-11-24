@@ -6,7 +6,8 @@ public class OrbController : MonoBehaviour, IApproachable {
 	private IApproachListener listener;
 
 	// Value used in approaching
-	public float distanceThreshold = 30f;
+	public float distanceToReach = 3f;
+	public float distanceThreshold = 0.5f;
 	public float attachForce = 10f;
 	public float attachDrag = 10f;
 
@@ -30,6 +31,7 @@ public class OrbController : MonoBehaviour, IApproachable {
 
 	public void ApproachTo(GameObject targetObject, IApproachListener listener) {
 		this.target = targetObject;
+		this.listener = listener;
 		this.prevDrag = this.rigidbody.drag;
 		this.rigidbody.drag = attachDrag;
 	}
@@ -46,14 +48,20 @@ public class OrbController : MonoBehaviour, IApproachable {
 
 	private void performApproach() {
 
-		if ( Vector3.Distance(this.transform.position, target.transform.position) < distanceThreshold ) {
-			GameObject destination = target;
+		Vector3 pointToReach = target.transform.position - target.transform.forward * distanceToReach;
+		float distance = Vector3.Distance(this.transform.position, pointToReach);
+		Vector3 directionForce;
+
+		if (distance > distanceThreshold) {
+			directionForce = (pointToReach - this.transform.position).normalized;
+		}
+		else {
+			// TODO: see if better to call InterruptApproaching()
+			listener.ApproachedTo(target, this.gameObject);
 			InterruptApproaching();
-			listener.ApproachedTo(destination, this.gameObject);
 			return;
 		}
 
-		Vector3 directionForce = (target.transform.position - this.transform.position).normalized;
-		this.rigidbody.AddForce(directionForce * attachForce);
+		this.rigidbody.AddForce(directionForce * attachForce, ForceMode.Acceleration);
 	}
 }

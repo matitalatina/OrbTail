@@ -17,8 +17,8 @@ public class MovementController : MonoBehaviour {
 		engineDriverStack = new DriverStack<IEngineDriver>();
 		wheelDriverStack = new DriverStack<IWheelDriver>();
 
-		engineDriverStack.Push(new DefaultEngineDriver(5));
-		wheelDriverStack.Push(new DefaultWheelDriver(1));
+		engineDriverStack.Push(new DefaultEngineDriver(1));
+		wheelDriverStack.Push(new DefaultWheelDriver(5));
 		Gravity = Physics.gravity;
 	}
 	

@@ -5,7 +5,7 @@ public class FloatingObject : MonoBehaviour {
 	
 	public float hoverForce = 9.8f;
 	public float hoverDistance = 5f;
-	public float smoothPitch = 5f;
+	// public float smoothPitch = 5f;
 	
 
 	// Use this for initialization
@@ -24,7 +24,7 @@ public class FloatingObject : MonoBehaviour {
 
 			//this.transform.rotation = Quaternion.Lerp(this.transform.rotation, this.transform.rotation * Quaternion.AngleAxis(Vector3.Angle(hit.normal, this.transform.up), this.transform.right), smoothPitch * Time.deltaTime);
 			if (hit.collider.gameObject.tag == Tags.Field) {
-				rigidbody.AddForce(Vector3.up * hoverForce * (hoverDistance - hit.distance) - Physics.gravity);
+				rigidbody.AddForce(Vector3.up * hoverForce * (hoverDistance - hit.distance) / hoverDistance - Physics.gravity, ForceMode.Acceleration);
 			}
 		}
 	}

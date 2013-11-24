@@ -8,16 +8,24 @@ public class DefaultEngineDriver : IEngineDriver {
 	private float smoothForce;
 	private float lastInput;
 
+
 	public DefaultEngineDriver(int power) {
 		powerShip = power;
 		smoothForce = Mathf.Pow(power / 5f, 2f) * quickSmooth;
 	}
 
+	/// <summary>
+	/// Gets the force of the engine.
+	/// </summary>
+	/// <returns>The force. Range [-1, 1]</returns>
 	public virtual float GetForce() {
-		// TODO: implement
 		return actualForce;
 	}
 
+	/// <summary>
+	/// Gets the power of the ship prototype.
+	/// </summary>
+	/// <returns>The power. Range [1, 5]</returns>
 	public int GetPower() {
 		return powerShip;
 	}
@@ -25,7 +33,10 @@ public class DefaultEngineDriver : IEngineDriver {
 	public void Update() {
 		float input = Input.GetAxis("Vertical");
 
-		if (input >= actualForce) {
+		if (input >= 0 && input >= actualForce) {
+			actualForce = Mathf.Lerp(actualForce, input, smoothForce * Time.deltaTime);
+		}
+		else if (input < 0 && input <= actualForce) {
 			actualForce = Mathf.Lerp(actualForce, input, smoothForce * Time.deltaTime);
 		}
 		else {

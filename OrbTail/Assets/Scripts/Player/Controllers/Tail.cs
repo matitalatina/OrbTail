@@ -69,6 +69,7 @@ public class Tail : IApproachListener {
 
 	public void ApproachedTo(GameObject destination, GameObject caller) {
 		SpringJoint joint = caller.GetComponent<SpringJoint>();
+
 		if (joint != null) {
 			Object.Destroy(joint);
 		}
@@ -77,6 +78,7 @@ public class Tail : IApproachListener {
 		joint.damper = dampSpring;
 		joint.spring = forceSpring;
 		joint.connectedBody = destination.rigidbody;
+
 	}
 
 
