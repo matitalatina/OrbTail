@@ -5,7 +5,7 @@ public class MovementController : MonoBehaviour {
 	private DriverStack<IEngineDriver> engineDriverStack;
 	private DriverStack<IWheelDriver> wheelDriverStack;
 
-	public float torqueForce = 30f;
+	public float torqueForce = 40f;
 	public float speedForce = 120f;
 	public float rotationSmooth = 5f;
 	
@@ -17,8 +17,8 @@ public class MovementController : MonoBehaviour {
 		engineDriverStack = new DriverStack<IEngineDriver>();
 		wheelDriverStack = new DriverStack<IWheelDriver>();
 
-		engineDriverStack.Push(new DefaultEngineDriver(1));
-		wheelDriverStack.Push(new DefaultWheelDriver(5));
+		engineDriverStack.Push(new DefaultEngineDriver(5));
+		wheelDriverStack.Push(new DefaultWheelDriver(1));
 		Gravity = Physics.gravity;
 	}
 	
