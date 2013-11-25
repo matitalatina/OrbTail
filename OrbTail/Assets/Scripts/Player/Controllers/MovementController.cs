@@ -35,7 +35,7 @@ public class MovementController : MonoBehaviour {
 		Quaternion rollRotation = Quaternion.FromToRotation(this.transform.up, Quaternion.AngleAxis(wheelSteer * maxRoll, -this.transform.forward) * -this.Gravity);
 		this.rigidbody.AddForce(forwardProjected * engineDriverStack.GetHead().GetForce() * speedForce, ForceMode.Acceleration);
 		//this.rigidbody.AddRelativeForce(Vector3.forward * engineDriverStack.GetHead().GetForce() * speedForce);
-		this.transform.rotation = Quaternion.Lerp(this.transform.rotation, rollRotation * Quaternion.LookRotation(forwardProjected, -this.Gravity) * Quaternion.AngleAxis(wheelSteer * torqueForce, -this.Gravity), rotationSmooth * Time.deltaTime);
+		this.rigidbody.rotation = Quaternion.Lerp(this.transform.rotation, rollRotation * Quaternion.LookRotation(forwardProjected, -this.Gravity) * Quaternion.AngleAxis(wheelSteer * torqueForce, -this.Gravity), rotationSmooth * Time.deltaTime);
 	}
 
 	public DriverStack<IEngineDriver> GetEngineDriverStack() {

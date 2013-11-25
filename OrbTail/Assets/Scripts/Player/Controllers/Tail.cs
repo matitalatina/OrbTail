@@ -9,8 +9,9 @@ public class Tail : IApproachListener {
 
 	// Values used to create spring
 	private float dampSpring = 1f;
-	private float forceSpring = 60f;
-	private float maxDistance = 0.3f;
+	private float forceSpring = 2f;
+	private float minDistance = 1f;
+	private float maxDistance = 1.5f;
 
 	public Tail(GameObject owner) {
 		this.owner = owner;
@@ -75,10 +76,14 @@ public class Tail : IApproachListener {
 		}
 
 		joint = caller.AddComponent<SpringJoint>();
+		
+		joint.connectedBody = destination.rigidbody;
 		joint.damper = dampSpring;
 		joint.spring = forceSpring;
 		joint.maxDistance = maxDistance;
-		joint.connectedBody = destination.rigidbody;
+		joint.autoConfigureConnectedAnchor = false;
+		joint.anchor = Vector3.zero;
+		joint.connectedAnchor = Vector3.zero;
 
 	}
 
