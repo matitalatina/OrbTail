@@ -6,11 +6,11 @@ public class Tail : IApproachListener {
 	private GameObject owner;
 	private Stack<GameObject> orbStack = new Stack<GameObject>();
 	private GameObject firstOrb;
-	private Vector3 distanceBetweenOrbs = Vector3.forward;
 
 	// Values used to create spring
-	public float dampSpring = 10f;
-	public float forceSpring = 10f;
+	private float dampSpring = 1f;
+	private float forceSpring = 60f;
+	private float maxDistance = 0.3f;
 
 	public Tail(GameObject owner) {
 		this.owner = owner;
@@ -77,6 +77,7 @@ public class Tail : IApproachListener {
 		joint = caller.AddComponent<SpringJoint>();
 		joint.damper = dampSpring;
 		joint.spring = forceSpring;
+		joint.maxDistance = maxDistance;
 		joint.connectedBody = destination.rigidbody;
 
 	}

@@ -40,6 +40,10 @@ public class OrbController : MonoBehaviour, IApproachable {
 		return target != null;
 	}
 
+	public bool IsAttached() {
+		return this.gameObject.GetComponent<SpringJoint>() != null;
+	}
+
 	public void InterruptApproaching() {
 			this.rigidbody.drag = prevDrag;
 			listener = null;
