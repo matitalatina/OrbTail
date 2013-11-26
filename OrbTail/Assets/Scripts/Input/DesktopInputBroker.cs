@@ -1,4 +1,5 @@
-﻿using System;
+﻿using UnityEngine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,13 +25,21 @@ class DesktopInputBroker: IInputBroker
     /// </summary>
     public IEnumerable<IGroup> FiredPowerUps
     {
-        get { throw new NotImplementedException(); }
+        get { return fired_power_ups; }
     }
 
     public void Update()
     {
-        throw new NotImplementedException();
+
+        Acceleration = Input.GetAxis("Vertical");
+        Steering = Input.GetAxis("Horizontal");
+
+        //TODO: Add the actual code for powerup firing
+        fired_power_ups = new List<IGroup>();
+
     }
+
+    private IList<IGroup> fired_power_ups;
 
 }
 

@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Push some default drivers to the ship and destroy shortly after
+/// </summary>
 public class ShipPrototype : MonoBehaviour {
 
     /// <summary>
@@ -45,8 +48,8 @@ public class ShipPrototype : MonoBehaviour {
         tail_controller.GetOffenceDriverStack().Push( new DefaultOffenceDriver(offence) );
         tail_controller.GetDefenceDriverStack().Push( new DefaultDefenceDriver(defence) );
         tail_controller.GetAttacherDriverStack().Push( new DefaultAttacherDriver() );
-    
-        
+
+        Destroy(this);
     
     }
 
