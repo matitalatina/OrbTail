@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Script used to broadcast messages to the network and the game
+/// </summary>
 public class EventLogger : MonoBehaviour {
 
     // Use this for initialization
