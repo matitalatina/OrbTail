@@ -11,6 +11,7 @@ public class TailController : MonoBehaviour {
 
 	public Tail Tail { get; set;}
 
+	private float dotProductAttackThreshold = 0.2f;
 
 	public DriverStack<IAttacherDriver> GetAttacherDriverStack() {
 		return attacherDriverStack;
@@ -40,22 +41,41 @@ public class TailController : MonoBehaviour {
 		// TODO: to remove injection of stacks
 		attacherDriverStack.Push(new DefaultAttacherDriver());
 		detacherDriverStack.Push(new DefaultDetacherDriver());
+		offenceDriverStack.Push(new DefaultOffenceDriver(5));
+		defenceDriverStack.Push(new DefaultDefenceDriver(5));
 	}
 
 	void OnCollisionEnter(Collision collision) {
 		GameObject collidedObj = collision.gameObject;
 
 		if (collidedObj.tag == Tags.Orb) {
+
 			OrbController orbController = collidedObj.GetComponent<OrbController>();
 
 			if (!orbController.IsAttached()) {
 				attacherDriverStack.GetHead().AttachOrbs(collidedObj, Tail);
 			}
+
+		}
+		else if (collidedObj.tag == Tags.Ship) {
+
+			if (IsAttack(collidedObj)) {
+				float damage = collidedObj.GetComponent<TailController>().GetOffenceDriverStack().GetHead().GetDamage(this.gameObject, collision);
+				int nOrbsToDetach = defenceDriverStack.GetHead().DamageToOrbs(damage);
+				detacherDriverStack.GetHead().DetachOrbs(nOrbsToDetach, this.Tail);
+			}
+
 		}
 	}
 
 	// Update is called once per frame
 	void Update () {
 	
+	}
+
+	private bool IsAttack(GameObject attacker) {
+		Vector3 relVector = this.transform.position - attacker.transform.position;
+		float dotProduct = Vector3.Dot(attacker.transform.forward, relVector.normalized);
+		return dotProduct >= dotProductAttackThreshold;
 	}
 }

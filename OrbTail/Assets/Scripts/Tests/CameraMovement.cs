@@ -18,7 +18,7 @@ public class CameraMovement : MonoBehaviour {
 	void Awake ()
 	{
 		// Setting up the reference.
-		player = GameObject.FindGameObjectWithTag("Player").transform;
+		player = GameObject.FindGameObjectWithTag(Tags.Ship).transform;
 		FloatingComponent = player.GetComponent<FloatingObject>();
 
 		// Setting the relative position as the initial relative position of the camera in the scene.

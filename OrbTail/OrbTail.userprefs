@@ -1,10 +1,14 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Physics/FloatingObject.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Player/Drivers/Tail/DefaultDefenceDriver.cs">
     <Files>
-      <File FileName="Assets/Scripts/Player/Controllers/MovementController.cs" Line="44" Column="84" />
-      <File FileName="Assets/Scripts/Tests/CameraMovement.cs" Line="22" Column="61" />
+      <File FileName="Assets/Scripts/Player/Controllers/MovementController.cs" Line="22" Column="49" />
+      <File FileName="Assets/Scripts/Tests/CameraMovement.cs" Line="22" Column="51" />
       <File FileName="Assets/Scripts/Physics/FloatingObject.cs" Line="43" Column="9" />
+      <File FileName="Assets/Scripts/Player/Controllers/TailController.cs" Line="59" Column="4" />
+      <File FileName="Assets/Scripts/Misc/Tags.cs" Line="5" Column="34" />
+      <File FileName="Assets/Scripts/Player/Controllers/Tail.cs" Line="22" Column="4" />
+      <File FileName="Assets/Scripts/Player/Drivers/Tail/DefaultDefenceDriver.cs" Line="15" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
