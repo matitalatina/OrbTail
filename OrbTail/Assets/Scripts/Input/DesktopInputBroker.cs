@@ -23,7 +23,7 @@ class DesktopInputBroker: IInputBroker
     /// <summary>
     /// Returns a collection which indicates all the power ups the user wants to fire. The elements indicates just the group of the proper power
     /// </summary>
-    public IEnumerable<IGroup> FiredPowerUps
+    public ICollection<IGroup> FiredPowerUps
     {
         get { return fired_power_ups; }
     }
@@ -33,6 +33,8 @@ class DesktopInputBroker: IInputBroker
 
         Acceleration = Input.GetAxis("Vertical");
         Steering = Input.GetAxis("Horizontal");
+
+        //Debug.Log(Acceleration + " & " + Steering);
 
         //TODO: Add the actual code for powerup firing
         fired_power_ups = new List<IGroup>();

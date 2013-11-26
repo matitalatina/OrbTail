@@ -19,7 +19,7 @@ class MobileInputBroker: IInputBroker
     /// </summary>
     public float Steering { get; private set; }
 
-    public IEnumerable<IGroup> FiredPowerUps
+    public ICollection<IGroup> FiredPowerUps
     {
         get { throw new NotImplementedException(); }
     }

@@ -7,12 +7,15 @@ using System.Collections.Generic;
 /// </summary>
 public class InputProxy : MonoBehaviour, IInputBroker{
 
+    public bool remote_reading = false;
+
     // Use this for initialization
 	public void Start () {
-
-        if (Network.isClient)
+                
+        if (!remote_reading)
         {
 
+            // Reads from local
             if(SystemInfo.supportsAccelerometer)
             {
 
@@ -32,7 +35,7 @@ public class InputProxy : MonoBehaviour, IInputBroker{
         else
         {
 
-            // The server has no broker as it just reads data
+            // Reads from remote
             input_broker_ = null;
 
         }
@@ -46,6 +49,10 @@ public class InputProxy : MonoBehaviour, IInputBroker{
         {
 
             input_broker_.Update();
+
+            Acceleration = input_broker_.Acceleration;
+            Steering = input_broker_.Steering;
+            fired_powers_ = input_broker_.FiredPowerUps;
 
         }
 
@@ -99,12 +106,12 @@ public class InputProxy : MonoBehaviour, IInputBroker{
     /// <summary>
     /// Returns a collection which indicates all the power ups the user wants to fire. The elements indicates just the group of the proper power
     /// </summary>
-    public IEnumerable<IGroup> FiredPowerUps
+    public ICollection<IGroup> FiredPowerUps
     {
 
         get
         {
-            return new List<IGroup>(fired_powers);
+            return new List<IGroup>(fired_powers_);
         }
 
     }
@@ -117,13 +124,13 @@ public class InputProxy : MonoBehaviour, IInputBroker{
 
         float acceleration = Acceleration;
         float steering = Steering;
-        float powers_count = fired_powers.Count;
+        float powers_count = fired_powers_.Count;
 
         stream.Serialize(ref acceleration);
         stream.Serialize(ref steering);
         stream.Serialize(ref powers_count);
 
-        foreach (IGroup power_group in fired_powers)
+        foreach (IGroup power_group in fired_powers_)
         {
 
             power_group.Serialize(stream);
@@ -149,14 +156,14 @@ public class InputProxy : MonoBehaviour, IInputBroker{
 
         Acceleration = acceleration;
         Steering = steering;
-        fired_powers = new List<IGroup>();
+        fired_powers_ = new List<IGroup>();
 
         for (; powers_count > 0; powers_count--)
         {
 
             group = new GroupID();
             group.Deserialize(stream);
-            fired_powers.Add(group);
+            fired_powers_.Add(group);
 
         }
 
@@ -170,6 +177,6 @@ public class InputProxy : MonoBehaviour, IInputBroker{
     /// <summary>
     /// The list of the powerups to be fired
     /// </summary>
-    private IList<IGroup> fired_powers;
+    private ICollection<IGroup> fired_powers_;
 
 }
