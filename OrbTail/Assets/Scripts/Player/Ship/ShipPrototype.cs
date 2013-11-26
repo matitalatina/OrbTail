@@ -26,17 +26,15 @@ public class ShipPrototype : MonoBehaviour {
     /// </summary>
     public int speed;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
+
 	// Update is called once per frame
 	void Update () {
 	
 	}
 
-    void Awake(){
+    // Use this for initialization
+    void Start()
+    {
 
         MovementController movement_controller = GetComponent<MovementController>();
 
@@ -48,6 +46,7 @@ public class ShipPrototype : MonoBehaviour {
         tail_controller.GetOffenceDriverStack().Push( new DefaultOffenceDriver(offence) );
         tail_controller.GetDefenceDriverStack().Push( new DefaultDefenceDriver(defence) );
         tail_controller.GetAttacherDriverStack().Push( new DefaultAttacherDriver() );
+        tail_controller.GetDetacherDriverStack().Push(new DefaultDetacherDriver());
 
         Destroy(this);
     
