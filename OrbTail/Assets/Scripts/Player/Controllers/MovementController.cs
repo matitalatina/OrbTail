@@ -18,8 +18,8 @@ public class MovementController : MonoBehaviour {
 		engineDriverStack = new DriverStack<IEngineDriver>();
 		wheelDriverStack = new DriverStack<IWheelDriver>();
 
-		engineDriverStack.Push(new DefaultEngineDriver(3));
-		wheelDriverStack.Push(new DefaultWheelDriver(3));
+		engineDriverStack.Push(new DefaultEngineDriver(5));
+		wheelDriverStack.Push(new DefaultWheelDriver(5));
 
 		FloatingBody = this.GetComponent<FloatingObject>();
 

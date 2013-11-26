@@ -1,10 +1,10 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Player/Controllers/MovementController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Physics/FloatingObject.cs">
     <Files>
-      <File FileName="Assets/Scripts/Physics/FloatingObject.cs" Line="31" Column="60" />
-      <File FileName="Assets/Scripts/Player/Controllers/MovementController.cs" Line="44" Column="3" />
+      <File FileName="Assets/Scripts/Player/Controllers/MovementController.cs" Line="44" Column="84" />
       <File FileName="Assets/Scripts/Tests/CameraMovement.cs" Line="22" Column="61" />
+      <File FileName="Assets/Scripts/Physics/FloatingObject.cs" Line="43" Column="9" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

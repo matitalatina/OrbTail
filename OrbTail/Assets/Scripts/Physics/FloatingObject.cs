@@ -29,7 +29,7 @@ public class FloatingObject : MonoBehaviour {
 		//ArenaDown = -transform.position.normalized;
 		//
 
-		if(Physics.Raycast(transform.position, ArenaDown, out hit)) {
+		if(Physics.Raycast(transform.position, ArenaDown, out hit, hoverDistance * 5)) {
 
 			if (hit.collider.gameObject.tag == Tags.Field) {
 
@@ -38,6 +38,11 @@ public class FloatingObject : MonoBehaviour {
 				                   ForceMode.Acceleration);
 
 			}
+
+		}
+		else {
+
+			rigidbody.AddForce(ArenaDown * hoverForce, ForceMode.Acceleration);
 
 		}
 	}
