@@ -2,27 +2,27 @@
 using System.Collections;
 using System.Collections.Generic;
 
-/// <summary>
-/// Used to cast events through the game and the network
-/// </summary>
 public class EventLogger : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
 
         NetworkInterface = GetComponent<NetworkView>();
 
-	}
-	
-	// Update is called once per frame
-	void Update () {}
+    }
+
+    // Update is called once per frame
+    void Update() { }
 
     /// <summary>
     /// Notifies than an orb has been attached
     /// </summary>
     /// <param name="orb">The orb that has been attached</param>
     /// <param name="ship">The ship that has been attached</param>
-    public void NotifyOrbAttached(GameObject orb, GameObject ship){
+    [RPC]
+    public void NotifyOrbAttached(GameObject orb, GameObject ship)
+    {
 
         if (EventOrbAttached != null)
         {
@@ -47,7 +47,9 @@ public class EventLogger : MonoBehaviour {
     /// <param name="orbs">The list of the orbs lost by the defender</param>
     /// <param name="attacker">The attacker's ship</param>
     /// <param name="defender">The defender's ship</param>
-    public void NotifyFight(IList<GameObject> orbs, GameObject attacker, GameObject defender){
+    [RPC]
+    public void NotifyFight(IList<GameObject> orbs, GameObject attacker, GameObject defender)
+    {
 
         if (EventFight != null)
         {
@@ -71,7 +73,9 @@ public class EventLogger : MonoBehaviour {
     /// </summary>
     /// <param name="power">The power that has been attached</param>
     /// <param name="ship">The ship who gained the power</param>
-    public void NotifyPowerAttached(Power power, GameObject ship){
+    [RPC]
+    public void NotifyPowerAttached(Power power, GameObject ship)
+    {
 
         if (EventPowerAttached != null)
         {
@@ -94,13 +98,15 @@ public class EventLogger : MonoBehaviour {
     /// Notifies the match's initialization
     /// </summary>
     /// <param name="identities">The identities of the players</param>
-    public void NotifyInitializeMatch(IList<PlayerIdentity> identities){
+    [RPC]
+    public void NotifyInitializeMatch(IList<PlayerIdentity> identities)
+    {
 
         if (EventInitializeMatch != null)
         {
 
             EventInitializeMatch(this, identities);
-                
+
         }
 
         if (Network.isServer)
@@ -112,11 +118,13 @@ public class EventLogger : MonoBehaviour {
         }
 
     }
-    
+
     /// <summary>
     /// Notifies the match's start
     /// </summary>
-    public void NotifyStartMatch(){
+    [RPC]
+    public void NotifyStartMatch()
+    {
 
         if (EventStartMatch != null)
         {
@@ -138,7 +146,9 @@ public class EventLogger : MonoBehaviour {
     /// <summary>
     /// Notifies the match's end
     /// </summary>
-    public void NotifyEndMatch(){
+    [RPC]
+    public void NotifyEndMatch()
+    {
 
         if (EventEndMatch != null)
         {
@@ -161,13 +171,15 @@ public class EventLogger : MonoBehaviour {
     /// Notifies that a player has been eliminated from the game
     /// </summary>
     /// <param name="player_identity">The identity of the player that has been eliminated</param>
-    public void NotifyPlayerEliminated(PlayerIdentity player_identity){
+    [RPC]
+    public void NotifyPlayerEliminated(PlayerIdentity player_identity)
+    {
 
         if (EventPlayerEliminated != null)
         {
 
             EventPlayerEliminated(this, player_identity);
-        
+
         }
 
         if (Network.isServer)
@@ -179,7 +191,7 @@ public class EventLogger : MonoBehaviour {
         }
 
     }
-
+    
     /// <summary>
     /// Delegate used by EventOrbAttached
     /// </summary>
