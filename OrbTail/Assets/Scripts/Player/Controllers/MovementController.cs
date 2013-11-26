@@ -10,7 +10,7 @@ public class MovementController : MonoBehaviour {
 	public float maxRoll = 60f;
 	public float rotationSmooth = 5f;
 	
-	public Vector3 Gravity {get; set;}
+	public FloatingObject FloatingBody {get; private set;}
 
 	// TODO: change with real initializer
 	// Use this for initialization
@@ -20,7 +20,9 @@ public class MovementController : MonoBehaviour {
 
 		engineDriverStack.Push(new DefaultEngineDriver(3));
 		wheelDriverStack.Push(new DefaultWheelDriver(3));
-		Gravity = Physics.gravity;
+
+		FloatingBody = this.GetComponent<FloatingObject>();
+
 	}
 	
 	// Update is called once per frame
@@ -30,12 +32,16 @@ public class MovementController : MonoBehaviour {
 	}
 
 	void FixedUpdate () {
+
+		Vector3 arenaDown = FloatingBody.ArenaDown;
+
+
 		float wheelSteer = wheelDriverStack.GetHead().GetDirection();
-		Vector3 forwardProjected = Vector3.Cross(this.Gravity, Vector3.Cross(-this.Gravity, this.transform.forward)).normalized;
-		Quaternion rollRotation = Quaternion.FromToRotation(this.transform.up, Quaternion.AngleAxis(wheelSteer * maxRoll, -this.transform.forward) * -this.Gravity);
+		Vector3 forwardProjected = Vector3.Cross(arenaDown, Vector3.Cross(-arenaDown, this.transform.forward)).normalized;
+		Quaternion rollRotation = Quaternion.FromToRotation(this.transform.up, Quaternion.AngleAxis(wheelSteer * maxRoll, -this.transform.forward) * -arenaDown);
 		this.rigidbody.AddForce(forwardProjected * engineDriverStack.GetHead().GetForce() * speedForce, ForceMode.Acceleration);
 		//this.rigidbody.AddRelativeForce(Vector3.forward * engineDriverStack.GetHead().GetForce() * speedForce);
-		this.rigidbody.rotation = Quaternion.Lerp(this.transform.rotation, rollRotation * Quaternion.LookRotation(forwardProjected, -this.Gravity) * Quaternion.AngleAxis(wheelSteer * torqueForce, -this.Gravity), rotationSmooth * Time.deltaTime);
+		this.rigidbody.rotation = Quaternion.Lerp(this.transform.rotation, rollRotation * Quaternion.AngleAxis(wheelSteer * torqueForce, -arenaDown) * Quaternion.LookRotation(forwardProjected, -arenaDown), rotationSmooth * Time.deltaTime);
 	}
 
 	public DriverStack<IEngineDriver> GetEngineDriverStack() {
