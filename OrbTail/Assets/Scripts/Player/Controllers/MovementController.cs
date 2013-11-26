@@ -5,7 +5,7 @@ public class MovementController : MonoBehaviour {
 	private DriverStack<IEngineDriver> engineDriverStack;
 	private DriverStack<IWheelDriver> wheelDriverStack;
 
-	public float torqueForce = 40f;
+	public float torqueForce = 17f;
 	public float speedForce = 120f;
 	public float maxRoll = 60f;
 	public float rotationSmooth = 5f;

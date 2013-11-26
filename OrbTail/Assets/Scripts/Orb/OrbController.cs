@@ -6,7 +6,7 @@ public class OrbController : MonoBehaviour, IApproachable {
 	private IApproachListener listener;
 
 	// Value used in approaching
-	public float distanceToReach = 3f;
+	public float distanceToReach = 1f;
 	public float distanceThreshold = 0.5f;
 	public float attachForce = 10f;
 	public float attachDrag = 10f;

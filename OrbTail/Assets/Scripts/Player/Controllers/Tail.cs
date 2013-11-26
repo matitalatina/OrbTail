@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Tail : IApproachListener {
+public class Tail {
 	private GameObject owner;
 	private Stack<GameObject> orbStack = new Stack<GameObject>();
 	private GameObject firstOrb;
@@ -10,8 +10,8 @@ public class Tail : IApproachListener {
 	// Values used to create spring
 	private float dampSpring = 1f;
 	private float forceSpring = 2f;
-	private float minDistance = 1f;
-	private float maxDistance = 1.5f;
+	private float minDistance = 0.8f;
+	private float maxDistance = 1f;
 
 	public Tail(GameObject owner) {
 		this.owner = owner;
@@ -35,7 +35,8 @@ public class Tail : IApproachListener {
 		}
 
 		orbStack.Push(orb);
-		orb.GetComponent<OrbController>().ApproachTo(target, this);
+		//orb.GetComponent<OrbController>().ApproachTo(target, this);
+		LinkOrbTo(target, orb);
 
 
 	}
@@ -68,14 +69,14 @@ public class Tail : IApproachListener {
 
 	}
 
-	public void ApproachedTo(GameObject destination, GameObject caller) {
-		SpringJoint joint = caller.GetComponent<SpringJoint>();
+	public void LinkOrbTo(GameObject destination, GameObject orb) {
+		SpringJoint joint = orb.GetComponent<SpringJoint>();
 
 		if (joint != null) {
 			Object.Destroy(joint);
 		}
 
-		joint = caller.AddComponent<SpringJoint>();
+		joint = orb.AddComponent<SpringJoint>();
 		
 		joint.connectedBody = destination.rigidbody;
 		joint.damper = dampSpring;
