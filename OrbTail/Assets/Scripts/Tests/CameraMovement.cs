@@ -13,13 +13,14 @@ public class CameraMovement : MonoBehaviour {
 	private Vector3 newPos;             // The position the camera is trying to reach.
 
 
-	
+	private FloatingObject FloatingComponent{ get;set; }
 	
 	void Awake ()
 	{
 		// Setting up the reference.
 		player = GameObject.FindGameObjectWithTag("Player").transform;
-		
+		FloatingComponent = player.GetComponent<FloatingObject>();
+
 		// Setting the relative position as the initial relative position of the camera in the scene.
 		relCameraPos = transform.position - player.position;
 		relCameraPosMag = relCameraPos.magnitude - 0.5f;
@@ -30,14 +31,16 @@ public class CameraMovement : MonoBehaviour {
 	{
 		// The standard position of the camera is the relative position of the camera from the player.
 		//Vector3 standardPos = player.position + relCameraPos;
-		Vector3 standardPos = player.position + player.forward * relDistancePos + relHighPos * Vector3.up;
+		Vector3 arenaDown = FloatingComponent.ArenaDown;
+
+		Vector3 standardPos = player.position + player.forward * relDistancePos + relHighPos * -arenaDown;
 		
 		newPos = standardPos;
 		// Lerp the camera's position between it's current position and it's new position.
 		transform.position = Vector3.Lerp(transform.position, newPos, smooth * Time.deltaTime);
 		
 		// Make sure the camera is looking at the player.
-		SmoothLookAt();
+		SmoothLookAt(arenaDown);
 	}
 	
 	
@@ -58,13 +61,14 @@ public class CameraMovement : MonoBehaviour {
 	}
 	
 	
-	void SmoothLookAt ()
+	void SmoothLookAt (Vector3 arenaDown)
 	{
 		// Create a vector from the camera towards the player.
 		Vector3 relPlayerPosition = player.position - transform.position;
-		
+
 		// Create a rotation based on the relative position of the player being the forward vector.
-		Quaternion lookAtRotation = Quaternion.LookRotation(relPlayerPosition, Vector3.up);
+
+		Quaternion lookAtRotation = Quaternion.LookRotation(relPlayerPosition, -arenaDown);
 		
 		// Lerp the camera's rotation between it's current rotation and the rotation that looks at the player.
 		transform.rotation = Quaternion.Lerp(transform.rotation, lookAtRotation, smooth * Time.deltaTime);

@@ -2,15 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Tail : IApproachListener {
+public class Tail {
 	private GameObject owner;
 	private Stack<GameObject> orbStack = new Stack<GameObject>();
 	private GameObject firstOrb;
-
-	// Values used to create spring
-	private float dampSpring = 1f;
-	private float forceSpring = 60f;
-	private float maxDistance = 0.3f;
+	
 
 	public Tail(GameObject owner) {
 		this.owner = owner;
@@ -34,7 +30,8 @@ public class Tail : IApproachListener {
 		}
 
 		orbStack.Push(orb);
-		orb.GetComponent<OrbController>().ApproachTo(target, this);
+		//orb.GetComponent<OrbController>().ApproachTo(target, this);
+		orb.GetComponent<OrbController>().LinkTo(target);
 
 
 	}
@@ -47,7 +44,7 @@ public class Tail : IApproachListener {
 
 		while (i < nOrbs && orbStack.Count <= 0) {
 			GameObject orbToDetach = orbStack.Pop();
-			CleanOrb(orbToDetach);
+			orbToDetach.GetComponent<OrbController>().Unlink();
 			detachedOrbs.Add(orbToDetach);
 		}
 
@@ -67,35 +64,7 @@ public class Tail : IApproachListener {
 
 	}
 
-	public void ApproachedTo(GameObject destination, GameObject caller) {
-		SpringJoint joint = caller.GetComponent<SpringJoint>();
 
-		if (joint != null) {
-			Object.Destroy(joint);
-		}
-
-		joint = caller.AddComponent<SpringJoint>();
-		joint.damper = dampSpring;
-		joint.spring = forceSpring;
-		joint.maxDistance = maxDistance;
-		joint.connectedBody = destination.rigidbody;
-
-	}
-
-
-	private void CleanOrb(GameObject orb) {
-		SpringJoint joint = orb.GetComponent<SpringJoint>();
-
-		if (joint != null) {
-			Object.Destroy(joint);
-		}
-
-		OrbController orbController = orb.GetComponent<OrbController>();
-		if (orbController.IsApproaching()) {
-			orbController.InterruptApproaching();
-		}
-
-	}
 
 
 }

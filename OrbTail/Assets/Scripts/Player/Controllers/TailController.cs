@@ -48,7 +48,7 @@ public class TailController : MonoBehaviour {
 		if (collidedObj.tag == Tags.Orb) {
 			OrbController orbController = collidedObj.GetComponent<OrbController>();
 
-			if (!orbController.IsApproaching() && !orbController.IsAttached()) {
+			if (!orbController.IsAttached()) {
 				attacherDriverStack.GetHead().AttachOrbs(collidedObj, Tail);
 			}
 		}
