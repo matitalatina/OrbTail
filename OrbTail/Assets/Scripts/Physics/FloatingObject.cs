@@ -5,7 +5,6 @@ public class FloatingObject : MonoBehaviour {
 	
 	public float hoverForce = 9.8f;
 	public float hoverDistance = 5f;
-	// public float smoothPitch = 5f;
 	
 
 	// Use this for initialization
@@ -18,7 +17,7 @@ public class FloatingObject : MonoBehaviour {
 	void FixedUpdate () {
 		RaycastHit hit;
 
-		if(Physics.Raycast(transform.position, ArenaDown, out hit, hoverDistance * 2)) {
+		if(Physics.Raycast(transform.position, ArenaDown, out hit)) {
 			//rigidbody.AddForce(Vector3.up * realHoverForce * (hoverDistance - hit.distance) - Physics.gravity);
 			//this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(Vector3.Cross(hit.normal, -Vector3.Cross(hit.normal, this.transform.forward)), this.transform.forward), smoothPitch * Time.deltaTime);
 

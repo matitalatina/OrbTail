@@ -1,71 +1,58 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class OrbController : MonoBehaviour, IApproachable {
+public class OrbController : MonoBehaviour {
 	private GameObject target;
 	private IApproachListener listener;
 
-	// Value used in approaching
-	public float distanceToReach = 1f;
-	public float distanceThreshold = 0.5f;
-	public float attachForce = 10f;
-	public float attachDrag = 10f;
+	// Values used to create spring
+	private float dampSpring = 1f;
+	private float forceSpring = 2f;
+	private float minDistance = 0.8f;
+	private float maxDistance = 1f;
 
 
-	// Backup values of rigidbody before approaching
-	private float prevDrag;
 
 	// Use this for initialization
 	void Start () {
-		prevDrag = this.rigidbody.drag;
-	}
-	
-	// Update is called once per frame
-	void FixedUpdate () {
-
-		if (IsApproaching()) {
-			performApproach();
-		}
-
 	}
 
-	public void ApproachTo(GameObject targetObject, IApproachListener listener) {
-		this.target = targetObject;
-		this.listener = listener;
-		this.prevDrag = this.rigidbody.drag;
-		this.rigidbody.drag = attachDrag;
-	}
-
-	public bool IsApproaching() {
-		return target != null;
-	}
 
 	public bool IsAttached() {
 		return this.gameObject.GetComponent<SpringJoint>() != null;
 	}
 
-	public void InterruptApproaching() {
-			this.rigidbody.drag = prevDrag;
-			listener = null;
-			target = null;
+	public void LinkTo(GameObject destination) {
+		SpringJoint joint = this.GetComponent<SpringJoint>();
+
+		if (joint != null) {
+			Object.Destroy(joint);
+		}
+		
+		joint = this.gameObject.AddComponent<SpringJoint>();
+		
+		joint.connectedBody = destination.rigidbody;
+		joint.damper = dampSpring;
+		joint.spring = forceSpring;
+		joint.minDistance = minDistance;
+		joint.maxDistance = maxDistance;
+		joint.autoConfigureConnectedAnchor = false;
+		joint.anchor = Vector3.zero;
+		joint.connectedAnchor = Vector3.zero;
+		
+	}
+	
+	
+	public void Unlink() {
+		SpringJoint joint = this.GetComponent<SpringJoint>();
+		
+		if (joint != null) {
+			Object.Destroy(joint);
+		}
+		
 	}
 
-	private void performApproach() {
 
-		Vector3 pointToReach = target.transform.position - target.transform.forward * distanceToReach;
-		float distance = Vector3.Distance(this.transform.position, pointToReach);
-		Vector3 directionForce;
 
-		if (distance > distanceThreshold) {
-			directionForce = (pointToReach - this.transform.position).normalized;
-		}
-		else {
-			// TODO: see if better to call InterruptApproaching()
-			listener.ApproachedTo(target, this.gameObject);
-			InterruptApproaching();
-			return;
-		}
 
-		this.rigidbody.AddForce(directionForce * attachForce, ForceMode.Acceleration);
-	}
 }
