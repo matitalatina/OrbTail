@@ -1,0 +1,23 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Player/Drivers/Tail/DefaultOffenceDriver.cs">
+    <Files>
+      <File FileName="Assets/Scripts/Player/Drivers/Tail/DefaultOffenceDriver.cs" Line="21" Column="62" />
+      <File FileName="Assets/Scripts/Player/Drivers/Tail/IOffenceDriver.cs" Line="6" Column="2" />
+      <File FileName="Assets/Scripts/Player/Drivers/Tail/DefaultDefenceDriver.cs" Line="17" Column="1" />
+      <File FileName="Assets/Scripts/Player/Controllers/Tail.cs" Line="64" Column="24" />
+      <File FileName="Assets/Scripts/Player/Controllers/TailController.cs" Line="41" Column="3" />
+      <File FileName="Assets/Scripts/Orb/OrbController.cs" Line="17" Column="17" />
+      <File FileName="Assets/Scripts/Player/Controllers/MovementController.cs" Line="15" Column="2" />
+      <File FileName="Assets/Scripts/Player/Drivers/Tail/DefaultAttacherDriver.cs" Line="6" Column="2" />
+      <File FileName="Assets/Scripts/Player/Drivers/Tail/DefaultDetacherDriver.cs" Line="21" Column="5" />
+      <File FileName="Assets/Scripts/Physics/FloatingObject.cs" Line="28" Column="3" />
+      <File FileName="Assets/Scripts/Powers/GroupID.cs" Line="53" Column="9" />
+      <File FileName="Assets/Scripts/Tests/MovementControllerBack.cs" Line="14" Column="2" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
