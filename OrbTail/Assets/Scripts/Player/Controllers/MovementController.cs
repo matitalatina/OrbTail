@@ -32,7 +32,6 @@ public class MovementController : MonoBehaviour {
 	}
 
 	void FixedUpdate () {
-
 		Vector3 arenaDown = FloatingBody.ArenaDown;
 
 

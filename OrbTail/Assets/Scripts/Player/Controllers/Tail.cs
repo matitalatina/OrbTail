@@ -42,10 +42,11 @@ public class Tail {
 
 		int i = 0;
 
-		while (i < nOrbs && orbStack.Count <= 0) {
+		while (i < nOrbs && orbStack.Count > 0) {
 			GameObject orbToDetach = orbStack.Pop();
 			orbToDetach.GetComponent<OrbController>().Unlink();
 			detachedOrbs.Add(orbToDetach);
+			i++;
 		}
 
 		if (orbStack.Count <= 0) {
@@ -59,10 +60,8 @@ public class Tail {
 		return orbStack.Count;
 	}
 
-	// TODO: to implement
-	public void Update() {
 
-	}
+	public void Update() {}
 
 
 
