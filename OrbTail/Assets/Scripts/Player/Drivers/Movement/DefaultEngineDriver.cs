@@ -30,17 +30,15 @@ public class DefaultEngineDriver : IEngineDriver {
 		return powerShip;
 	}
 
-	public void Update() {
-		float input = Input.GetAxis("Vertical");
-
-		if (input >= 0 && input >= actualForce) {
-			actualForce = Mathf.Lerp(actualForce, input, smoothForce * Time.deltaTime);
+	public void Update(float inputAcceleration) {
+		if (inputAcceleration >= 0 && inputAcceleration >= actualForce) {
+			actualForce = Mathf.Lerp(actualForce, inputAcceleration, smoothForce * Time.deltaTime);
 		}
-		else if (input < 0 && input <= actualForce) {
-			actualForce = Mathf.Lerp(actualForce, input, smoothForce * Time.deltaTime);
+		else if (inputAcceleration < 0 && inputAcceleration <= actualForce) {
+			actualForce = Mathf.Lerp(actualForce, inputAcceleration, smoothForce * Time.deltaTime);
 		}
 		else {
-			actualForce = input;
+			actualForce = inputAcceleration;
 		}
 
 	}

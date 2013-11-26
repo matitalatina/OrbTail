@@ -2,8 +2,6 @@
 using System.Collections;
 
 public class MovementController : MonoBehaviour {
-	private DriverStack<IEngineDriver> engineDriverStack;
-	private DriverStack<IWheelDriver> wheelDriverStack;
 
 	public float torqueForce = 17f;
 	public float speedForce = 120f;
@@ -11,6 +9,13 @@ public class MovementController : MonoBehaviour {
 	public float rotationSmooth = 5f;
 	
 	public FloatingObject FloatingBody {get; private set;}
+
+
+	private DriverStack<IEngineDriver> engineDriverStack;
+	private DriverStack<IWheelDriver> wheelDriverStack;
+
+	private InputProxy inputProxy;
+	
 
 
 	void Awake() {
@@ -22,12 +27,13 @@ public class MovementController : MonoBehaviour {
 	void Start () {
 
 		FloatingBody = this.GetComponent<FloatingObject>();
+		inputProxy = this.GetComponent<InputProxy>();
 
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		engineDriverStack.GetHead().Update();
+		engineDriverStack.GetHead().Update(inputProxy.Acceleration);
 		wheelDriverStack.GetHead().Update();
 	}
 
@@ -35,7 +41,7 @@ public class MovementController : MonoBehaviour {
 		Vector3 arenaDown = FloatingBody.ArenaDown;
 
 
-		float wheelSteer = wheelDriverStack.GetHead().GetDirection();
+		float wheelSteer = wheelDriverStack.GetHead().GetDirection(inputProxy.Steering);
 		Vector3 forwardProjected = Vector3.Cross(arenaDown, Vector3.Cross(-arenaDown, this.transform.forward)).normalized;
 		Quaternion rollRotation = Quaternion.FromToRotation(this.transform.up, Quaternion.AngleAxis(wheelSteer * maxRoll, -this.transform.forward) * -arenaDown);
 		this.rigidbody.AddForce(forwardProjected * engineDriverStack.GetHead().GetForce() * speedForce, ForceMode.Acceleration);

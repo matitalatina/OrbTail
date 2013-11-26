@@ -5,9 +5,9 @@ public class JammedWheelDriver : DefaultWheelDriver {
 
 	public JammedWheelDriver(int steering) : base(steering) {}
 
-	public override float GetDirection()
+	public override float GetDirection(float inputSteer)
 	{
-		return -base.GetDirection();
+		return -base.GetDirection(inputSteer);
 	}
 
 }

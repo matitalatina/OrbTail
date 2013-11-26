@@ -11,7 +11,7 @@ public class DefaultWheelDriver : IWheelDriver {
 		adjustedSteer = Mathf.Sqrt(steering / 5f);
 	}
 
-	public virtual float GetDirection() {
+	public virtual float GetDirection(float inputSteer) {
 		// TODO: to implement
 		return Input.GetAxis("Horizontal") * adjustedSteer;
 	}
