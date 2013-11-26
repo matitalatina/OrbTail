@@ -12,14 +12,14 @@ public class MovementController : MonoBehaviour {
 	
 	public FloatingObject FloatingBody {get; private set;}
 
-	// TODO: change with real initializer
-	// Use this for initialization
-	void Start () {
+
+	void Awake() {
 		engineDriverStack = new DriverStack<IEngineDriver>();
 		wheelDriverStack = new DriverStack<IWheelDriver>();
+	}
 
-		engineDriverStack.Push(new DefaultEngineDriver(5));
-		wheelDriverStack.Push(new DefaultWheelDriver(5));
+	// Use this for initialization
+	void Start () {
 
 		FloatingBody = this.GetComponent<FloatingObject>();
 
