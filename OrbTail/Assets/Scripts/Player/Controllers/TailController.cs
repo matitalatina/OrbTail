@@ -29,20 +29,17 @@ public class TailController : MonoBehaviour {
 		return defenceDriverStack;
 	}
 
-
-	void Start () {
+	void Awake() {
 		attacherDriverStack = new DriverStack<IAttacherDriver>();
 		detacherDriverStack = new DriverStack<IDetacherDriver>();
 		offenceDriverStack = new DriverStack<IOffenceDriver>();
 		defenceDriverStack = new DriverStack<IDefenceDriver>();
-
+		
 		Tail = new Tail(this.gameObject);
+	}
 
-		// TODO: to remove injection of stacks
-		attacherDriverStack.Push(new DefaultAttacherDriver());
-		detacherDriverStack.Push(new DefaultDetacherDriver());
-		offenceDriverStack.Push(new DefaultOffenceDriver(5));
-		defenceDriverStack.Push(new DefaultDefenceDriver(5));
+	void Start () {
+
 	}
 
 	void OnCollisionEnter(Collision collision) {
