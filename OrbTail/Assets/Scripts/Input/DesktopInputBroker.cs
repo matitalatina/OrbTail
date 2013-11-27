@@ -10,6 +10,10 @@ using System.Text;
 class DesktopInputBroker: IInputBroker
 {
 
+    public string acceleration_axis_name = "Vertical";
+
+    public string steering_axis_name = "Horizontal";
+
     /// <summary>
     /// Returns the acceleration command's status. 0 no acceleration, 1 maximum acceleration.
     /// </summary>
@@ -31,8 +35,8 @@ class DesktopInputBroker: IInputBroker
     public void Update()
     {
 
-        Acceleration = Input.GetAxis("Vertical");
-        Steering = Input.GetAxis("Horizontal");
+        Acceleration = Input.GetAxis(acceleration_axis_name);
+        Steering = Input.GetAxis(steering_axis_name);
 
         //Debug.Log(Acceleration + " & " + Steering);
 
