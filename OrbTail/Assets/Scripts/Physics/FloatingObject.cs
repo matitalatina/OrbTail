@@ -29,7 +29,7 @@ public class FloatingObject : MonoBehaviour {
 		//ArenaDown = -transform.position.normalized;
 		//
 
-		if(Physics.Raycast(transform.position, ArenaDown, out hit, hoverDistance * 5)) {
+		if(Physics.Raycast(transform.position, ArenaDown, out hit, hoverDistance * 5, Layers.Field)) {
 
 			if (hit.collider.gameObject.tag == Tags.Field) {
 
