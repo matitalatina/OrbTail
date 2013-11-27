@@ -3,8 +3,8 @@ using System.Collections;
 
 public class MovementController : MonoBehaviour {
 
-	public float torqueForce = 17f;
-	public float speedForce = 120f;
+	public float maxTorqueForce = 17f;
+	public float maxSpeedForce = 120f;
 	public float maxRoll = 60f;
 	public float rotationSmooth = 5f;
 	
@@ -25,10 +25,8 @@ public class MovementController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
 		FloatingBody = this.GetComponent<FloatingObject>();
 		inputProxy = this.GetComponent<InputProxy>();
-
 	}
 	
 	// Update is called once per frame
@@ -40,19 +38,36 @@ public class MovementController : MonoBehaviour {
 	void FixedUpdate () {
 		Vector3 arenaDown = FloatingBody.ArenaDown;
 
-
 		float wheelSteer = wheelDriverStack.GetHead().GetDirection(inputProxy.Steering);
-		Vector3 forwardProjected = Vector3.Cross(arenaDown, Vector3.Cross(-arenaDown, this.transform.forward)).normalized;
-		Quaternion rollRotation = Quaternion.FromToRotation(this.transform.up, Quaternion.AngleAxis(wheelSteer * maxRoll, -this.transform.forward) * -arenaDown);
-		this.rigidbody.AddForce(forwardProjected * engineDriverStack.GetHead().GetForce() * speedForce, ForceMode.Acceleration);
-		//this.rigidbody.AddRelativeForce(Vector3.forward * engineDriverStack.GetHead().GetForce() * speedForce);
-		this.rigidbody.rotation = Quaternion.Lerp(this.transform.rotation, rollRotation * Quaternion.AngleAxis(wheelSteer * torqueForce, -arenaDown) * Quaternion.LookRotation(forwardProjected, -arenaDown), rotationSmooth * Time.deltaTime);
+		float engineForce = engineDriverStack.GetHead().GetForce();
+
+		Vector3 forwardProjected = Vector3.Cross(arenaDown,
+		                                         Vector3.Cross(-arenaDown, this.transform.forward)
+		                                         ).normalized;
+
+		Quaternion rollRotation = Quaternion.FromToRotation(this.transform.up,
+		                                                    Quaternion.AngleAxis(wheelSteer * maxRoll, -this.transform.forward) * -arenaDown);
+		Quaternion yawRotation = Quaternion.AngleAxis(wheelSteer * maxTorqueForce, -arenaDown);
+		Quaternion pitchStabilization = Quaternion.LookRotation(forwardProjected, -arenaDown);
+
+		this.rigidbody.AddForce(forwardProjected * engineForce * maxSpeedForce, ForceMode.Acceleration);
+		this.rigidbody.rotation = Quaternion.Lerp(this.transform.rotation, rollRotation * yawRotation * pitchStabilization, rotationSmooth * Time.deltaTime);
 	}
 
+
+	/// <summary>
+	/// Gets the engine driver stack.
+	/// </summary>
+	/// <returns>The engine driver stack.</returns>
 	public DriverStack<IEngineDriver> GetEngineDriverStack() {
 		return engineDriverStack;
 	}
 
+
+	/// <summary>
+	/// Gets the wheel driver stack.
+	/// </summary>
+	/// <returns>The wheel driver stack.</returns>
 	public DriverStack<IWheelDriver> GetWheelDriverStack() {
 		return wheelDriverStack;
 	}

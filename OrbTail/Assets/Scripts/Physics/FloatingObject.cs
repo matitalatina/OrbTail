@@ -19,8 +19,7 @@ public class FloatingObject : MonoBehaviour {
 
 	}
 
-
-	// TODO: change Vector3.up with gravity
+	
 	// Update is called once per frame
 	void FixedUpdate () {
 		RaycastHit hit;

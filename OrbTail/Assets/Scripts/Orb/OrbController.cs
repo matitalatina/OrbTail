@@ -18,11 +18,21 @@ public class OrbController : MonoBehaviour {
 	}
 
 
+
+	/// <summary>
+	/// Determines whether this instance is attached to something.
+	/// </summary>
+	/// <returns><c>true</c> if this instance is attached; otherwise, <c>false</c>.</returns>
 	public bool IsAttached() {
 		return this.gameObject.GetComponent<SpringJoint>() != null;
 	}
 
-	public void LinkTo(GameObject destination) {
+
+	/// <summary>
+	/// Links this instance to the passed parameter with a SpringJoint.
+	/// </summary>
+	/// <param name="destination">Target.</param>
+	public void LinkTo(GameObject target) {
 		SpringJoint joint = this.GetComponent<SpringJoint>();
 
 		if (joint != null) {
@@ -31,7 +41,7 @@ public class OrbController : MonoBehaviour {
 		
 		joint = this.gameObject.AddComponent<SpringJoint>();
 		
-		joint.connectedBody = destination.rigidbody;
+		joint.connectedBody = target.rigidbody;
 		joint.damper = dampSpring;
 		joint.spring = forceSpring;
 		joint.minDistance = minDistance;
@@ -42,7 +52,10 @@ public class OrbController : MonoBehaviour {
 		
 	}
 	
-	
+
+	/// <summary>
+	/// Unlink this instance removing the joint.
+	/// </summary>
 	public void Unlink() {
 		SpringJoint joint = this.GetComponent<SpringJoint>();
 		
