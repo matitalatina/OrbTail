@@ -15,7 +15,7 @@ public abstract class PowerView
     /// <summary>
     /// Get the group of this power
     /// </summary>
-    protected abstract IGroup Group { get; }
+    public abstract IGroup Group { get; }
     
     /// <summary>
     /// Get the readyness of this power. 1 if ready, less than 1 otherwise
@@ -25,7 +25,7 @@ public abstract class PowerView
     /// <summary>
     /// Fire EventDestroyed
     /// </summary>
-    protected void Deactivate()
+    public void Deactivate()
     {
         if (EventDestroyed != null)
         {

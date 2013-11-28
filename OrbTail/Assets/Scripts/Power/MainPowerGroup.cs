@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class MainPowerGroup
 {
     private static MainPowerGroup instance;
-    private GroupID groupID;
+    public GroupID groupID { get; private set; }
 
     private MainPowerGroup()
     {
@@ -21,13 +21,5 @@ public class MainPowerGroup
             }
             return instance;
         }
-    }
-
-    /// <summary>
-    /// Return PowerUp group ID
-    /// </summary>
-    /// <returns>Return PowerUp group ID</returns>
-    public GroupID getGroupID(){
-        return groupID;
     }
 }

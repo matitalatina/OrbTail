@@ -23,7 +23,7 @@ public abstract class Power : PowerView
     /// <summary>
     /// Get the group of this power
     /// </summary>
-    protected override IGroup Group
+    public override IGroup Group
     {
         get
         {

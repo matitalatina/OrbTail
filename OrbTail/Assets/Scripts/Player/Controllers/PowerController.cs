@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class PowerController : MonoBehaviour
 {
-    private Power power { get; set; }
-    
+    private Dictionary<IGroup, Power> powers;
+
     public PowerController()
     {
 
@@ -13,11 +13,20 @@ public class PowerController : MonoBehaviour
 
     public void AddPower(Power power)
     {
-        this.power = power;
+        // If exist another power with the same family
+        if(powers.ContainsKey(power.Group))
+        {
+            powers[power.Group].Deactivate();
+            powers[power.Group] = power;
+        }
+        else
+        {
+            powers.Add(power.Group, power);
+        }
     }
 
-    public PowerView GetPowerView<T>()
+    public PowerView GetPowerView(IGroup group)
     {
-        return power;
+        return powers[group];
     }
 }
