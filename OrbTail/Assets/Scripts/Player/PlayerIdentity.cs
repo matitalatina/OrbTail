@@ -9,7 +9,7 @@ public class PlayerIdentity : MonoBehaviour {
     /// <summary>
     /// The nickname of the player
     /// </summary>
-    public string name = "";
+    public string player_name = "";
 
     /// <summary>
     /// The color associated to the player

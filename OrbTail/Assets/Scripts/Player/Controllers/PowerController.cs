@@ -6,8 +6,9 @@ public class PowerController : MonoBehaviour
 {
     private Dictionary<IGroup, Power> powers;
 
-    public PowerController()
-    {
+    public void Awake(){
+
+        powers = new Dictionary<IGroup, Power>();
 
     }
 
