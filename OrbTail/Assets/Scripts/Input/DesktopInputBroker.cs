@@ -10,9 +10,17 @@ using System.Text;
 class DesktopInputBroker: IInputBroker
 {
 
+    #region "Axis names"
+    
     public string acceleration_axis_name = "Vertical";
 
     public string steering_axis_name = "Horizontal";
+
+    public string fire_special_axis_name = "FireSpecial";
+
+    public string fire_main_axis_name = "FireMain";
+    
+    #endregion
 
     /// <summary>
     /// Returns the acceleration command's status. 0 no acceleration, 1 maximum acceleration.
@@ -29,23 +37,41 @@ class DesktopInputBroker: IInputBroker
     /// </summary>
     public ICollection<IGroup> FiredPowerUps
     {
-        get { return fired_power_ups; }
+        get { return fired_power_ups_; }
     }
 
     public void Update()
     {
 
+        if (fired_power_ups_.Count > 0)
+        {
+
+            fired_power_ups_.Clear();
+
+        }
+
         Acceleration = Input.GetAxis(acceleration_axis_name);
         Steering = Input.GetAxis(steering_axis_name);
+        
+        //TODO: Fill those properly
+        if (Input.GetAxis(fire_special_axis_name) > 0.0f)
+        {
 
-        //Debug.Log(Acceleration + " & " + Steering);
+            fired_power_ups_.Add(null /*SpecialPowerGroup*/);
 
-        //TODO: Add the actual code for powerup firing
-        fired_power_ups = new List<IGroup>();
+        }
+
+        if (Input.GetAxis(fire_main_axis_name) > 0.0f)
+        {
+
+            fired_power_ups_.Add(null /*MainPowerGroup*/);
+
+        }
 
     }
 
-    private IList<IGroup> fired_power_ups;
+
+    private IList<IGroup> fired_power_ups_ = new List<IGroup>();
 
 }
 
