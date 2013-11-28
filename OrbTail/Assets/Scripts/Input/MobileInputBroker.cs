@@ -1,4 +1,5 @@
-﻿using System;
+﻿using UnityEngine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,24 @@ using System.Text;
 /// </summary>
 class MobileInputBroker: IInputBroker
 {
+
+    MobileInputBroker()
+    {
+
+        AccelerometerOffset = Vector3.forward;
+
+    }
+
+    private const float kForceFactor = 1.0f;
+
+    private const float kAccelerationExponent = 0.3f;
+
+    private const float kSteeringExponent = 0.5f;
+
+    /// <summary>
+    /// Returns the accelerometers' offset
+    /// </summary>
+    public Vector3 AccelerometerOffset { get; private set; }
 
     /// <summary>
     /// Returns the acceleration command's status. 0 no acceleration, 1 maximum acceleration.
@@ -19,24 +38,38 @@ class MobileInputBroker: IInputBroker
     /// </summary>
     public float Steering { get; private set; }
 
+    /// <summary>
+    /// Returns a collection which indicates all the power ups the user wants to fire. The elements indicates just the group of the proper power
+    /// </summary>
     public ICollection<IGroup> FiredPowerUps
     {
-        get { throw new NotImplementedException(); }
+        get { return fired_power_ups_; }
+    }
+
+    /// <summary>
+    /// Set the actual offset used for the accelerometer's calculation
+    /// </summary>
+    public void Calibrate()
+    {
+
+        AccelerometerOffset = Input.acceleration.normalized;
+
     }
 
     public void Update()
     {
-        ////////////
-        // Accelerometer
-        //		Vector3 forceVector = Vector3.zero;
-        //        int i = 0;
-        //        while (i < Input.accelerationEventCount) {
-        //            AccelerationEvent accEvent = Input.GetAccelerationEvent(i);
-        //            forceVector += accEvent.acceleration * forcePower;
-        //            ++i;
-        //        }
-        ///////////////
-        throw new NotImplementedException();
+
+        var direction = (Input.acceleration.normalized + AccelerometerOffset).normalized;
+
+        //From 0.0f to 1.0f. The power here is useful to avoid extreme angles
+        Acceleration = Mathf.Pow( Mathf.Clamp01(direction.z), kAccelerationExponent );
+
+        //From -1.0f to 1.0f.
+        Steering = -Mathf.Pow( Mathf.Clamp01( Mathf.Abs( direction.y ) ), 
+                                              kSteeringExponent) * Mathf.Sign(direction.y);
+
     }
+
+    private IList<IGroup> fired_power_ups_ = new List<IGroup>();
 
 }
