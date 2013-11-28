@@ -66,7 +66,7 @@ public class InputProxy : MonoBehaviour, IInputBroker{
     /// </summary>
     public void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)
     {
-
+        
         //Stream: | Acceleration | Steering | #Powers | Group(1) | Group(2) | ...
 
         if (stream.isWriting)
