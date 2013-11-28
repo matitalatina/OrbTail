@@ -8,10 +8,26 @@ using System.Collections.Generic;
 public class EventLogger : MonoBehaviour {
 
     // Use this for initialization
-    void Start(){}
+    void Start(){
+
+
+    }
+
+    void Awake()
+    {
+
+        orbs_accumulator_ = new RPCAccumulator<GameObject>();
+
+        player_identities_accumulator_ = new RPCAccumulator<PlayerIdentity>();
+
+    }
 
     // Update is called once per frame
-    void Update() { }
+    void Update() {
+
+    }
+
+    #region "Notifications"
 
     /// <summary>
     /// Notifies than an orb has been attached
@@ -42,23 +58,6 @@ public class EventLogger : MonoBehaviour {
         }
 
     }
-    
-    [RPC]
-    private void ReceiveOrbAttached(NetworkViewID orb_id, NetworkViewID ship_id)
-    {
-
-        GameObject orb = NetworkView.Find(orb_id).gameObject;
-        GameObject ship = NetworkView.Find(ship_id).gameObject;
-
-        //Call the actual event
-        if (EventOrbAttached != null)
-        {
-
-            EventOrbAttached(this, orb, ship);
-
-        }
-
-    }
 
     /// <summary>
     /// Notify that two ships have fought
@@ -75,9 +74,19 @@ public class EventLogger : MonoBehaviour {
             if (Network.isServer)
             {
 
-                //RPC to other clients if this is the server
-                //networkView.RPC("ReceiveFight", RPCMode.Others, orb.networkView.viewID, ship.networkView.viewID);
+                //TODO: get a real fight UID
+                int fight_uid = 0;
 
+                //RPC to other clients if this is the server
+                foreach (GameObject orb in orbs)
+                {
+
+                    networkView.RPC("ReceiveAccumulateOrb", RPCMode.Others, fight_uid, orb.networkView.viewID);
+
+                }
+
+                networkView.RPC("ReceiveFight", RPCMode.Others, fight_uid, attacker.networkView.viewID, defender.networkView.viewID);
+                
             }
 
             if (EventFight != null)
@@ -92,70 +101,52 @@ public class EventLogger : MonoBehaviour {
     }
 
     /// <summary>
-    /// Notifies that a power has been attached to a player
+    /// Notifies that a power has been attached to a player. This event is not transmitted over the network!
     /// </summary>
     /// <param name="power">The power that has been attached</param>
     /// <param name="ship">The ship who gained the power</param>
     public void NotifyPowerAttached(Power power, GameObject ship)
     {
-        
-        if (EventPowerAttached != null)
+
+        if (!Network.isClient)
         {
 
-            EventPowerAttached(this, power, ship);
+            if (EventPowerAttached != null)
+            {
+
+                EventPowerAttached(this, power, ship);
+
+            }
 
         }
 
+        //Call the typed version
+        NotifyPowerTypeAttached(power.GetType(), ship);
+        
     }
 
     /// <summary>
-    /// Notifies that a power has been detached from a ship
+    /// Notifies that a power has been detached from a ship. This event is not transmitted over the network!
     /// </summary>
     /// <param name="power">The power that has been detached</param>
     /// <param name="ship">The ship who lost the poweup</param>
     public void NotifyPowerDetached(Power power, GameObject ship)
     {
 
-        if (EventPowerDetached != null)
+        if (!Network.isClient)
         {
 
-            EventPowerDetached(this, power, ship);
+            if (EventPowerDetached != null)
+            {
+
+                EventPowerDetached(this, power, ship);
+
+            }
 
         }
 
-    }
-
-    /// <summary>
-    /// Notifies that a power has been attached to a player
-    /// </summary>
-    /// <param name="power">The power that has been attached</param>
-    /// <param name="ship">The ship who gained the power</param>
-    private void NotifyPowerTypeAttached(System.Type power_type, GameObject ship)
-    {
-
-        if (EventPowerAttached != null)
-        {
-
-            EventPowerTypeAttached(this, power_type, ship);
-
-        }
-
-    }
-
-    /// <summary>
-    /// Notifies that a power has been detached from a ship
-    /// </summary>
-    /// <param name="power">The power that has been detached</param>
-    /// <param name="ship">The ship who lost the poweup</param>
-    private void NotifyPowerTypeDetached(System.Type power_type, GameObject ship)
-    {
-
-        if (EventPowerDetached != null)
-        {
-
-            EventPowerTypeDetached(this, power_type, ship);
-
-        }
+        //Call the typed version
+        NotifyPowerTypeDetached(power.GetType(), ship);
 
     }
 
@@ -166,10 +157,34 @@ public class EventLogger : MonoBehaviour {
     public void NotifyInitializeMatch(IList<PlayerIdentity> identities)
     {
 
-        if (EventInitializeMatch != null)
+        if (!Network.isClient)
         {
 
-            EventInitializeMatch(this, identities);
+            if (Network.isServer)
+            {
+
+                //TODO: get a real identity UID
+                int initialization_uid = 0;
+
+
+                //RPC to other clients if this is the server
+                foreach (PlayerIdentity identity in identities)
+                {
+
+                    networkView.RPC("ReceiveAccumulateIdentity", RPCMode.Others, initialization_uid, identity.networkView.viewID);
+
+                }
+
+                networkView.RPC("ReceiveInitializeMatch", RPCMode.Others, initialization_uid);
+
+            }
+
+            if (EventInitializeMatch != null)
+            {
+
+                EventInitializeMatch(this, identities);
+
+            }
 
         }
 
@@ -203,19 +218,6 @@ public class EventLogger : MonoBehaviour {
 
     }
 
-    [RPC]
-    private void ReceiveStartMatch()
-    {
-
-        if (EventStartMatch != null)
-        {
-
-            EventStartMatch(this);
-
-        }
-
-    }
-
     /// <summary>
     /// Notifies the match's end
     /// </summary>
@@ -242,19 +244,6 @@ public class EventLogger : MonoBehaviour {
 
         }
         
-    }
-
-    [RPC]
-    private void ReceiveEndMatch()
-    {
-
-        if (EventEndMatch != null)
-        {
-
-            EventEndMatch(this);
-
-        }
-
     }
 
     /// <summary>
@@ -286,21 +275,10 @@ public class EventLogger : MonoBehaviour {
 
     }
 
-    [RPC]
-    private void ReceivePlayerEliminated(NetworkViewID player_identity_id)
-    {
+    #endregion
 
-        PlayerIdentity player_identity = NetworkView.Find(player_identity_id).gameObject.GetComponent<PlayerIdentity>();
+    #region "Delegates"
 
-        if (EventPlayerEliminated != null)
-        {
-
-            EventPlayerEliminated(this, player_identity);
-
-        }
-
-    }
-    
     /// <summary>
     /// Delegate used by EventOrbAttached
     /// </summary>
@@ -356,6 +334,10 @@ public class EventLogger : MonoBehaviour {
     /// </summary>
     public delegate void DelegatePlayerEliminated(object sender, PlayerIdentity player_identity);
 
+    #endregion
+
+    #region "Events"
+
     /// <summary>
     /// Raised when an orb has been attached to a player
     /// </summary>
@@ -406,4 +388,214 @@ public class EventLogger : MonoBehaviour {
     /// </summary>
     public event DelegatePlayerEliminated EventPlayerEliminated;
 
+    #endregion
+
+    /// <summary>
+    /// Notifies that a power has been attached to a player
+    /// </summary>
+    /// <param name="power">The power that has been attached</param>
+    /// <param name="ship">The ship who gained the power</param>
+    private void NotifyPowerTypeAttached(System.Type power_type, GameObject ship)
+    {
+
+        if (!Network.isClient)
+        {
+
+            if (Network.isServer)
+            {
+
+                //RPC to other clients if this is the server
+                networkView.RPC("ReceivePowerTypeAttached", RPCMode.Others, power_type.FullName, ship.networkView.viewID);
+
+            }
+
+            if (EventPowerAttached != null)
+            {
+
+                EventPowerTypeAttached(this, power_type, ship);
+
+            }
+
+        }
+
+    }
+
+    /// <summary>
+    /// Notifies that a power has been detached from a ship
+    /// </summary>
+    /// <param name="power">The power that has been detached</param>
+    /// <param name="ship">The ship who lost the poweup</param>
+    private void NotifyPowerTypeDetached(System.Type power_type, GameObject ship)
+    {
+
+        if (!Network.isClient)
+        {
+
+            if (Network.isServer)
+            {
+
+                //RPC to other clients if this is the server
+                networkView.RPC("ReceivePowerTypeDetached", RPCMode.Others, power_type.FullName, ship.networkView.viewID);
+
+            }
+
+            if (EventPowerTypeDetached != null)
+            {
+
+                EventPowerTypeDetached(this, power_type, ship);
+
+            }
+
+        }
+    }
+
+    #region "RPC Stuffs"
+
+    private RPCAccumulator<GameObject> orbs_accumulator_;
+
+    private RPCAccumulator<PlayerIdentity> player_identities_accumulator_;
+
+    [RPC]
+    private void ReceiveOrbAttached(NetworkViewID orb_id, NetworkViewID ship_id)
+    {
+
+        GameObject orb = NetworkView.Find(orb_id).gameObject;
+        GameObject ship = NetworkView.Find(ship_id).gameObject;
+
+        //Call the actual event
+        if (EventOrbAttached != null)
+        {
+
+            EventOrbAttached(this, orb, ship);
+
+        }
+
+    }
+
+    [RPC]
+    private void ReceiveAccumulateOrb(int unique_id, NetworkViewID orb_id)
+    {
+
+        //Accumulates the orb
+        orbs_accumulator_.Accumulate(unique_id, NetworkView.Find(orb_id).gameObject);
+
+    }
+
+    [RPC]
+    private void ReceiveFight(int unique_id, NetworkViewID attacker_id, NetworkViewID defender_id)
+    {
+
+        GameObject attacker = NetworkView.Find(attacker_id).gameObject;
+        GameObject defender = NetworkView.Find(defender_id).gameObject;
+        IList<GameObject> orbs = orbs_accumulator_.Fetch(unique_id);
+
+        if (EventFight != null)
+        {
+
+            EventFight(this, orbs, attacker, defender);
+
+        }
+
+    }
+
+    [RPC]
+    private void ReceivePowerTypeAttached(string type_string, NetworkViewID ship_id)
+    {
+
+        System.Type power_type = System.Type.GetType(type_string);
+        GameObject ship = NetworkView.Find(ship_id).gameObject;
+
+        if (EventPowerAttached != null)
+        {
+
+            EventPowerTypeAttached(this, power_type, ship);
+
+        }
+
+    }
+
+    [RPC]
+    private void ReceivePowerTypeDetached(string type_string, NetworkViewID ship_id)
+    {
+
+        System.Type power_type = System.Type.GetType(type_string);
+        GameObject ship = NetworkView.Find(ship_id).gameObject;
+
+        if (EventPowerAttached != null)
+        {
+
+            EventPowerTypeDetached(this, power_type, ship);
+
+        }
+
+    }
+
+    [RPC]
+    private void ReceiveAccumulateIdentity(int unique_id, NetworkViewID identity_id)
+    {
+
+        //Accumulates the identity
+        player_identities_accumulator_.Accumulate(unique_id, NetworkView.Find(identity_id).gameObject.GetComponent<PlayerIdentity>());
+
+    }
+
+    [RPC]
+    private void ReceiveInitializeMatch(int unique_id)
+    {
+
+        IList<PlayerIdentity> identities = player_identities_accumulator_.Fetch(unique_id);
+
+        if (EventInitializeMatch != null)
+        {
+
+            EventInitializeMatch(this, identities);
+
+        }
+
+    }
+
+    [RPC]
+    private void ReceiveStartMatch()
+    {
+
+        if (EventStartMatch != null)
+        {
+
+            EventStartMatch(this);
+
+        }
+
+    }
+
+    [RPC]
+    private void ReceiveEndMatch()
+    {
+
+        if (EventEndMatch != null)
+        {
+
+            EventEndMatch(this);
+
+        }
+
+    }
+
+    [RPC]
+    private void ReceivePlayerEliminated(NetworkViewID player_identity_id)
+    {
+
+        PlayerIdentity player_identity = NetworkView.Find(player_identity_id).gameObject.GetComponent<PlayerIdentity>();
+
+        if (EventPlayerEliminated != null)
+        {
+
+            EventPlayerEliminated(this, player_identity);
+
+        }
+
+    }
+
+    #endregion
+
+    
 }
