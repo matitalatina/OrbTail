@@ -75,7 +75,7 @@ public class EventLogger : MonoBehaviour {
             {
 
                 //TODO: get a real fight UID
-                int fight_uid = 0;
+                int fight_uid = UIDGenerator.Instance.GetNewUID();
 
                 //RPC to other clients if this is the server
                 foreach (GameObject orb in orbs)
@@ -164,8 +164,7 @@ public class EventLogger : MonoBehaviour {
             {
 
                 //TODO: get a real identity UID
-                int initialization_uid = 0;
-
+                int initialization_uid = UIDGenerator.Instance.GetNewUID();
 
                 //RPC to other clients if this is the server
                 foreach (PlayerIdentity identity in identities)
@@ -597,5 +596,4 @@ public class EventLogger : MonoBehaviour {
 
     #endregion
 
-    
 }
