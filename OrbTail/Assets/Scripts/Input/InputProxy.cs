@@ -7,6 +7,9 @@ using System.Collections.Generic;
 /// </summary>
 public class InputProxy : MonoBehaviour, IInputBroker{
 
+    /// <summary>
+    /// Is this proxy reading from remote?
+    /// </summary>
     public bool remote_reading = false;
 
     // Use this for initialization
@@ -20,14 +23,14 @@ public class InputProxy : MonoBehaviour, IInputBroker{
             {
 
                 //Mobile platform
-                input_broker_ = new MobileInputBroker();
+                InputBroker = new MobileInputBroker();
 
             }
             else
             {
                 
                 //Desktop platform
-                input_broker_ = new DesktopInputBroker();
+                InputBroker = new DesktopInputBroker();
 
             }
 
@@ -36,7 +39,7 @@ public class InputProxy : MonoBehaviour, IInputBroker{
         {
 
             // Reads from remote
-            input_broker_ = null;
+            InputBroker = null;
 
         }
 
@@ -45,14 +48,14 @@ public class InputProxy : MonoBehaviour, IInputBroker{
 	// Update is called once per frame
 	public void Update () {
 
-        if (input_broker_ != null)
+        if (InputBroker != null)
         {
 
-            input_broker_.Update();
+            InputBroker.Update();
 
-            Acceleration = input_broker_.Acceleration;
-            Steering = input_broker_.Steering;
-            fired_powers_ = input_broker_.FiredPowerUps;
+            Acceleration = InputBroker.Acceleration;
+            Steering = InputBroker.Steering;
+            fired_powers_ = InputBroker.FiredPowerUps;
 
         }
 
@@ -172,7 +175,7 @@ public class InputProxy : MonoBehaviour, IInputBroker{
     /// <summary>
     /// The input broker used to read user's input or to exechange data
     /// </summary>
-    private IInputBroker input_broker_;
+    private IInputBroker InputBroker{ get;set; }
 
     /// <summary>
     /// The list of the powerups to be fired

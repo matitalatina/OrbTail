@@ -3,7 +3,6 @@ using System.Collections;
 
 public class OrbController : MonoBehaviour {
 	private GameObject target;
-	private IApproachListener listener;
 
 	// Values used to create spring
 	private float dampSpring = 1f;

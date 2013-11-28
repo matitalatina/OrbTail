@@ -8,12 +8,7 @@ using System.Collections.Generic;
 public class EventLogger : MonoBehaviour {
 
     // Use this for initialization
-    void Start()
-    {
-
-        NetworkInterface = GetComponent<NetworkView>();
-
-    }
+    void Start(){}
 
     // Update is called once per frame
     void Update() { }
@@ -23,22 +18,43 @@ public class EventLogger : MonoBehaviour {
     /// </summary>
     /// <param name="orb">The orb that has been attached</param>
     /// <param name="ship">The ship that has been attached</param>
-    [RPC]
     public void NotifyOrbAttached(GameObject orb, GameObject ship)
     {
 
+        if (!Network.isClient)
+        {
+
+            if (Network.isServer)
+            {
+             
+                //RPC to other clients if this is the server
+                networkView.RPC("ReceiveOrbAttached", RPCMode.Others, orb.networkView.viewID, ship.networkView.viewID);
+
+            }
+
+            if (EventOrbAttached != null)
+            {
+
+                EventOrbAttached(this, orb, ship);
+
+            }
+
+        }
+
+    }
+    
+    [RPC]
+    private void ReceiveOrbAttached(NetworkViewID orb_id, NetworkViewID ship_id)
+    {
+
+        GameObject orb = NetworkView.Find(orb_id).gameObject;
+        GameObject ship = NetworkView.Find(ship_id).gameObject;
+
+        //Call the actual event
         if (EventOrbAttached != null)
         {
 
             EventOrbAttached(this, orb, ship);
-
-        }
-
-        if (Network.isServer)
-        {
-
-            //Sends the routine to the client
-            NetworkInterface.RPC("NotifyOrbAttached", RPCMode.Others, orb, ship);
 
         }
 
@@ -50,22 +66,26 @@ public class EventLogger : MonoBehaviour {
     /// <param name="orbs">The list of the orbs lost by the defender</param>
     /// <param name="attacker">The attacker's ship</param>
     /// <param name="defender">The defender's ship</param>
-    [RPC]
     public void NotifyFight(IList<GameObject> orbs, GameObject attacker, GameObject defender)
     {
 
-        if (EventFight != null)
+        if (!Network.isClient)
         {
 
-            EventFight(this, orbs, attacker, defender);
+            if (Network.isServer)
+            {
 
-        }
+                //RPC to other clients if this is the server
+                //networkView.RPC("ReceiveFight", RPCMode.Others, orb.networkView.viewID, ship.networkView.viewID);
 
-        if (Network.isServer)
-        {
+            }
 
-            //Sends the routine to the client
-            NetworkInterface.RPC("NotifyFight", RPCMode.Others, orbs, attacker, defender);
+            if (EventFight != null)
+            {
+
+                EventFight(this, orbs, attacker, defender);
+
+            }
 
         }
 
@@ -76,10 +96,9 @@ public class EventLogger : MonoBehaviour {
     /// </summary>
     /// <param name="power">The power that has been attached</param>
     /// <param name="ship">The ship who gained the power</param>
-    [RPC]
     public void NotifyPowerAttached(Power power, GameObject ship)
     {
-
+        
         if (EventPowerAttached != null)
         {
 
@@ -87,11 +106,54 @@ public class EventLogger : MonoBehaviour {
 
         }
 
-        if (Network.isServer)
+    }
+
+    /// <summary>
+    /// Notifies that a power has been detached from a ship
+    /// </summary>
+    /// <param name="power">The power that has been detached</param>
+    /// <param name="ship">The ship who lost the poweup</param>
+    public void NotifyPowerDetached(Power power, GameObject ship)
+    {
+
+        if (EventPowerDetached != null)
         {
 
-            //Sends the routine to the client
-            NetworkInterface.RPC("NotifyPowerAttached", RPCMode.Others, power, ship);
+            EventPowerDetached(this, power, ship);
+
+        }
+
+    }
+
+    /// <summary>
+    /// Notifies that a power has been attached to a player
+    /// </summary>
+    /// <param name="power">The power that has been attached</param>
+    /// <param name="ship">The ship who gained the power</param>
+    private void NotifyPowerTypeAttached(System.Type power_type, GameObject ship)
+    {
+
+        if (EventPowerAttached != null)
+        {
+
+            EventPowerTypeAttached(this, power_type, ship);
+
+        }
+
+    }
+
+    /// <summary>
+    /// Notifies that a power has been detached from a ship
+    /// </summary>
+    /// <param name="power">The power that has been detached</param>
+    /// <param name="ship">The ship who lost the poweup</param>
+    private void NotifyPowerTypeDetached(System.Type power_type, GameObject ship)
+    {
+
+        if (EventPowerDetached != null)
+        {
+
+            EventPowerTypeDetached(this, power_type, ship);
 
         }
 
@@ -101,7 +163,6 @@ public class EventLogger : MonoBehaviour {
     /// Notifies the match's initialization
     /// </summary>
     /// <param name="identities">The identities of the players</param>
-    [RPC]
     public void NotifyInitializeMatch(IList<PlayerIdentity> identities)
     {
 
@@ -112,21 +173,38 @@ public class EventLogger : MonoBehaviour {
 
         }
 
-        if (Network.isServer)
-        {
-
-            //Sends the routine to the client
-            NetworkInterface.RPC("NotifyInitializeMatch", RPCMode.Others, identities);
-
-        }
-
     }
 
     /// <summary>
     /// Notifies the match's start
     /// </summary>
-    [RPC]
     public void NotifyStartMatch()
+    {
+
+        if (!Network.isClient)
+        {
+
+            if (Network.isServer)
+            {
+
+                //RPC to other clients if this is the server
+                networkView.RPC("ReceiveStartMatch", RPCMode.Others);
+
+            }
+
+            if (EventStartMatch != null)
+            {
+
+                EventStartMatch(this);
+
+            }
+
+        }
+
+    }
+
+    [RPC]
+    private void ReceiveStartMatch()
     {
 
         if (EventStartMatch != null)
@@ -136,21 +214,38 @@ public class EventLogger : MonoBehaviour {
 
         }
 
-        if (Network.isServer)
-        {
-
-            //Sends the routine to the client
-            NetworkInterface.RPC("NotifyStartMatch", RPCMode.Others);
-
-        }
-
     }
 
     /// <summary>
     /// Notifies the match's end
     /// </summary>
-    [RPC]
     public void NotifyEndMatch()
+    {
+
+        if (!Network.isClient)
+        {
+
+            if (Network.isServer)
+            {
+
+                //RPC to other clients if this is the server
+                networkView.RPC("ReceiveEndMatch", RPCMode.Others);
+
+            }
+
+            if (EventEndMatch != null)
+            {
+
+                EventEndMatch(this);
+
+            }
+
+        }
+        
+    }
+
+    [RPC]
+    private void ReceiveEndMatch()
     {
 
         if (EventEndMatch != null)
@@ -160,36 +255,47 @@ public class EventLogger : MonoBehaviour {
 
         }
 
-        if (Network.isServer)
-        {
-
-            //Sends the routine to the client
-            NetworkInterface.RPC("NotifyEndMatch", RPCMode.Others);
-
-        }
-
     }
 
     /// <summary>
     /// Notifies that a player has been eliminated from the game
     /// </summary>
     /// <param name="player_identity">The identity of the player that has been eliminated</param>
-    [RPC]
     public void NotifyPlayerEliminated(PlayerIdentity player_identity)
     {
+
+        if (!Network.isClient)
+        {
+
+            if (Network.isServer)
+            {
+
+                //RPC to other clients if this is the server
+                networkView.RPC("ReceivePlayerEliminated", RPCMode.Others, player_identity.networkView.viewID);
+
+            }
+
+            if (EventPlayerEliminated != null)
+            {
+
+                EventPlayerEliminated(this, player_identity);
+
+            }
+
+        }
+
+    }
+
+    [RPC]
+    private void ReceivePlayerEliminated(NetworkViewID player_identity_id)
+    {
+
+        PlayerIdentity player_identity = NetworkView.Find(player_identity_id).gameObject.GetComponent<PlayerIdentity>();
 
         if (EventPlayerEliminated != null)
         {
 
             EventPlayerEliminated(this, player_identity);
-
-        }
-
-        if (Network.isServer)
-        {
-
-            //Sends the routine to the client
-            NetworkInterface.RPC("NotifyInitializeMatch", RPCMode.Others, player_identity);
 
         }
 
@@ -201,6 +307,11 @@ public class EventLogger : MonoBehaviour {
     public delegate void DelegateOrbAttached(object sender, GameObject orb, GameObject ship);
 
     /// <summary>
+    /// Delegate used by EventOrbDetached
+    /// </summary>
+    public delegate void DelegateOrbDetached(object sender, GameObject orb, GameObject ship);
+    
+    /// <summary>
     /// Delegate used by EventFight
     /// </summary>
     public delegate void DelegateFight(object sender, IList<GameObject> orbs, GameObject attacker, GameObject defender);
@@ -210,6 +321,21 @@ public class EventLogger : MonoBehaviour {
     /// </summary>
     public delegate void DelegatePowerAttached(object sender, Power power, GameObject ship);
 
+    /// <summary>
+    /// Delegate used by EventPowerDetached
+    /// </summary>
+    public delegate void DelegatePowerDetached(object sender, Power power, GameObject ship);
+
+    /// <summary>
+    /// Delegate used by EventPowerAttached
+    /// </summary>
+    public delegate void DelegatePowerTypeAttached(object sender, System.Type power_type, GameObject ship);
+
+    /// <summary>
+    /// Delegate used by EventPowerDetached
+    /// </summary>
+    public delegate void DelegatePowerTypeDetached(object sender, System.Type power_type, GameObject ship);
+    
     /// <summary>
     /// Delegate used by EventInitializeMatch
     /// </summary>
@@ -246,6 +372,21 @@ public class EventLogger : MonoBehaviour {
     public event DelegatePowerAttached EventPowerAttached;
 
     /// <summary>
+    /// Raised when a ship have lost a power
+    /// </summary>
+    public event DelegatePowerDetached EventPowerDetached;
+
+    /// <summary>
+    /// Raised when a ship has gained a power type
+    /// </summary>
+    public event DelegatePowerTypeAttached EventPowerTypeAttached;
+
+    /// <summary>
+    /// Raised when a ship have lost a power type
+    /// </summary>
+    public event DelegatePowerTypeDetached EventPowerTypeDetached;
+
+    /// <summary>
     /// Raised at match's start
     /// </summary>
     public event DelegateInitializeMatch EventInitializeMatch;
@@ -264,10 +405,5 @@ public class EventLogger : MonoBehaviour {
     /// Raised when a player has been eliminated
     /// </summary>
     public event DelegatePlayerEliminated EventPlayerEliminated;
-
-    /// <summary>
-    /// The network interface used to broadcast the RPC or used to receive them
-    /// </summary>
-    private NetworkView NetworkInterface { get; set; }
 
 }
