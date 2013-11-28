@@ -13,7 +13,7 @@ public class GUIController : MonoBehaviour {
     /// </summary>
     /// <param name="power_view">The power to add</param>
     [RPC]
-    public void AddPower(IPowerView power_view)
+    public void AddPower(PowerView power_view)
     {
 
         if (GUIBroker == null)
@@ -37,7 +37,7 @@ public class GUIController : MonoBehaviour {
     /// Removes a power from the GUI
     /// </summary>
     /// <param name="power_view">The power view to remove</param>
-    private void RemovePower(IPowerView power_view)
+    private void RemovePower(PowerView power_view)
     {
 
         //if( GUIBroker ==)
