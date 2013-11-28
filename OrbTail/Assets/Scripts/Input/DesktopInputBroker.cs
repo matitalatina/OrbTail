@@ -53,18 +53,17 @@ class DesktopInputBroker: IInputBroker
         Acceleration = Input.GetAxis(acceleration_axis_name);
         Steering = Input.GetAxis(steering_axis_name);
         
-        //TODO: Fill those properly
         if (Input.GetAxis(fire_special_axis_name) > 0.0f)
         {
 
-            fired_power_ups_.Add(null /*SpecialPowerGroup*/);
+            fired_power_ups_.Add(SpecialPowerGroup.Instance.groupID);
 
         }
 
         if (Input.GetAxis(fire_main_axis_name) > 0.0f)
         {
 
-            fired_power_ups_.Add(null /*MainPowerGroup*/);
+            fired_power_ups_.Add(MainPowerGroup.Instance.groupID);
 
         }
 

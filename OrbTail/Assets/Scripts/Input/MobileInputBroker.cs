@@ -7,21 +7,20 @@ using System.Text;
 /// <summary>
 /// Reads the data from a mobile platform
 /// </summary>
-class MobileInputBroker: IInputBroker
+public class MobileInputBroker: IInputBroker
 {
-
-    MobileInputBroker()
-    {
-
-        AccelerometerOffset = Vector3.forward;
-
-    }
-
-    private const float kForceFactor = 1.0f;
 
     private const float kAccelerationExponent = 0.3f;
 
     private const float kSteeringExponent = 0.5f;
+
+    public MobileInputBroker()
+    {
+
+        //Standard position, with the phone in landscape position and the bottom on the right.
+        AccelerometerOffset = Vector3.left; 
+
+    }
 
     /// <summary>
     /// Returns the accelerometers' offset
