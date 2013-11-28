@@ -6,6 +6,7 @@ public class Tail {
 	private GameObject owner;
 	private Stack<GameObject> orbStack = new Stack<GameObject>();
 	private GameObject firstOrb;
+	private EventLogger eventLogger;
 	
 
 	/// <summary>
@@ -14,6 +15,7 @@ public class Tail {
 	/// <param name="owner">The owner of the tail.</param>
 	public Tail(GameObject owner) {
 		this.owner = owner;
+		eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
 	}
 
 	// TODO: to implement
@@ -41,6 +43,7 @@ public class Tail {
 		//orb.GetComponent<OrbController>().ApproachTo(target, this);
 		orb.GetComponent<OrbController>().LinkTo(target);
 
+		eventLogger.NotifyOrbAttached(orb, owner);
 
 	}
 

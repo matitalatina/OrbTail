@@ -46,7 +46,9 @@ public class MovementController : MonoBehaviour {
 		                                         ).normalized;
 
 		Quaternion rollRotation = Quaternion.FromToRotation(this.transform.up,
-		                                                    Quaternion.AngleAxis(wheelSteer * maxRoll, -this.transform.forward) * -arenaDown);
+		                                                    Quaternion.AngleAxis(	wheelSteer * maxRoll, 
+		                     														-this.transform.forward
+		                     													) * -arenaDown);
 		Quaternion yawRotation = Quaternion.AngleAxis(wheelSteer * maxTorqueForce, -arenaDown);
 		Quaternion pitchStabilization = Quaternion.LookRotation(forwardProjected, -arenaDown);
 

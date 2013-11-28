@@ -9,6 +9,8 @@ public class TailController : MonoBehaviour {
 	private DriverStack<IOffenceDriver> offenceDriverStack;
 	private DriverStack<IDefenceDriver> defenceDriverStack;
 
+	private EventLogger eventLogger;
+
 	public Tail Tail { get; set;}
 
 	private float dotProductAttackThreshold = 0.2f;
@@ -56,6 +58,8 @@ public class TailController : MonoBehaviour {
 		detacherDriverStack = new DriverStack<IDetacherDriver>();
 		offenceDriverStack = new DriverStack<IOffenceDriver>();
 		defenceDriverStack = new DriverStack<IDefenceDriver>();
+
+		eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
 		
 		Tail = new Tail(this.gameObject);
 	}
@@ -80,7 +84,9 @@ public class TailController : MonoBehaviour {
 			if (IsAttack(collidedObj)) {
 				float damage = collidedObj.GetComponent<TailController>().GetOffenceDriverStack().GetHead().GetDamage(this.gameObject, collision);
 				int nOrbsToDetach = defenceDriverStack.GetHead().DamageToOrbs(damage);
-				detacherDriverStack.GetHead().DetachOrbs(nOrbsToDetach, this.Tail);
+				List<GameObject> orbsDetached = detacherDriverStack.GetHead().DetachOrbs(nOrbsToDetach, this.Tail);
+
+				eventLogger.NotifyFight(orbsDetached, collidedObj, this.gameObject);
 			}
 
 		}

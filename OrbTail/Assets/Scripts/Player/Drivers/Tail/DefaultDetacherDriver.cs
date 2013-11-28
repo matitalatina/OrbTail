@@ -16,6 +16,7 @@ public class DefaultDetacherDriver : IDetacherDriver {
 
 			foreach(GameObject orb in detachedOrbs) {
 				orb.rigidbody.AddForce(Random.onUnitSphere * force, ForceMode.Impulse);
+				
 			}
 
 		//}
@@ -24,4 +25,5 @@ public class DefaultDetacherDriver : IDetacherDriver {
 	}
 
 	public void Update() {}
+	
 }
