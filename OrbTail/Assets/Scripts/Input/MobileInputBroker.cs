@@ -10,9 +10,9 @@ using System.Text;
 public class MobileInputBroker: IInputBroker
 {
 
-    private const float kAccelerationExponent = 0.2f;
+    private const float kAccelerationExponent = 5f;
 
-    private const float kSteeringExponent = 0.5f;
+    private const float kSteeringExponent = 4f;
 
     public MobileInputBroker()
     {
@@ -59,15 +59,17 @@ public class MobileInputBroker: IInputBroker
     public void Update()
     {
 
-        var direction = Input.acceleration.normalized - AccelerometerOffset;
-
+        //var direction = Input.acceleration.normalized - AccelerometerOffset;
+		var delta = Vector3.Cross(AccelerometerOffset, Input.acceleration.normalized);
         //From 0.0f to 1.0f. The power here is useful to avoid extreme angles
-        Acceleration = Mathf.Pow( Mathf.Clamp01(-direction.z), kAccelerationExponent );
+		Acceleration = Mathf.Clamp(delta.x * kAccelerationExponent, -1f, 1f);
+		//Mathf.Pow( Mathf.Clamp01(-direction.z), kAccelerationExponent );
 
         //From -1.0f to 1.0f.
-        Steering = Mathf.Pow( Mathf.Clamp01( Mathf.Abs( direction.x ) ), 
-                                              kSteeringExponent) * Mathf.Sign(direction.x);
+        //Steering = Mathf.Pow( Mathf.Clamp01( Mathf.Abs( direction.x ) ), 
+        //                                      kSteeringExponent) * Mathf.Sign(direction.x);
 
+		Steering = Mathf.Clamp(delta.z * kSteeringExponent, -1f, 1f);
     }
 
     private IList<IGroup> fired_power_ups_ = new List<IGroup>();

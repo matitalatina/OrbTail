@@ -15,7 +15,6 @@ public class MovementController : MonoBehaviour {
 	private DriverStack<IWheelDriver> wheelDriverStack;
 
 	private InputProxy inputProxy;
-	
 
 
 	void Awake() {
