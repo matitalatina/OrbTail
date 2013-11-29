@@ -7,39 +7,55 @@ using System.Collections.Generic;
 /// </summary>
 public class InputProxy : MonoBehaviour, IInputBroker{
 
+    public enum InputProxyType
+    {
+
+        Human,      //The player is a local human
+        AIEasy,     //The player is a local AI (easy difficult)
+        Remote      //The player is a remote player
+
+    }
+
     /// <summary>
-    /// Is this proxy reading from remote?
+    /// The input proxy type
     /// </summary>
-    public bool remote_reading = false;
+    public InputProxyType proxy_type = InputProxyType.Human;
 
     // Use this for initialization
 	public void Start () {
-                
-        if (!remote_reading)
+
+        switch (proxy_type)
         {
+            case InputProxyType.Human:
 
-            // Reads from local
-            if(SystemInfo.supportsAccelerometer)
-            {
+                if (SystemInfo.supportsAccelerometer)
+                {
 
-                //Mobile platform
-                InputBroker = new MobileInputBroker();
+                    //Mobile platform
+                    InputBroker = new MobileInputBroker();
 
-            }
-            else
-            {
-                
-                //Desktop platform
-                InputBroker = new DesktopInputBroker();
+                }
+                else
+                {
 
-            }
+                    //Desktop platform
+                    InputBroker = new DesktopInputBroker();
 
-        }
-        else
-        {
+                }
 
-            // Reads from remote
-            InputBroker = null;
+                break;
+
+            case InputProxyType.AIEasy:
+
+                InputBroker = new AIInputBroker(AIInputBroker.AIIntelligence.VeryLow);
+
+                break;
+
+            case InputProxyType.Remote:
+
+                InputBroker = null;
+
+                break;
 
         }
 
