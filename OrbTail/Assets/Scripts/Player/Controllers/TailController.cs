@@ -58,14 +58,12 @@ public class TailController : MonoBehaviour {
 		detacherDriverStack = new DriverStack<IDetacherDriver>();
 		offenceDriverStack = new DriverStack<IOffenceDriver>();
 		defenceDriverStack = new DriverStack<IDefenceDriver>();
-
-		eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
 		
 		Tail = new Tail(this.gameObject);
 	}
 
 	void Start () {
-
+		eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
 	}
 
 	void OnCollisionEnter(Collision collision) {

@@ -14,8 +14,6 @@ public class PlayerAI : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		inputBroker.Acceleration = 1f;
-		inputBroker.Steering = 1f;
 	}
 	
 	// Update is called once per frame
