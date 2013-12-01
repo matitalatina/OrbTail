@@ -6,10 +6,7 @@ public class PlayerAI : MonoBehaviour {
 	private RelayInputBroker inputBroker = new RelayInputBroker();
 	private GameObject target;
 	private Vector3 desideredDirection;
-	private bool alreadyCollided = false;
-	private OrbController orbController;
-	private float actualSteering;
-	private FloatingObject floatingObject;
+	private bool alreadyCollided;
 
 	public IInputBroker GetInputBroker() {
 		return inputBroker;
@@ -17,7 +14,8 @@ public class PlayerAI : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		floatingObject = GetComponent<FloatingObject>();
+		inputBroker.Acceleration = 1f;
+		inputBroker.Steering = 1f;
 	}
 	
 	// Update is called once per frame
@@ -25,60 +23,44 @@ public class PlayerAI : MonoBehaviour {
 		if (target != null) {
 			if (target.tag == Tags.Ship) {
 				if (!alreadyCollided) {
-					ChasingPlayer();
+					Chasing();
 				}
 				else {
 					GoAway();
 				}
 			}
 			else {
-				ChasingOrb();
+				Chasing();
 			}
 		}
 		else {
 			LookAround();
 		}
 
-		float steering = Vector3.Dot(-floatingObject.ArenaDown / 4f, Vector3.Cross(transform.forward, desideredDirection));
-		inputBroker.Steering = Mathf.Clamp(steering, -1f, 1f);
-		inputBroker.Acceleration = 1f - Mathf.Clamp01(steering) / 2f;
-
 		AvoidOstacles();
+
+		inputBroker.Acceleration(desideredDirection.z);
+		inputBroker.Steering(desideredDirection.x);
 	}
 
-	void ChasingOrb() {
-		if (!orbController.IsAttached()) {
-			Vector3 relVector = target.transform.position - gameObject.transform.position;
-			desideredDirection = relVector;
-		}
-		else {
-			orbController = null;
-			target = null;
-		}
+	void Chasing() {
+		Vector3 relVector = target.transform.position - gameObject.transform.position;
+		desideredDirection = relVector.normalized;
 	}
 
 	void GoAway() {
 		Vector3 relVector = gameObject.transform.position - target.transform.position;
-		desideredDirection = relVector;
+		desideredDirection = relVector.normalized;
 	}
 
 	void OnTriggerEnter(Collider other) {
 		GameObject colObject = other.gameObject;
 
 		if (target == null) {
-			if (colObject.tag == Tags.Ship) {
+			if (colObject.tag == Tags.Ship || IsFreeOrb(colObject)) {
 				target = colObject;
 			}
-			//else if (IsFreeOrb(colObject)) {
-			//	target = colObject;
-			//	orbController = colObject.GetComponent<OrbController>();
-			//}
 		}
-	}
-
-	void ChasingPlayer() {
-		Vector3 relVector = target.transform.position - gameObject.transform.position;
-		desideredDirection = relVector;
 	}
 
 	void AvoidOstacles() {
