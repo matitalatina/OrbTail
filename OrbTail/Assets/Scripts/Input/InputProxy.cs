@@ -11,8 +11,8 @@ public class InputProxy : MonoBehaviour, IInputBroker{
     {
 
         Human,      //The player is a local human
-        AIEasy,     //The player is a local AI (easy difficult)
-        Remote      //The player is a remote player
+        Remote,     //The player is a remote player
+        AI          //The player has an AI
 
     }
 
@@ -23,6 +23,7 @@ public class InputProxy : MonoBehaviour, IInputBroker{
 
     // Use this for initialization
 	public void Start () {
+
 
         switch (proxy_type)
         {
@@ -45,11 +46,9 @@ public class InputProxy : MonoBehaviour, IInputBroker{
 
                 break;
 
-            case InputProxyType.AIEasy:
+            case InputProxyType.AI:
 
-                InputBroker = new AIInputBroker(AIInputBroker.AIIntelligence.VeryLow);
-
-                break;
+                //InputBroker = GetComponent.GetInputBroker
 
             case InputProxyType.Remote:
 
@@ -191,7 +190,7 @@ public class InputProxy : MonoBehaviour, IInputBroker{
     /// <summary>
     /// The input broker used to read user's input or to exechange data
     /// </summary>
-    private IInputBroker InputBroker{ get;set; }
+    private IInputBroker InputBroker { get; set; }
 
     /// <summary>
     /// The list of the powerups to be fired
