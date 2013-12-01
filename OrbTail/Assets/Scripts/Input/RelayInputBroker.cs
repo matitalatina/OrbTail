@@ -7,7 +7,7 @@ using System.Text;
 /// <summary>
 /// Relays the input
 /// </summary>
-class RelayInputBroker: IInputBroker
+public class RelayInputBroker: IInputBroker
 {
 
     public RelayInputBroker()

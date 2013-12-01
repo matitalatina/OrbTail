@@ -6,7 +6,7 @@ using System.Text;
 /// <summary>
 /// Brokes the input of various players
 /// </summary>
-interface IInputBroker
+public interface IInputBroker
 {
 
     /// <summary>

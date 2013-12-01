@@ -48,7 +48,9 @@ public class InputProxy : MonoBehaviour, IInputBroker{
 
             case InputProxyType.AI:
 
-                //InputBroker = GetComponent.GetInputBroker
+				InputBroker = GetComponent<PlayerAI>().GetInputBroker();
+				
+				break;
 
             case InputProxyType.Remote:
 
