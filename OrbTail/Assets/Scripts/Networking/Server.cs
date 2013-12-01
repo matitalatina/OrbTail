@@ -43,7 +43,7 @@ public class Server : MonoBehaviour {
         Debug.Log("A player has been connected, let the game begin!");
 
         //Instantiate a normal orb
-        var orb = Resources.Load("Prefabs/Orb");
+        var orb = Resources.Load("Prefabs/Ship");
 
         Network.Instantiate(orb, Vector3.zero, Quaternion.identity, 0);
 
