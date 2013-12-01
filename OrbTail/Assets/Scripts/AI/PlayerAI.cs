@@ -39,8 +39,8 @@ public class PlayerAI : MonoBehaviour {
 
 		AvoidOstacles();
 
-		inputBroker.Acceleration(desideredDirection.z);
-		inputBroker.Steering(desideredDirection.x);
+		inputBroker.Acceleration = desideredDirection.z;
+		inputBroker.Steering = desideredDirection.x;
 	}
 
 	void Chasing() {
