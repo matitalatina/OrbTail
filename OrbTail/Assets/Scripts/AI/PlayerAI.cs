@@ -39,9 +39,16 @@ public class PlayerAI : MonoBehaviour {
 			LookAround();
 		}
 
-		float steering = Vector3.Dot(-floatingObject.ArenaDown, Vector3.Cross(transform.forward, desideredDirection.normalized));
-		inputBroker.Steering = Mathf.Clamp(steering * 10f, -1f, 1f);
-		inputBroker.Acceleration = 1f - Mathf.Clamp01(steering) / 2f;
+        float steering = -Mathf.Sign(Vector3.Dot(-floatingObject.ArenaDown,
+                                     Vector3.Cross(transform.forward, desideredDirection.normalized))) *
+                         (Vector3.Dot( transform.forward, desideredDirection.normalized ) - 1.0f);
+
+        Debug.Log(steering);
+
+        //float steering = Vector3.Dot(-floatingObject.ArenaDown, Vector3.Cross(transform.forward, desideredDirection.normalized));
+
+		inputBroker.Steering = Mathf.Clamp(steering * 5.0f, -1f, 1f);
+		inputBroker.Acceleration = 1f - Mathf.Clamp01(steering);
 
 		AvoidOstacles();
 	}
@@ -78,6 +85,7 @@ public class PlayerAI : MonoBehaviour {
 
 	void ChasingPlayer() {
 		Vector3 relVector = target.transform.position - gameObject.transform.position;
+        
 		desideredDirection = relVector;
 	}
 
