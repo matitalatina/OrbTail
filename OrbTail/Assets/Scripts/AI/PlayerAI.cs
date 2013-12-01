@@ -39,8 +39,8 @@ public class PlayerAI : MonoBehaviour {
 			LookAround();
 		}
 
-		float steering = Vector3.Dot(-floatingObject.ArenaDown / 4f, Vector3.Cross(transform.forward, desideredDirection));
-		inputBroker.Steering = Mathf.Clamp(steering, -1f, 1f);
+		float steering = Vector3.Dot(-floatingObject.ArenaDown, Vector3.Cross(transform.forward, desideredDirection.normalized));
+		inputBroker.Steering = Mathf.Clamp(steering * 10f, -1f, 1f);
 		inputBroker.Acceleration = 1f - Mathf.Clamp01(steering) / 2f;
 
 		AvoidOstacles();
