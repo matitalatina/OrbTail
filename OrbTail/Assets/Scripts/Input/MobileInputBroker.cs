@@ -10,9 +10,9 @@ using System.Text;
 public class MobileInputBroker: IInputBroker
 {
 
-    private const float kAccelerationExponent = 5f;
+    private const float kAccelerationExponent = 4f;
 
-    private const float kSteeringExponent = 4f;
+    private const float kSteeringExponent = 3f;
 
     public MobileInputBroker()
     {
