@@ -11,7 +11,6 @@ public class InputProxy : MonoBehaviour, IInputBroker{
     {
 
         Human,      //The player is a local human
-        Remote,     //The player is a remote player
         AI          //The player has an AI
 
     }
@@ -23,12 +22,23 @@ public class InputProxy : MonoBehaviour, IInputBroker{
 
     // Use this for initialization
 	public void Start () {
-
-
-        switch (proxy_type)
+        
+        if (networkView.isMine ||
+            ( !Network.isClient &&
+              !Network.isServer ))
         {
-            case InputProxyType.Human:
 
+            if (proxy_type == InputProxyType.AI)
+            {
+
+                //This ship is a local AI
+                InputBroker = GetComponent<PlayerAI>().GetInputBroker();
+				
+            }
+            else if (proxy_type == InputProxyType.Human)
+            {
+
+                //This ship is a local human
                 if (SystemInfo.supportsAccelerometer)
                 {
 
@@ -44,19 +54,14 @@ public class InputProxy : MonoBehaviour, IInputBroker{
 
                 }
 
-                break;
+            }
 
-            case InputProxyType.AI:
+        }
+        else
+        {
 
-				InputBroker = GetComponent<PlayerAI>().GetInputBroker();
-				
-				break;
-
-            case InputProxyType.Remote:
-
-                InputBroker = null;
-
-                break;
+            //This ship will take the input from the network
+            InputBroker = null;
 
         }
 
@@ -86,28 +91,17 @@ public class InputProxy : MonoBehaviour, IInputBroker{
         
         //Stream: | Acceleration | Steering | #Powers | Group(1) | Group(2) | ...
 
-        if (stream.isWriting)
+        if (stream.isWriting &&
+            networkView.isMine)
         {
-            
-            if (Network.isClient)
-            {
 
-                // Only the client can serialize stuffs
-                Serialize(stream);
+            Serialize(stream);
 
-            }
-            
-        }
-        else
+        }else if( stream.isReading &&
+                  !networkView.isMine)
         {
-            
-            if (Network.isServer)
-            {
 
-                // Only the server can deserialize stuffs
-                Deserialize(stream);
-
-            }
+            Deserialize(stream);
 
         }
 

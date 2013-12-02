@@ -7,24 +7,19 @@ using System.Collections;
 public class PlayerIdentity : MonoBehaviour {
 
     /// <summary>
+    /// The ordinal number of the player
+    /// </summary>
+    public int id = 0;
+
+    /// <summary>
     /// The nickname of the player
     /// </summary>
     public string player_name = "";
 
     /// <summary>
-    /// The color associated to the player
-    /// </summary>
-    public Color color = Color.red;
-
-    /// <summary>
-    /// The ordinal number of the player
-    /// </summary>
-    public int player_number = 0;
-
-    /// <summary>
     /// The name of the ship prefab used by the player
     /// </summary>
-    public string ship_name = "ship";
+    public string ship_name = "Ship";
 
 	// Use this for initialization
 	void Start () {

@@ -7,12 +7,17 @@ public class GUIServerClient : MonoBehaviour {
 
     GameObject server_button;
     GameObject client_button;
+    GameObject start_button;
 
 	// Use this for initialization
 	void Start () {
 
         server_button = GameObject.Find("ServerButton");
         client_button = GameObject.Find("ClientButton");
+        start_button = GameObject.Find("StartButton");
+
+        //This should not be active at the beginning
+        start_button.SetActive(false);
 
 	}
 	
@@ -38,9 +43,8 @@ public class GUIServerClient : MonoBehaviour {
                 {
 
                     //Loads the server builder
-                    var server_builder = Resources.Load("Prefabs/ServerBuilder");
-                    Instantiate(server_builder, Vector3.zero, Quaternion.identity);
-
+                    gameObject.AddComponent<ServerBuilder>().EventMatchCreated += GUIServerClient_EventMatchCreated;
+                    
                     server_button.gameObject.SetActive(false);
                     client_button.gameObject.SetActive(false);
 
@@ -49,11 +53,18 @@ public class GUIServerClient : MonoBehaviour {
                 {
 
                     //Loads the client builder
-                    var client_builder = Resources.Load("Prefabs/ClientBuilder");
-                    Instantiate(client_builder, Vector3.zero, Quaternion.identity);
+                    gameObject.AddComponent<ClientBuilder>().EventServerReady += GUIServerClient_EventServerReady;
 
                     server_button.gameObject.SetActive(false);
                     client_button.gameObject.SetActive(false);
+
+                }
+                else if (raycast_hit.collider.gameObject == start_button)
+                {
+
+                    MasterServer.UnregisterHost();      //No more connections are allowed from now on
+
+                    NextLevel();
 
                 }
 
@@ -62,5 +73,32 @@ public class GUIServerClient : MonoBehaviour {
         }
 
 	}
+
+    
+
+    private void NextLevel()
+    {
+        
+        Destroy(this);                      //The component should be destroyed
+        DontDestroyOnLoad(gameObject);      //The Game should be preserved
+
+        Application.LoadLevel("PrototypeScene");
+
+    }
+
+    void GUIServerClient_EventMatchCreated(object sender)
+    {
+
+        start_button.gameObject.SetActive(true);
+
+    }
+
+    void GUIServerClient_EventServerReady(object sender)
+    {
+
+        NextLevel();
+
+    }
+
 
 }
