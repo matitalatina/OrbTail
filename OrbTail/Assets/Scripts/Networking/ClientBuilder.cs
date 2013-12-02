@@ -12,4 +12,14 @@ public class ClientBuilder : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    /// <summary>
+    /// Initialize the client match instance
+    /// </summary>
+    public void InitializeClientMatch()
+    {
+
+    }
+
+
 }

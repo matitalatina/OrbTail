@@ -20,7 +20,7 @@ public class ServerTest : MonoBehaviour {
                                   "Game #" + rng.Next().ToString(),
                                   "Server test!");
 
-        Debug.Log("Creating a server a server...");
+        Debug.Log("Creating a server...");
 
     }
 

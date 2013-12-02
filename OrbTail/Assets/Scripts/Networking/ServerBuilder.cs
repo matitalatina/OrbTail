@@ -12,4 +12,12 @@ public class ServerBuilder : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    /// <summary>
+    /// Initialize the server match instance
+    /// </summary>
+    public void InitializeServerMatch(){
+
+    }
+
 }
