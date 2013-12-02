@@ -6,4 +6,5 @@ public class Tags {
 	public const string Orb = "Orb";
 	public const string Field = "Field";
 	public const string Game = "Game";
+	public const string AICheckpoint = "AICheckpoint";
 }
