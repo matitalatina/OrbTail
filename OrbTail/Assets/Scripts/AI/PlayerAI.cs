@@ -1,19 +1,27 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerAI : MonoBehaviour {
 
 	private RelayInputBroker inputBroker = new RelayInputBroker();
 	private EventLogger eventLogger;
 
-	private GameObject target;
+	private GameObject target = null;
 	private Vector3 desideredDirection;
 	private bool alreadyCollided = false;
+
 	private OrbController orbController;
-	private float actualSteering;
 	private FloatingObject floatingObject;
 
 	private float maxTimeToGoAway = 4f;
+	private float maxVisibility = 60f;
+	private float maxAcceleration = 0.8f;
+	private float thresholdToGiveUp = 0.4f;
+	private float sqrCheckpointDistanceThreshold = 15f;
+
+	private HashSet<GameObject> checkpoints;
+
 
 	public IInputBroker GetInputBroker() {
 		return inputBroker;
@@ -24,25 +32,35 @@ public class PlayerAI : MonoBehaviour {
 		floatingObject = GetComponent<FloatingObject>();
 		eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
 		eventLogger.EventFight += OnEventFight;
+		eventLogger.EventOrbAttached += OnEventOrbAttached;
+		checkpoints = new HashSet<GameObject>(GameObject.FindGameObjectsWithTag(Tags.AICheckpoint));
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		CheckVisibility();
+
 		if (target != null) {
+
 			if (target.tag == Tags.Ship) {
+
 				if (!alreadyCollided) {
 					ChasingPlayer();
 				}
 				else {
 					GoAway();
 				}
+
+			}
+			else if (IsPatrolling()) {
+				Patrolling();
 			}
 			else {
 				ChasingOrb();
 			}
 		}
 		else {
-			LookAround();
+			ChangeCheckpoint();
 		}
 
 		AvoidOstacles();
@@ -55,7 +73,7 @@ public class PlayerAI : MonoBehaviour {
 		//	(Vector3.Dot( transform.forward, desideredDirection.normalized ) - 1.0f);
 
 		inputBroker.Steering = Mathf.Clamp(steering * 5f, -1f, 1f);
-		inputBroker.Acceleration = 1f - Mathf.Clamp01(Mathf.Abs(steering));
+		inputBroker.Acceleration = Mathf.Min (maxAcceleration, 1f - Mathf.Clamp01(Mathf.Abs(steering)));
         
 
 
@@ -67,8 +85,7 @@ public class PlayerAI : MonoBehaviour {
 			desideredDirection = relVector;
 		}
 		else {
-			orbController = null;
-			target = null;
+			ResetTarget();
 		}
 	}
 
@@ -77,19 +94,7 @@ public class PlayerAI : MonoBehaviour {
 		desideredDirection = relVector;
 	}
 
-	void OnTriggerEnter(Collider other) {
-		GameObject colObject = other.gameObject;
 
-		if (target == null) {
-			if (colObject.tag == Tags.Ship) {
-				target = colObject;
-			}
-			//else if (IsFreeOrb(colObject)) {
-			//	target = colObject;
-			//	orbController = colObject.GetComponent<OrbController>();
-			//}
-		}
-	}
 
 	void ChasingPlayer() {
 		Vector3 relVector = target.transform.position - gameObject.transform.position;
@@ -101,25 +106,102 @@ public class PlayerAI : MonoBehaviour {
 
 	}
 
-	void LookAround() {
+	void Patrolling() {
+		Vector3 relVector = target.transform.position - gameObject.transform.position;
+		desideredDirection = relVector;
 
-	}
-
-	void OnEventFight(object sender, System.Collections.Generic.IList<GameObject> orbs, GameObject attacker, GameObject defender) {
-		if (attacker == this.gameObject && defender == target) {
-			alreadyCollided = true;
-			StartCoroutine("stopGoAway");
+		if (desideredDirection.sqrMagnitude < sqrCheckpointDistanceThreshold) {
+			ChangeCheckpoint();
 		}
 	}
 
-	private IEnumerator stopGoAway() {
+	void OnEventFight(object sender, System.Collections.Generic.IList<GameObject> orbs, GameObject attacker, GameObject defender) {
+
+		if (attacker == this.gameObject && defender == target) {
+			alreadyCollided = true;
+			StartCoroutine("decideWhetherContinue");
+		}
+
+	}
+
+	void OnEventOrbAttached(object sender, GameObject orb, GameObject ship) {
+
+		if (target == orb) {
+			ResetTarget();
+		}
+
+	}
+
+	void OnTriggerStay(Collider other) {
+		GameObject colObject = other.gameObject;
+		
+		if (target == null || IsPatrolling()) {
+			if (colObject.tag == Tags.Ship) {
+				target = colObject;
+			}
+			else if (IsFreeOrb(colObject)) {
+				target = colObject;
+				orbController = colObject.GetComponent<OrbController>();
+			}
+		}
+	}
+
+	private void CheckVisibility() {
+
+		if (target != null && !IsPatrolling() && !IsVisible()) {
+			ResetTarget();
+		}
+
+	}
+
+	private IEnumerator decideWhetherContinue() {
 		float timeToWait = Random.value * maxTimeToGoAway;
 		yield return new WaitForSeconds(timeToWait);
 		alreadyCollided = false;
+
+		if (Random.value <= thresholdToGiveUp) {
+			ResetTarget();
+		}
 	}
 
 	private bool IsFreeOrb(GameObject orb) {
 		return orb.tag == Tags.Orb && !orb.GetComponent<OrbController>().IsAttached();
+	}
+
+	private bool IsVisible() {
+		if (target != null) {
+			Vector3 relVector = target.transform.position - transform.position;
+			float distance = relVector.magnitude;
+			// If raycast collide something -> not visible
+			return distance < maxVisibility && !Physics.Raycast(transform.position, relVector, distance, Layers.FieldAndObstacles);
+		}
+
+		return false;
+	}
+
+	private bool IsPatrolling() {
+		return checkpoints.Contains(target);
+	}
+
+	private void ChangeCheckpoint() {
+		var enumerator = checkpoints.GetEnumerator();
+
+		int i = 0;
+		int chosenNumber = Random.Range(0, checkpoints.Count);
+		GameObject newTarget = null;
+
+		while (i < chosenNumber) {
+			newTarget = enumerator.Current;
+			enumerator.MoveNext();
+			i++;
+		}
+
+		target = newTarget;
+	}
+
+	private void ResetTarget() {
+		target = null;
+		orbController = null;
 	}
 
 
