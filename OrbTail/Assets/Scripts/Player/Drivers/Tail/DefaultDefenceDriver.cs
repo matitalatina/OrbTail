@@ -7,7 +7,7 @@ public class DefaultDefenceDriver : IDefenceDriver {
 
 	public DefaultDefenceDriver(int defence) {
 		defenceShip = defence;
-		adjustedDefence = defence / 5 + 1;
+		adjustedDefence = defence / 5f + 1f;
 	}
 
 	public int GetDefence() {
