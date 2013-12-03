@@ -14,18 +14,23 @@ public class CameraMovement : MonoBehaviour {
 
 
 	private FloatingObject FloatingComponent{ get;set; }
+
+    public void LookAt(GameObject target)
+    {
+
+        // Setting up the reference.
+        player = target.transform;
+        FloatingComponent = player.GetComponent<FloatingObject>();
+
+        // Setting the relative position as the initial relative position of the camera in the scene.
+        relCameraPos = transform.position - player.position;
+        relCameraPosMag = relCameraPos.magnitude - 0.5f;
 	
+    }
+
 	void Awake ()
 	{
-		// Setting up the reference.
-		player = GameObject.FindGameObjectWithTag(Tags.Ship).transform;
-		FloatingComponent = player.GetComponent<FloatingObject>();
-
-		// Setting the relative position as the initial relative position of the camera in the scene.
-		relCameraPos = transform.position - player.position;
-		relCameraPosMag = relCameraPos.magnitude - 0.5f;
 	}
-	
 	
 	void FixedUpdate ()
 	{

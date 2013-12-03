@@ -35,6 +35,7 @@ public class ServerBuilder : PlayerBuilder {
         Debug.Log("Creating a server...");
 
         //Initializes the server and registers the match
+        
         Network.InitializeServer(max_players - 1, server_port, !Network.HavePublicAddress());
 
         MasterServer.RegisterHost("OrbTail",

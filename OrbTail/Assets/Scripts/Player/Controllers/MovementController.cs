@@ -4,9 +4,9 @@ using System.Collections;
 public class MovementController : MonoBehaviour {
 
 	public float maxTorqueForce = 17f;
-	public float maxSpeedForce = 120f;
-	public float maxRoll = 60f;
-	public float rotationSmooth = 5f;
+	public float maxSpeedForce = 100.0f;
+	public float maxRoll = 80f;
+	public float rotationSmooth = 10f;
 	
 	public FloatingObject FloatingBody {get; private set;}
 
