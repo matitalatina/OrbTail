@@ -3,9 +3,9 @@ using System.Collections;
 
 public class CameraMovement : MonoBehaviour {
 
-	public float smooth = 1.5f;         // The relative speed at which the camera will catch up.
-	public float relDistancePos = -5f;
-	public float relHighPos = 3f;
+	public float smooth = 10f;         // The relative speed at which the camera will catch up.
+	public float relDistancePos = -7f;
+	public float relHighPos = 2.2f;
 	
 	private Transform player;           // Reference to the player's transform.
 	private Vector3 relCameraPos;       // The relative position of the camera from the player.
@@ -20,7 +20,7 @@ public class CameraMovement : MonoBehaviour {
 
         // Setting up the reference.
         player = target.transform;
-        FloatingComponent = player.GetComponent<FloatingObject>();
+        FloatingComponent = target.GetComponent<FloatingObject>();
 
         // Setting the relative position as the initial relative position of the camera in the scene.
         relCameraPos = transform.position - player.position;
@@ -34,18 +34,20 @@ public class CameraMovement : MonoBehaviour {
 	
 	void FixedUpdate ()
 	{
-		// The standard position of the camera is the relative position of the camera from the player.
-		//Vector3 standardPos = player.position + relCameraPos;
-		Vector3 arenaDown = FloatingComponent.ArenaDown;
+		if (FloatingComponent != null) {
+			// The standard position of the camera is the relative position of the camera from the player.
+			//Vector3 standardPos = player.position + relCameraPos;
+			Vector3 arenaDown = FloatingComponent.ArenaDown;
 
-		Vector3 standardPos = player.position + player.forward * relDistancePos + relHighPos * -arenaDown;
+			Vector3 standardPos = player.position + player.forward * relDistancePos + relHighPos * -arenaDown;
 		
-		newPos = standardPos;
-		// Lerp the camera's position between it's current position and it's new position.
-		transform.position = Vector3.Lerp(transform.position, newPos, smooth * Time.deltaTime);
+			newPos = standardPos;
+			// Lerp the camera's position between it's current position and it's new position.
+			transform.position = Vector3.Lerp(transform.position, newPos, smooth * Time.deltaTime);
 		
-		// Make sure the camera is looking at the player.
-		SmoothLookAt(arenaDown);
+			// Make sure the camera is looking at the player.
+			SmoothLookAt(arenaDown);
+		}
 	}
 	
 	
