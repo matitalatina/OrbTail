@@ -82,7 +82,7 @@ public class GUIServerClient : MonoBehaviour {
         Destroy(this);                      //The component should be destroyed
         DontDestroyOnLoad(gameObject);      //The Game should be preserved
 
-        Application.LoadLevel("PrototypeScene");
+        Application.LoadLevel("NetworkTest");
 
     }
 
