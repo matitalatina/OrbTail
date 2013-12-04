@@ -10,11 +10,13 @@ public abstract class Power : PowerView
     public event EventHandler<EventArgs> EventDestroyed;
     
     protected IGroup group { get; private set; }
-    protected float duration { get; set; }
-    protected GameObject shipOwner { get; set; }
+    protected float? duration { get; set; }
+    protected GameObject shipOwner { get; private set; }
     protected float activatedTime { get; private set; }
-    
-    protected Power(IGroup group, float duration)
+
+    private float time_accumulator = 0.0f;
+
+    protected Power(IGroup group, float? duration)
     {
         this.group = group;
         this.duration = duration;
@@ -31,13 +33,41 @@ public abstract class Power : PowerView
         }
     }
 
-    protected void Activate(GameObject gameObj)
+    public virtual void Activate(GameObject gameObj)
     {
         this.shipOwner = gameObj;
         this.activatedTime = Time.time;
+        this.time_accumulator = 0.0f;
     }
 
-    public abstract void Update();
-    public abstract void Fire();
-    protected abstract GameObject GetShip();
+
+    public virtual void Deactivate()
+    {
+
+        Destroy();
+
+    }
+
+    public virtual void Update()
+    {
+
+        time_accumulator += Time.deltaTime;
+
+        Debug.Log(time_accumulator);
+
+        if (time_accumulator > (duration ?? float.MaxValue))
+        {
+            
+            time_accumulator = 0.0f;
+            duration = null;
+
+            Deactivate();
+
+        }
+
+    }
+
+
+    public virtual void Fire() { }
+
 }

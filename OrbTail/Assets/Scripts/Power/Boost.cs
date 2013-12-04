@@ -7,8 +7,8 @@ public class Boost : Power
 {
     private bool ready = true;
 
-    public Boost(IGroup group, float duration)
-        : base(group, duration)
+    public Boost()
+        : base(SpecialPowerGroup.Instance.groupID, float.MaxValue)
     {
 
     }
@@ -17,7 +17,7 @@ public class Boost : Power
     {
         get
         {
-            return Mathf.Clamp01(activatedTime / duration);
+            return 0.0f; //TODO; this is fucking retared
         }
     }
     
@@ -42,8 +42,4 @@ public class Boost : Power
         ready = false;
     }
 
-    protected override GameObject GetShip()
-    {
-        return shipOwner;
-    }
 }

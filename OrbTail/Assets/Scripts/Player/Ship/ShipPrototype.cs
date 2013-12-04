@@ -53,6 +53,8 @@ public class ShipPrototype : MonoBehaviour {
             tail_controller.GetAttacherDriverStack().Push(new DefaultAttacherDriver());
             tail_controller.GetDetacherDriverStack().Push(new DefaultDetacherDriver());
 
+            PowerController power_controller = gameObject.AddComponent<PowerController>();
+
         }
 
         Destroy(this);

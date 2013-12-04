@@ -5,7 +5,7 @@ using System.Linq;
 
 public class PowerGenerator : MonoBehaviour {
 
-    public float delta_generation = 10f;
+    public float delta_generation = 1.0f;
 
     private IList<GameObject> orbs;
 
@@ -52,6 +52,7 @@ public class PowerGenerator : MonoBehaviour {
                 if (index == 0)
                 {
 
+                    Debug.Log("Spawning some powerup");
                     orb.AddComponent<RandomPowerAttacher>();
                     break;
 

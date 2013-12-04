@@ -21,6 +21,9 @@ public class RandomPowerAttacher : MonoBehaviour
 
             collidedObj.GetComponent<PowerController>().AddPower(randomPower);
 
+            ///Activate the power
+            randomPower.Activate(collidedObj);
+
             Destroy(this);
         }  
     }

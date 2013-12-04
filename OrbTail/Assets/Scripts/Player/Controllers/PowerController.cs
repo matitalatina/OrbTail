@@ -24,6 +24,17 @@ public class PowerController : MonoBehaviour
         {
             powers.Add(power.Group, power);
         }
+
+    }
+
+    public void Update()
+    {
+
+        foreach (Power power in powers.Values)
+        {
+            power.Update();
+        }
+
     }
 
     public PowerView GetPowerView(IGroup group)
