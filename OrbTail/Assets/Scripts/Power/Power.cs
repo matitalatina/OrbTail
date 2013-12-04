@@ -11,7 +11,7 @@ public abstract class Power : PowerView
     
     protected IGroup group { get; private set; }
     protected float duration { get; set; }
-    protected GameObject gameObjActivated { get; set; }
+    protected GameObject shipOwner { get; set; }
     protected float activatedTime { get; private set; }
     
     protected Power(IGroup group, float duration)
@@ -33,7 +33,7 @@ public abstract class Power : PowerView
 
     protected void Activate(GameObject gameObj)
     {
-        this.gameObjActivated = gameObj;
+        this.shipOwner = gameObj;
         this.activatedTime = Time.time;
     }
 

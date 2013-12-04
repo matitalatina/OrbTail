@@ -26,13 +26,13 @@ public class Boost : Power
         // If it's active or on recharge
         if (!ready)
         {
-            float deltaActivatedTime = Stopwatch.GetTimestamp() - activatedTime;
+            float deltaActivatedTime = Time.time - activatedTime;
             duration -= deltaActivatedTime;
 
             if (duration <= 0f)
             {
                 ready = false;
-                Deactivate();
+                //Deactivate();
             }
         }
     }
@@ -44,6 +44,6 @@ public class Boost : Power
 
     protected override GameObject GetShip()
     {
-        return gameObjActivated;
+        return shipOwner;
     }
 }
