@@ -7,12 +7,6 @@ using System.Collections.Generic;
 /// </summary>
 public class EventLogger : MonoBehaviour {
 
-    // Use this for initialization
-    void Start(){
-
-
-    }
-
     void Awake()
     {
 

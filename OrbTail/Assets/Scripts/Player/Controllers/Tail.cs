@@ -13,9 +13,11 @@ public class Tail {
 	/// Initializes a new instance of the <see cref="Tail"/> class.
 	/// </summary>
 	/// <param name="owner">The owner of the tail.</param>
-	public Tail(GameObject owner) {
+	public Tail(GameObject owner, EventLogger logger) {
+
 		this.owner = owner;
-		eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
+        eventLogger = logger;
+
 	}
 
 	// TODO: to implement

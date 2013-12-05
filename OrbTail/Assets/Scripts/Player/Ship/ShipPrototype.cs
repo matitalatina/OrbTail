@@ -35,27 +35,27 @@ public class ShipPrototype : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-
+        
         if( networkView.isMine ||
             (!Network.isClient &&
              !Network.isServer))
         {
-            
+        
             MovementController movement_controller = gameObject.AddComponent<MovementController>();
 
             movement_controller.GetEngineDriverStack().Push(new DefaultEngineDriver(speed));
             movement_controller.GetWheelDriverStack().Push(new DefaultWheelDriver(steering));
-
-            TailController tail_controller = gameObject.AddComponent<TailController>();
-
-            tail_controller.GetOffenceDriverStack().Push(new DefaultOffenceDriver(offence));
-            tail_controller.GetDefenceDriverStack().Push(new DefaultDefenceDriver(defence));
-            tail_controller.GetAttacherDriverStack().Push(new DefaultAttacherDriver());
-            tail_controller.GetDetacherDriverStack().Push(new DefaultDetacherDriver());
-
+        
             PowerController power_controller = gameObject.AddComponent<PowerController>();
 
         }
+
+        TailController tail_controller = gameObject.AddComponent<TailController>();
+
+        tail_controller.GetOffenceDriverStack().Push(new DefaultOffenceDriver(offence));
+        tail_controller.GetDefenceDriverStack().Push(new DefaultDefenceDriver(defence));
+        tail_controller.GetAttacherDriverStack().Push(new DefaultAttacherDriver());
+        tail_controller.GetDetacherDriverStack().Push(new DefaultDetacherDriver());
 
         Destroy(this);
 

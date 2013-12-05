@@ -10,6 +10,7 @@ public class TailController : MonoBehaviour {
 	private DriverStack<IDefenceDriver> defenceDriverStack;
 
 	private EventLogger eventLogger;
+    private OwnershipManager ownershipManager;
 
 	public Tail Tail { get; set;}
 
@@ -54,16 +55,21 @@ public class TailController : MonoBehaviour {
 
 
 	void Awake() {
-		attacherDriverStack = new DriverStack<IAttacherDriver>();
+
+        attacherDriverStack = new DriverStack<IAttacherDriver>();
 		detacherDriverStack = new DriverStack<IDetacherDriver>();
 		offenceDriverStack = new DriverStack<IOffenceDriver>();
 		defenceDriverStack = new DriverStack<IDefenceDriver>();
-
-		eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
-		Tail = new Tail(this.gameObject);
+		
 	}
 
 	void Start () {
+
+        var game = GameObject.FindGameObjectWithTag(Tags.Game);
+
+        eventLogger = game.GetComponent<EventLogger>();
+        Tail = new Tail(this.gameObject, eventLogger);
+        ownershipManager = game.GetComponent<OwnershipManager>();
 
 	}
 
@@ -75,6 +81,14 @@ public class TailController : MonoBehaviour {
 
 			if (!orbController.IsAttached()) {
 				attacherDriverStack.GetHead().AttachOrbs(collidedObj, Tail);
+
+                if (networkView.isMine)
+                {
+                    
+                    ownershipManager.AcquireOwnership(collidedObj);
+
+                }
+
 			}
 
 		}
