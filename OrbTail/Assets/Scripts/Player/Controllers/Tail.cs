@@ -2,19 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Tail {
-	private GameObject owner;
+public class Tail : MonoBehaviour {
 	private Stack<GameObject> orbStack = new Stack<GameObject>();
 	private GameObject firstOrb;
 	private EventLogger eventLogger;
 	
+	
 
-	/// <summary>
-	/// Initializes a new instance of the <see cref="Tail"/> class.
-	/// </summary>
-	/// <param name="owner">The owner of the tail.</param>
-	public Tail(GameObject owner) {
-		this.owner = owner;
+	// Use this for initialization
+	void Start () {
 		eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
 	}
 
@@ -32,7 +28,7 @@ public class Tail {
 		GameObject target;
 
 		if (orbStack.Count <= 0) {
-			target = owner;
+			target = gameObject;
 			firstOrb = orb;
 		} 
 		else {
@@ -43,7 +39,7 @@ public class Tail {
 		//orb.GetComponent<OrbController>().ApproachTo(target, this);
 		orb.GetComponent<OrbController>().LinkTo(target);
 
-		eventLogger.NotifyOrbAttached(orb, owner);
+		eventLogger.NotifyOrbAttached(orb, gameObject);
 
 	}
 

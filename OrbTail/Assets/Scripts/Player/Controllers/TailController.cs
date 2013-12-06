@@ -60,11 +60,10 @@ public class TailController : MonoBehaviour {
 		defenceDriverStack = new DriverStack<IDefenceDriver>();
 
 		eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
-		Tail = new Tail(this.gameObject);
 	}
 
 	void Start () {
-
+		Tail = GetComponent<Tail>();
 	}
 
 	void OnCollisionEnter(Collision collision) {
