@@ -10,7 +10,6 @@ public class TailController : MonoBehaviour {
 	private DriverStack<IDefenceDriver> defenceDriverStack;
 
 	private EventLogger eventLogger;
-    private OwnershipManager ownershipManager;
 
 	public Tail Tail { get; set;}
 
@@ -55,92 +54,40 @@ public class TailController : MonoBehaviour {
 
 
 	void Awake() {
-
-        attacherDriverStack = new DriverStack<IAttacherDriver>();
+		attacherDriverStack = new DriverStack<IAttacherDriver>();
 		detacherDriverStack = new DriverStack<IDetacherDriver>();
 		offenceDriverStack = new DriverStack<IOffenceDriver>();
 		defenceDriverStack = new DriverStack<IDefenceDriver>();
-		
+
+		eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
 	}
 
 	void Start () {
-
-        var game = GameObject.FindGameObjectWithTag(Tags.Game);
-
-        eventLogger = game.GetComponent<EventLogger>();
-        Tail = new Tail(this.gameObject, eventLogger);
-        ownershipManager = game.GetComponent<OwnershipManager>();
-
-        eventLogger.EventOrbAttached += eventLogger_EventOrbAttached;
-        eventLogger.EventFight += eventLogger_EventFight;
-
+		Tail = GetComponent<Tail>();
 	}
-
-    void eventLogger_EventFight(object sender, IList<GameObject> orbs, GameObject attacker, GameObject defender)
-    {
-        
-        if( !defender.networkView.isMine &&
-            defender == gameObject)
-        {
-
-            //TODO: detach all the orbs provided!
-            
-
-        }
-
-    }
-
-    void eventLogger_EventOrbAttached(object sender, GameObject orb, GameObject ship)
-    {
-
-        if (!ship.networkView.isMine &&
-            ship == gameObject)
-        {
-
-            //TODO: Detach orb from previous owner
-            
-            attacherDriverStack.GetHead().AttachOrbs(orb, Tail);
-
-        }
-
-    }
 
 	void OnCollisionEnter(Collision collision) {
 		GameObject collidedObj = collision.gameObject;
 
-        if (networkView.isMine)
-        {
+		if (collidedObj.tag == Tags.Orb) {
+			OrbController orbController = collidedObj.GetComponent<OrbController>();
 
-            if (collidedObj.tag == Tags.Orb)
-            {
-                OrbController orbController = collidedObj.GetComponent<OrbController>();
+			if (!orbController.IsAttached()) {
+				attacherDriverStack.GetHead().AttachOrbs(collidedObj, Tail);
+			}
 
-                if (!orbController.IsAttached())
-                {
+		}
+		else if (collidedObj.tag == Tags.Ship) {
 
-                    ownershipManager.AcquireOwnership(collidedObj);
-                     
-                    attacherDriverStack.GetHead().AttachOrbs(collidedObj, Tail);
+			if (IsAttack(collidedObj)) {
+				float damage = collidedObj.GetComponent<TailController>().GetOffenceDriverStack().GetHead().GetDamage(this.gameObject, collision);
+				int nOrbsToDetach = defenceDriverStack.GetHead().DamageToOrbs(damage);
+				List<GameObject> orbsDetached = detacherDriverStack.GetHead().DetachOrbs(nOrbsToDetach, this.Tail);
 
-                }
+				eventLogger.NotifyFight(orbsDetached, collidedObj, this.gameObject);
+			}
 
-            }
-            else if (collidedObj.tag == Tags.Ship)
-            {
-
-                if (IsAttack(collidedObj))
-                {
-                    float damage = collidedObj.GetComponent<TailController>().GetOffenceDriverStack().GetHead().GetDamage(this.gameObject, collision);
-                    int nOrbsToDetach = defenceDriverStack.GetHead().DamageToOrbs(damage);
-                    List<GameObject> orbsDetached = detacherDriverStack.GetHead().DetachOrbs(nOrbsToDetach, this.Tail);
-
-                    eventLogger.NotifyFight(orbsDetached, collidedObj, this.gameObject);
-                }
-
-            }
-
-        }
-		
+		}
 	}
 
 	// Update is called once per frame
