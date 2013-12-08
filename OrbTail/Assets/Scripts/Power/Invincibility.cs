@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Jam : Power
+public class Invincibility : Power
 {
     private const float power_time = 10.0f;
 
-    static IGroup jam_group = new GroupID();
+    static IGroup invincibility_group = new GroupID();
 
-    public Jam() : base(jam_group, power_time) { }
+    public Invincibility() : base(invincibility_group, power_time) { }
 
     private Deactivator deactivator;
 

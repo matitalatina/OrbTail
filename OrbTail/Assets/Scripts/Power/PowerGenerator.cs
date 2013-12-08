@@ -52,7 +52,7 @@ public class PowerGenerator : MonoBehaviour {
                 if (index == 0)
                 {
 
-                    Debug.Log("Spawning some powerup");
+                    Debug.Log("Spawning some powerup attached to orb.");
                     orb.AddComponent<RandomPowerAttacher>();
                     break;
 

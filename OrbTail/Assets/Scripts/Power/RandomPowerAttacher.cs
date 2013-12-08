@@ -17,7 +17,7 @@ public class RandomPowerAttacher : MonoBehaviour
         {
             
             Power randomPower = new Jam(); //TODO random power up gen. Factory?
-            Debug.Log("Random ass power");
+            Debug.Log("Ship captured a random power up!");
 
             collidedObj.GetComponent<PowerController>().AddPower(randomPower);
 
@@ -31,7 +31,7 @@ public class RandomPowerAttacher : MonoBehaviour
     void Start()
     {
         // TODO: Special effects
-        Debug.Log("Special effects");
+        Debug.Log("TODO: GFX Special effects for power up");
 
     }
 

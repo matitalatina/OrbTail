@@ -14,7 +14,7 @@ public abstract class Power : PowerView
     protected GameObject shipOwner { get; private set; }
     protected float activatedTime { get; private set; }
 
-    private float time_accumulator = 0.0f;
+    protected float time_accumulator = 0.0f;
 
     protected Power(IGroup group, float? duration)
     {
@@ -23,7 +23,7 @@ public abstract class Power : PowerView
     }
 
     /// <summary>
-    /// Get the group of this power
+    /// Get the power's group
     /// </summary>
     public override IGroup Group
     {
@@ -33,6 +33,10 @@ public abstract class Power : PowerView
         }
     }
 
+    /// <summary>
+    /// Activate the power up
+    /// </summary>
+    /// <param name="gameObj">Ship with activated power up</param>
     public virtual void Activate(GameObject gameObj)
     {
         this.shipOwner = gameObj;
@@ -40,7 +44,9 @@ public abstract class Power : PowerView
         this.time_accumulator = 0.0f;
     }
 
-
+    /// <summary>
+    /// Deactivate power up
+    /// </summary>
     public virtual void Deactivate()
     {
 
@@ -48,6 +54,9 @@ public abstract class Power : PowerView
 
     }
 
+    /// <summary>
+    /// Counter to deactivate the active power up
+    /// </summary>
     public virtual void Update()
     {
 
@@ -55,6 +64,7 @@ public abstract class Power : PowerView
 
         Debug.Log(time_accumulator);
 
+        // If power up time is expired, deactivate power up
         if (time_accumulator > (duration ?? float.MaxValue))
         {
             
@@ -67,7 +77,9 @@ public abstract class Power : PowerView
 
     }
 
-
+    /// <summary>
+    /// Fire avaiable power up
+    /// </summary>
     public virtual void Fire() { }
 
 }
