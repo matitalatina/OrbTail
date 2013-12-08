@@ -3,7 +3,8 @@ using System.Collections;
 
 public class MissleFollower : MonoBehaviour {
 
-    private GameObject target = null;
+    public GameObject Target { get; set; }
+    public GameObject Owner { get; set; }
     private const float maxMissleSteering = 3.0f;
     private const float maxMissleSpeed = 15.0f;
 
@@ -12,9 +13,9 @@ public class MissleFollower : MonoBehaviour {
 	}
 	
 	void Update () {
-        if (target != null)
+        if (Target != null)
         {
-            Vector3 direction = target.transform.position - this.transform.position;
+            Vector3 direction = Target.transform.position - this.transform.position;
             direction.Normalize();
 
             Vector3 new_forward  = Vector3.RotateTowards(transform.forward, direction, Time.deltaTime * maxMissleSteering, 0);
@@ -37,8 +38,14 @@ public class MissleFollower : MonoBehaviour {
         }
 	}
 
-    public void SetTarget(GameObject enemyShip)
+    void OnCollisionEnter(Collision collision)
     {
-        target = enemyShip;
-    } 
+        if ((collision.gameObject.tag == Tags.Ship) && (collision.gameObject != Owner))
+        {
+            Debug.Log("BUM HEADSHOT!");
+
+            Destroy(this.gameObject);
+            collision.gameObject.GetComponent<TailController>().GetDetacherDriverStack().GetHead().DetachOrbs(int.MaxValue, collision.gameObject.GetComponent<Tail>());
+        }
+    }
 }

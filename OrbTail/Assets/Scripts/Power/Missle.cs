@@ -15,7 +15,7 @@ public class Missle : Power
         Debug.Log("Ship shooted Missile!");
 
         var missileRes = Resources.Load("Prefabs/Missle");
-        GameObject missile = GameObject.Instantiate(missileRes, Vector3.up * 20.0f, shipOwner.transform.rotation) as GameObject;
+        GameObject missile = GameObject.Instantiate(missileRes, shipOwner.transform.position, shipOwner.transform.rotation) as GameObject;
 
         var ships = GameObject.FindGameObjectsWithTag(Tags.Ship);
         float nearestEnemyDistance = float.MaxValue;
@@ -24,7 +24,7 @@ public class Missle : Power
         {
             if (ship == shipOwner)
             {
-                //continue;
+                continue;
             }
 
             Vector3 distanceVector = (ship.transform.position - shipOwner.transform.position);
@@ -37,8 +37,10 @@ public class Missle : Power
             }
         }
 
+        var missileFollower = missile.AddComponent<MissleFollower>();
         // Shoot to nearest enemy ship
-        missile.AddComponent<MissleFollower>().SetTarget(nearestEnemyShip);
+        missileFollower.Target = nearestEnemyShip;
+        missileFollower.Owner = shipOwner;
 
         //Once fire it is destroyed
         Deactivate();

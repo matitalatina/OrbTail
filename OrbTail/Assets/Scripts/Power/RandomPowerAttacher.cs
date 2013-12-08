@@ -12,7 +12,6 @@ static class PowerFactory
         {
             case 1:
             case 3:
-            case 4:
             case 0:{ 
                 return new Missle();
             }
@@ -24,10 +23,10 @@ static class PowerFactory
             }
             /*case 3: { 
                 return new TailSwap();
-            }
+            }*/
             case 4: { 
                 return new OrbSteal();
-            }*/
+            }
             case 5: { 
                 return new Jam();
             }
