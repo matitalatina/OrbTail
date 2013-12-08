@@ -191,6 +191,6 @@ public class InputProxy : MonoBehaviour, IInputBroker{
     /// <summary>
     /// The list of the powerups to be fired
     /// </summary>
-    private ICollection<IGroup> fired_powers_;
+    private ICollection<IGroup> fired_powers_ = new List<IGroup>();
 
 }

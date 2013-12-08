@@ -11,18 +11,20 @@ public class RandomPowerAttacher : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        GameObject collidedObj = collision.gameObject;
+        var collidedObj = collision.gameObject;
 
         if (collidedObj.tag == Tags.Ship)
         {
             
-            Power randomPower = new Jam(); //TODO random power up gen. Factory?
+            Power randomPower = new Boost(); //TODO random power up gen. Factory?
+
             Debug.Log("Ship captured a random power up!");
 
             collidedObj.GetComponent<PowerController>().AddPower(randomPower);
 
-            ///Activate the power
             randomPower.Activate(collidedObj);
+
+            Debug.Log("Power activated on ship.");
 
             Destroy(this);
         }  

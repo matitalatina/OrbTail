@@ -62,8 +62,6 @@ public abstract class Power : PowerView
 
         time_accumulator += Time.deltaTime;
 
-        Debug.Log(time_accumulator);
-
         // If power up time is expired, deactivate power up
         if (time_accumulator > (duration ?? float.MaxValue))
         {
