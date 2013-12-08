@@ -7,12 +7,6 @@ using System.Collections.Generic;
 /// </summary>
 public class EventLogger : MonoBehaviour {
 
-    // Use this for initialization
-    void Start(){
-
-
-    }
-
     void Awake()
     {
 
@@ -163,7 +157,6 @@ public class EventLogger : MonoBehaviour {
             if (Network.isServer)
             {
 
-                //TODO: get a real identity UID
                 int initialization_uid = UIDGenerator.Instance.GetNewUID();
 
                 //RPC to other clients if this is the server

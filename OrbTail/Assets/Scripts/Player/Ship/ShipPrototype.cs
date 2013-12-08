@@ -36,15 +36,13 @@ public class ShipPrototype : MonoBehaviour {
     void Start()
     {
 
-        if( networkView.isMine ||
-            (!Network.isClient &&
-             !Network.isServer))
-        {
-            
-            MovementController movement_controller = gameObject.AddComponent<MovementController>();
+        //Everyone have a tail
+        Tail tail = gameObject.AddComponent<Tail>();
 
-            movement_controller.GetEngineDriverStack().Push(new DefaultEngineDriver(speed));
-            movement_controller.GetWheelDriverStack().Push(new DefaultWheelDriver(steering));
+        //Server side controls the collisions
+        if (Network.peerType == NetworkPeerType.Disconnected ||
+            Network.peerType == NetworkPeerType.Server)
+        {
 
             TailController tail_controller = gameObject.AddComponent<TailController>();
 
@@ -52,6 +50,18 @@ public class ShipPrototype : MonoBehaviour {
             tail_controller.GetDefenceDriverStack().Push(new DefaultDefenceDriver(defence));
             tail_controller.GetAttacherDriverStack().Push(new DefaultAttacherDriver());
             tail_controller.GetDetacherDriverStack().Push(new DefaultDetacherDriver());
+
+        }
+
+        //Client side controls the movement
+       if (Network.peerType == NetworkPeerType.Disconnected ||
+           networkView.isMine )
+        {
+
+            MovementController movement_controller = gameObject.AddComponent<MovementController>();
+
+            movement_controller.GetEngineDriverStack().Push(new DefaultEngineDriver(speed));
+            movement_controller.GetWheelDriverStack().Push(new DefaultWheelDriver(steering));
 
         }
 

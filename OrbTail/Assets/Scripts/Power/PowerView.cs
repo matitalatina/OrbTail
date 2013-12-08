@@ -22,15 +22,14 @@ public abstract class PowerView
     /// </summary>
     protected abstract float IsReady{ get; }
 
-    /// <summary>
-    /// Fire EventDestroyed
-    /// </summary>
-    public void Deactivate()
+    protected void Destroy()
     {
+
         if (EventDestroyed != null)
         {
             EventDestroyed(this, null);
         }
+
     }
 
 }

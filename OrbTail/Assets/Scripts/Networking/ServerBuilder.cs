@@ -75,7 +75,7 @@ public class ServerBuilder : PlayerBuilder {
         if (server_event == MasterServerEvent.RegistrationSucceeded)
         {
 
-            Debug.Log("Registration successfull");
+            Debug.Log("Registration successful");
 
             if (EventMatchCreated != null)
             {
@@ -132,35 +132,35 @@ public class ServerBuilder : PlayerBuilder {
     private void InitializeAll()
     {
         
-        //Creates the master, used to deliver informations and orders to the clients
-        var master = CreateMaster();
+        //Creates the game, used to deliver informations and orders to the clients
+        var game = CreateGame();
        
         //The server has always the ship's ID equals to 0
         int unique_id = 0;
 
         //Initializes the server's ship
-        InitializePlayer(unique_id, Vector3.zero);
+        InitializePlayer(unique_id, Vector3.up * 10.0f);
 
         //Initializes the clients' ship
         foreach (NetworkPlayer connection in Network.connections)
         {
 
-            networkView.RPC("InitializePlayer", connection, ++unique_id, Vector3.zero);
+            networkView.RPC("InitializePlayer", connection, ++unique_id, Vector3.up * 10.0f);
             
         }
 
-        master.GetComponent<EventLogger>().NotifyStartMatch();
+        game.GetComponent<EventLogger>().NotifyStartMatch();
               
     }
 
     /// <summary>
     /// The master sends command to other clients
     /// </summary>
-    private GameObject CreateMaster()
+    private GameObject CreateGame()
     {
-        var master = Resources.Load("Prefabs/Master");
+        var game = Resources.Load("Prefabs/Game");
 
-        return Network.Instantiate(master, Vector3.zero, Quaternion.identity, 0) as GameObject;
+        return Network.Instantiate(game, Vector3.zero, Quaternion.identity, 0) as GameObject;
 
     }
 
