@@ -2,6 +2,42 @@
 using System;
 using System.Collections.Generic;
 
+static class PowerFactory
+{
+    public static Power GetPower()
+    {
+        System.Random rng = new System.Random();
+
+        switch (rng.Next(0, 5))
+        {
+            case 1:
+            case 3:
+            case 4:
+            case 0:{ 
+                return new Missle();
+            }
+            /*case 1: { 
+                return new Magnet();
+            }*/
+            case 2: { 
+                return new Invincibility();
+            }
+            /*case 3: { 
+                return new TailSwap();
+            }
+            case 4: { 
+                return new OrbSteal();
+            }*/
+            case 5: { 
+                return new Jam();
+            }
+            default: {
+                System.Diagnostics.Debug.Assert(false);
+                return null;
+            }
+        }
+    }
+}
 
 public class RandomPowerAttacher : MonoBehaviour
 {
@@ -15,12 +51,11 @@ public class RandomPowerAttacher : MonoBehaviour
 
         if (collidedObj.tag == Tags.Ship)
         {
-            
-            Power randomPower = new Boost(); //TODO random power up gen. Factory?
-
-            Debug.Log("Ship captured a random power up!");
+            Power randomPower = PowerFactory.GetPower();
 
             collidedObj.GetComponent<PowerController>().AddPower(randomPower);
+
+            //Debug.Log("Ship captured a random power up!");
 
             randomPower.Activate(collidedObj);
 
@@ -33,7 +68,7 @@ public class RandomPowerAttacher : MonoBehaviour
     void Start()
     {
         // TODO: Special effects
-        Debug.Log("TODO: GFX Special effects for power up");
+        //Debug.Log("TODO: GFX Special effects for power up");
 
     }
 

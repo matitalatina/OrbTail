@@ -7,10 +7,12 @@ using System.Collections.Generic;
 public abstract class PowerView
 {
 
+    public delegate void DelegateDestroyed(object sender, IGroup group);
+
     /// <summary>
     /// Fired when the power has been destroyed and cannot be used anymore
     /// </summary>
-    event EventHandler<EventArgs> EventDestroyed;
+    public event DelegateDestroyed EventDestroyed;
     
     /// <summary>
     /// Get the group of this power
@@ -22,12 +24,12 @@ public abstract class PowerView
     /// </summary>
     protected abstract float IsReady{ get; }
 
-    protected void Destroy()
+    protected void Destroy(IGroup group)
     {
 
         if (EventDestroyed != null)
         {
-            EventDestroyed(this, null);
+            EventDestroyed(this, group);
         }
 
     }

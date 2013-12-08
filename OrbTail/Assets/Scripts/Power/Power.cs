@@ -4,11 +4,6 @@ using System.Collections.Generic;
 
 public abstract class Power : PowerView
 {
-    /// <summary>
-    /// Fired when the power has been destroyed and cannot be used anymore
-    /// </summary>
-    public event EventHandler<EventArgs> EventDestroyed;
-    
     protected IGroup group { get; private set; }
     protected float? duration { get; set; }
     protected GameObject shipOwner { get; private set; }
@@ -50,7 +45,7 @@ public abstract class Power : PowerView
     public virtual void Deactivate()
     {
 
-        Destroy();
+        Destroy(group);
 
     }
 

@@ -6,29 +6,27 @@ public class Invincibility : Power
 {
     private const float power_time = 10.0f;
 
-    static IGroup invincibility_group = new GroupID();
-
-    public Invincibility() : base(invincibility_group, power_time) { }
+    public Invincibility() : base(MainPowerGroup.Instance.groupID, power_time) { }
 
     private Deactivator deactivator;
 
     public override void Activate(UnityEngine.GameObject gameObj)
     {
 
-        Debug.Log("Ship Jammed!");
+        Debug.Log("Ship Invincible!");
 
         base.Activate(gameObj);
 
-        var wheel_stack = gameObj.GetComponent<MovementController>().GetWheelDriverStack();
+        var tail_stack = gameObj.GetComponent<TailController>().GetDetacherDriverStack();
 
-        deactivator = wheel_stack.Push( new JammedWheelDriver( wheel_stack.GetPrototype().GetSteering() ));
+        deactivator = tail_stack.Push( new InvincibleDetacherDriver());
         
     }
 
     public override void Deactivate()
     {
 
-        Debug.Log("Ship no more Jammed!");
+        Debug.Log("Ship no more Invincible!");
 
         base.Deactivate();
 

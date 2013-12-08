@@ -31,7 +31,17 @@ public class PowerController : MonoBehaviour
             powers.Add(power.Group, power);
         }
 
+        power.EventDestroyed += power_EventDestroyed;
+
     }
+
+    void power_EventDestroyed(object sender, IGroup group)
+    {
+
+        powers.Remove(group);
+
+    }
+
 
     public void Update()
     {
