@@ -40,9 +40,8 @@ static class PowerFactory
 
 public class RandomPowerAttacher : MonoBehaviour
 {
-    public RandomPowerAttacher()
-    { 
-    }
+
+    private GameObject particle_dummy;
 
     void OnCollisionEnter(Collision collision)
     {
@@ -50,28 +49,54 @@ public class RandomPowerAttacher : MonoBehaviour
 
         if (collidedObj.tag == Tags.Ship)
         {
-            Power randomPower = PowerFactory.GetPower();
 
-            collidedObj.GetComponent<PowerController>().AddPower(randomPower);
+            if (!Network.isClient)
+            {
 
-            //Debug.Log("Ship captured a random power up!");
+                Power randomPower = PowerFactory.GetPower();
 
-            randomPower.Activate(collidedObj);
+                collidedObj.GetComponent<PowerController>().AddPower(randomPower);
 
-            Debug.Log("Power activated on ship.");
+                randomPower.Activate(collidedObj);
 
-            Destroy(this);
+            }
+
+            networkView.RPC("RemoveFX", RPCMode.All);
+
         }  
+
     }
 
     void Start()
     {
-        // TODO: Special effects
-        //Debug.Log("TODO: GFX Special effects for power up");
 
+        AddFX();
+        
     }
 
     void Update()
     {
     }
+
+    [RPC]
+    private void AddFX()
+    {
+
+        var particle_dummy_resource = Resources.Load("Prefabs/PowerGlow");
+
+        particle_dummy = GameObject.Instantiate(particle_dummy_resource, gameObject.transform.position, Quaternion.identity) as GameObject;
+
+        particle_dummy.transform.parent = gameObject.transform;
+
+    }
+
+    [RPC]
+    private void RemoveFX()
+    {
+
+        Destroy(particle_dummy);
+        Destroy(this);
+
+    }
+
 }

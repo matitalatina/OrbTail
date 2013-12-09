@@ -78,7 +78,7 @@ public class PowerGenerator : MonoBehaviour {
 
     private void SpawnPower(GameObject orb)
     {
-
+    
         orb.AddComponent<RandomPowerAttacher>();
 
         if (Network.isServer)
