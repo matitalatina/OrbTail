@@ -65,6 +65,14 @@ public class ShipPrototype : MonoBehaviour {
 
         }
 
+		//TODO: fix this crap, seriously
+		PowerController power_controller = gameObject.AddComponent<PowerController>();
+
+		var boost = new Boost();
+		boost.Activate(gameObject);
+
+		power_controller.AddPower( boost );
+
         Destroy(this);
 
     }

@@ -12,7 +12,7 @@ public class MobileInputBroker: IInputBroker
 
     private const float kAccelerationExponent = 4f;
 
-    private const float kSteeringExponent = 3f;
+    private const float kSteeringExponent = 2f;
 
     public MobileInputBroker()
     {

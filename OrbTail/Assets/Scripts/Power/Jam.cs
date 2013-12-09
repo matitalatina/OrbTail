@@ -27,13 +27,11 @@ public class Jam : Power
 
     public override void Deactivate()
     {
-
         Debug.Log("Ship no more Jammed!");
 
         base.Deactivate();
 
         deactivator.Deactivate();
-
     }
     
     protected override float IsReady { get { return 0.0f; } }

@@ -5,6 +5,12 @@ using System.Collections.Generic;
 public class PowerController : MonoBehaviour
 {
     private Dictionary<IGroup, Power> powers;
+    private InputProxy input;
+
+    public void Start()
+    {
+        input = GetComponent<InputProxy>();
+    }
 
     public void Awake(){
 
@@ -25,14 +31,35 @@ public class PowerController : MonoBehaviour
             powers.Add(power.Group, power);
         }
 
+        power.EventDestroyed += power_EventDestroyed;
+
     }
+
+    void power_EventDestroyed(object sender, IGroup group)
+    {
+
+        powers.Remove(group);
+
+    }
+
 
     public void Update()
     {
 
-        foreach (Power power in powers.Values)
+        foreach (Power power in new List<Power>( powers.Values ))
         {
             power.Update();
+        }
+
+        foreach (IGroup group in input.FiredPowerUps)
+        {
+
+            if (powers.ContainsKey(group)) {
+
+                powers[group].Fire();
+
+            }
+            
         }
 
     }
