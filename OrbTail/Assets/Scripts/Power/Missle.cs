@@ -5,6 +5,7 @@ using UnityEngine;
 public class Missle : Power
 {
     private const float power_time = 7.0f;
+	private const float missileforwardOffset = 1.5f;
 
     public Missle() : base(MainPowerGroup.Instance.groupID, float.MaxValue) { }
     
@@ -15,7 +16,7 @@ public class Missle : Power
         Debug.Log("Ship shooted Missile!");
 
         var missileRes = Resources.Load("Prefabs/Missle");
-        GameObject missile = GameObject.Instantiate(missileRes, shipOwner.transform.position, shipOwner.transform.rotation) as GameObject;
+		GameObject missile = GameObject.Instantiate(missileRes, shipOwner.transform.position + shipOwner.transform.forward * missileforwardOffset, shipOwner.transform.rotation) as GameObject;
 
         var ships = GameObject.FindGameObjectsWithTag(Tags.Ship);
         float nearestEnemyDistance = float.MaxValue;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class OrbSteal : Power
 {
@@ -24,7 +25,7 @@ public class OrbSteal : Power
 
     void eventLogger_EventFight(object sender, IList<GameObject> orbs, GameObject attacker, GameObject defender)
     {
-        foreach (GameObject orb in orbs)
+		foreach (GameObject orb in orbs.Where((GameObject go) => { return !go.GetComponent<OrbController>().IsAttached();}))
         {
             attacker.GetComponent<TailController>().GetAttacherDriverStack().GetHead().AttachOrbs(orb, attacker.GetComponent<Tail>());
         }

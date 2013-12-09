@@ -46,7 +46,7 @@ public class PowerController : MonoBehaviour
     public void Update()
     {
 
-        foreach (Power power in powers.Values)
+        foreach (Power power in new List<Power>( powers.Values ))
         {
             power.Update();
         }
