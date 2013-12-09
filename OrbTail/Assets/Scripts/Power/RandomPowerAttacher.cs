@@ -61,7 +61,14 @@ public class RandomPowerAttacher : MonoBehaviour
 
             }
 
-            networkView.RPC("RemoveFX", RPCMode.All);
+			if (Network.peerType != NetworkPeerType.Disconnected)
+			{
+
+            	networkView.RPC("RemoveFX", RPCMode.Others);
+
+			}
+
+			RemoveFX();
 
         }  
 
