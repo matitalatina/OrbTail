@@ -5,7 +5,7 @@ using UnityEngine;
 public class Missle : Power
 {
     private const float power_time = 7.0f;
-	private const float missileforwardOffset = 1.5f;
+	private const float missileforwardOffset = 2f;
 
     public Missle() : base(MainPowerGroup.Instance.groupID, float.MaxValue) { }
     

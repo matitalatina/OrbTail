@@ -6,6 +6,7 @@ public class Boost : Power
 {
     private const float reload_power_time = 5.0f;
     private float time_accumulator_to_reload = reload_power_time;
+	private float boost_force = 100.0f;
 
     private Deactivator deactivator;
 
@@ -36,7 +37,7 @@ public class Boost : Power
         {
             time_accumulator_to_reload = 0.0f;
 
-            shipOwner.GetComponent<Rigidbody>().AddForce(shipOwner.transform.forward * 100, ForceMode.Impulse);
+			shipOwner.GetComponent<Rigidbody>().AddForce(shipOwner.transform.forward * boost_force, ForceMode.Impulse);
         }
     }
 
