@@ -7,12 +7,20 @@ public class PowerGenerator : MonoBehaviour {
 
     public float delta_generation = 1.0f;
 
-    private IList<GameObject> orbs;
+    private IList<GameObject> orbs = null;
 
     private IEnumerable<GameObject> DetachedOrbs
     {
         get
         {
+
+            if (orbs == null)
+            {
+
+                orbs = new List<GameObject>(GameObject.FindGameObjectsWithTag(Tags.Orb));
+
+            }
+
             return orbs.Where((GameObject orb) =>
             {
                 return !orb.GetComponent<OrbController>().IsAttached() &&
@@ -25,48 +33,69 @@ public class PowerGenerator : MonoBehaviour {
 
     private float time_accumulator = 0.0f;
 
-	// Use this for initialization
-	void Start () {
-
-        orbs = new List<GameObject>(GameObject.FindGameObjectsWithTag(Tags.Orb));
-
-	}
-	
 	// Update is called once per frame
 	void Update () {
 
-        time_accumulator += Time.deltaTime;
-
-        if (time_accumulator >= delta_generation)
+        if (!Network.isClient)
         {
 
-            time_accumulator = 0.0f;
+            time_accumulator += Time.deltaTime;
 
-            var detached_orbs = DetachedOrbs;
-
-            var index = rng.Next(0, detached_orbs.Count());
-
-            foreach (GameObject orb in detached_orbs)
+            if (time_accumulator >= delta_generation)
             {
 
-                if (index == 0)
+                time_accumulator = 0.0f;
+
+                var detached_orbs = DetachedOrbs;
+
+                var index = rng.Next(0, detached_orbs.Count());
+
+                foreach (GameObject orb in detached_orbs)
                 {
 
-                    Debug.Log("Spawning some powerup attached to orb.");
-                    orb.AddComponent<RandomPowerAttacher>();
-                    break;
+                    if (index == 0)
+                    {
 
-                }
-                else
-                {
+                        SpawnPower(orb);
+                        break;
 
-                    --index;
+                    }
+                    else
+                    {
+
+                        --index;
+
+                    }
 
                 }
 
             }
 
+
+        }
+        
+	}
+
+    private void SpawnPower(GameObject orb)
+    {
+
+        orb.AddComponent<RandomPowerAttacher>();
+
+        if (Network.isServer)
+        {
+
+            networkView.RPC("SpawnPower", RPCMode.OthersBuffered, orb.networkView.viewID);
+
         }
 
-	}
+    }
+
+    [RPC]
+    private void SpawnPower(NetworkViewID orb_view_id)
+    {
+
+        SpawnPower(NetworkView.Find(orb_view_id).gameObject);
+
+    }
+
 }
