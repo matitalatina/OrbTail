@@ -15,6 +15,7 @@ public class PlayerAI : MonoBehaviour {
 	private FloatingObject floatingObject;
 
 	private float maxTimeToGoAway = 4f;
+	private float maxTimeToFirePowerUp = 5f;
 	private float maxVisibility = 60f;
 	private float maxAcceleration = 0.8f;
 	private float thresholdToGiveUp = 0.4f;
@@ -33,6 +34,7 @@ public class PlayerAI : MonoBehaviour {
 		eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
 		eventLogger.EventFight += OnEventFight;
 		eventLogger.EventOrbAttached += OnEventOrbAttached;
+		eventLogger.EventPowerAttached += OnEventPowerAttached;
 		checkpoints = new HashSet<GameObject>(GameObject.FindGameObjectsWithTag(Tags.AICheckpoint));
 	}
 	
@@ -162,6 +164,18 @@ public class PlayerAI : MonoBehaviour {
 		if (Random.value <= thresholdToGiveUp) {
 			ResetTarget();
 		}
+	}
+
+	private void OnEventPowerAttached(object sender, Power power, GameObject ship) {
+		Debug.Log("power attached");
+		StartCoroutine("FirePowerUp");
+	}
+
+	private IEnumerator FirePowerUp() {
+		inputBroker.FiredPowerUps.Clear();
+		float timeToWait = Random.value * maxTimeToFirePowerUp;
+		yield return new WaitForSeconds(timeToWait);
+		inputBroker.FiredPowerUps.Add(MainPowerGroup.Instance.groupID);
 	}
 
 	private bool IsFreeOrb(GameObject orb) {

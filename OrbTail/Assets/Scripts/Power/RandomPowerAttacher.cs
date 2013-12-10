@@ -50,14 +50,17 @@ public class RandomPowerAttacher : MonoBehaviour
         if (collidedObj.tag == Tags.Ship)
         {
 
+			RemoveFX();
+
             if (!Network.isClient)
             {
 
                 Power randomPower = PowerFactory.GetPower();
 
+				randomPower.Activate(collidedObj);
+
                 collidedObj.GetComponent<PowerController>().AddPower(randomPower);
 
-                randomPower.Activate(collidedObj);
 
             }
 
@@ -68,7 +71,6 @@ public class RandomPowerAttacher : MonoBehaviour
 
 			}
 
-			RemoveFX();
 
         }  
 

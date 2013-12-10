@@ -6,10 +6,12 @@ public class PowerController : MonoBehaviour
 {
     private Dictionary<IGroup, Power> powers;
     private InputProxy input;
+	private EventLogger eventLogger;
 
     public void Start()
     {
         input = GetComponent<InputProxy>();
+		eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
     }
 
     public void Awake(){
@@ -32,6 +34,7 @@ public class PowerController : MonoBehaviour
         }
 
         power.EventDestroyed += power_EventDestroyed;
+		eventLogger.NotifyPowerAttached(power, gameObject);
 
     }
 
