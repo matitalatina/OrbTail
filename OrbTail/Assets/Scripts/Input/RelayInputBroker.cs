@@ -16,7 +16,7 @@ public class RelayInputBroker: IInputBroker
         fired_powers_ = new List<IGroup>();
         acceleration_ = 0;
         steering_ = 0;
-
+        
     }
 
     public float Acceleration
@@ -53,7 +53,7 @@ public class RelayInputBroker: IInputBroker
     {
         get
         {
-
+            
             return fired_powers_;
 
         }

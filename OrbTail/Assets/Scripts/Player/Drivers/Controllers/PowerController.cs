@@ -10,8 +10,10 @@ public class PowerController : MonoBehaviour
 
     public void Start()
     {
+
         input = GetComponent<InputProxy>();
 		eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
+
     }
 
     public void Awake(){

@@ -29,7 +29,17 @@ public class ShipPrototype : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-	
+
+        this.enabled = false;
+
+        var boost = new Boost();
+
+        boost.Activate(gameObject);
+
+        var power_controller = gameObject.GetComponent<PowerController>();
+
+        power_controller.AddPower(boost);
+
 	}
 
     // Use this for initialization
@@ -54,8 +64,8 @@ public class ShipPrototype : MonoBehaviour {
         }
 
         //Client side controls the movement
-       if (Network.peerType == NetworkPeerType.Disconnected ||
-           networkView.isMine )
+        if (Network.peerType == NetworkPeerType.Disconnected ||
+            networkView.isMine)
         {
 
             MovementController movement_controller = gameObject.AddComponent<MovementController>();
@@ -65,15 +75,7 @@ public class ShipPrototype : MonoBehaviour {
 
         }
 
-		//TODO: fix this crap, seriously
-		PowerController power_controller = gameObject.AddComponent<PowerController>();
-
-		var boost = new Boost();
-		boost.Activate(gameObject);
-
-		power_controller.AddPower( boost );
-
-        Destroy(this);
+        PowerController power_controller = gameObject.AddComponent<PowerController>();
 
     }
 
