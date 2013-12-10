@@ -14,7 +14,7 @@ public class MobileInputBroker: IInputBroker
 
     private const float kSteeringExponent = 2f;
 
-	private const float kBoostThreshold = 1f;
+	private const float kBoostThreshold = 4.0f;
 
     public MobileInputBroker()
     {
@@ -83,7 +83,8 @@ public class MobileInputBroker: IInputBroker
 
 		}
 
-		if (delta.x > kBoostThreshold) {
+		// TODO: to enhance 
+		if (Input.acceleration.sqrMagnitude > kBoostThreshold) {
 
 			fired_power_ups_.Add(SpecialPowerGroup.Instance.groupID);
 

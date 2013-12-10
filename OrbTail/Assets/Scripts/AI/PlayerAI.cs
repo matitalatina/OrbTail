@@ -18,6 +18,7 @@ public class PlayerAI : MonoBehaviour {
 	private float maxTimeToFirePowerUp = 5f;
 	private float maxVisibility = 60f;
 	private float maxAcceleration = 0.8f;
+	private int minOrbsToStartFight = 5;
 	private float thresholdToGiveUp = 0.4f;
 	private float sqrCheckpointDistanceThreshold = 15f;
 
@@ -121,7 +122,7 @@ public class PlayerAI : MonoBehaviour {
 
 		if (attacker == this.gameObject && defender == target) {
 			alreadyCollided = true;
-			StartCoroutine("decideWhetherContinue");
+			StartCoroutine("decideWhetherContinueFight");
 		}
 
 	}
@@ -138,7 +139,7 @@ public class PlayerAI : MonoBehaviour {
 		GameObject colObject = other.gameObject;
 		
 		if (target == null || IsPatrolling()) {
-			if (colObject.tag == Tags.Ship) {
+			if (colObject.tag == Tags.Ship && colObject.GetComponent<Tail>().GetOrbCount() >= minOrbsToStartFight) {
 				target = colObject;
 			}
 			else if (IsFreeOrb(colObject)) {
@@ -156,7 +157,7 @@ public class PlayerAI : MonoBehaviour {
 
 	}
 
-	private IEnumerator decideWhetherContinue() {
+	private IEnumerator decideWhetherContinueFight() {
 		float timeToWait = Random.value * maxTimeToGoAway;
 		yield return new WaitForSeconds(timeToWait);
 		alreadyCollided = false;
