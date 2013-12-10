@@ -401,7 +401,7 @@ public class EventLogger : MonoBehaviour {
 
             }
 
-            if (EventPowerAttached != null)
+            if (EventPowerTypeAttached != null)
             {
 
                 EventPowerTypeAttached(this, power_type, ship);

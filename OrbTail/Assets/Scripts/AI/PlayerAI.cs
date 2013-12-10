@@ -169,7 +169,6 @@ public class PlayerAI : MonoBehaviour {
 	private void OnEventPowerAttached(object sender, Power power, GameObject ship) {
 
 		if (ship == gameObject) {
-			Debug.Log("power attached");
 			StartCoroutine("FirePowerUp");
 		}
 	}
