@@ -14,6 +14,8 @@ public class MobileInputBroker: IInputBroker
 
     private const float kSteeringExponent = 2f;
 
+	private const float kBoostThreshold = 1f;
+
     public MobileInputBroker()
     {
 
@@ -68,6 +70,24 @@ public class MobileInputBroker: IInputBroker
         //From -1.0f to 1.0f.
         //Steering = Mathf.Pow( Mathf.Clamp01( Mathf.Abs( direction.x ) ), 
         //                                      kSteeringExponent) * Mathf.Sign(direction.x);
+
+		if( fired_power_ups_.Count > 0){
+
+			fired_power_ups_.Clear();
+
+		}
+
+		if (Input.touchCount > 0 ) {
+
+			fired_power_ups_.Add(MainPowerGroup.Instance.groupID);
+
+		}
+
+		if (delta.x > kBoostThreshold) {
+
+			fired_power_ups_.Add(SpecialPowerGroup.Instance.groupID);
+
+		}
 
 		Steering = Mathf.Clamp(delta.z * kSteeringExponent, -1f, 1f);
     }
