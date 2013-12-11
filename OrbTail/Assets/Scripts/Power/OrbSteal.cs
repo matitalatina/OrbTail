@@ -8,7 +8,7 @@ public class OrbSteal : Power
     private const float power_time = 10.0f;
     private EventLogger eventLogger;
 
-    public OrbSteal() : base(MainPowerGroup.Instance.groupID, float.MaxValue) { }
+    public OrbSteal() : base(MainPowerGroup.Instance.groupID, float.MaxValue, "OrbSteal") { }
 
     public override void Activate(GameObject gameObj)
     {
@@ -41,4 +41,12 @@ public class OrbSteal : Power
     }
 
     protected override float IsReady { get { return 1.0f; } }
+
+    public override Power Generate()
+    {
+
+        return new OrbSteal();
+
+    }
+
 }

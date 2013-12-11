@@ -8,7 +8,7 @@ public class Jam : Power
 
     static IGroup jam_group = new GroupID();
 
-    public Jam() : base(jam_group, power_time) { }
+    public Jam() : base(jam_group, power_time, "Jam") { }
 
     private Deactivator deactivator;
 
@@ -35,4 +35,12 @@ public class Jam : Power
     }
     
     protected override float IsReady { get { return 0.0f; } }
+
+    public override Power Generate()
+    {
+
+        return new Jam();
+
+    }
+
 }

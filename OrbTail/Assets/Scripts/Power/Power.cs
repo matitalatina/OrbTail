@@ -11,10 +11,13 @@ public abstract class Power : PowerView
 
     protected float time_accumulator = 0.0f;
 
-    protected Power(IGroup group, float? duration)
+    protected Power(IGroup group, float? duration, string name)
     {
+
         this.group = group;
         this.duration = duration;
+        this.Name = name;
+
     }
 
     /// <summary>
@@ -27,6 +30,20 @@ public abstract class Power : PowerView
             return group;
         }
     }
+
+    /// <summary>
+    /// The power name
+    /// </summary>
+    public string Name
+    {
+        get;
+        private set;
+    }
+
+    /// <summary>
+    /// Clone this power
+    /// </summary>
+    public abstract Power Generate();
 
     /// <summary>
     /// Activate the power up

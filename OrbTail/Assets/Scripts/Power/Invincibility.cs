@@ -6,7 +6,7 @@ public class Invincibility : Power
 {
     private const float power_time = 10.0f;
 
-    public Invincibility() : base(MainPowerGroup.Instance.groupID, power_time) { }
+    public Invincibility() : base(MainPowerGroup.Instance.groupID, power_time, "Invincibility") { }
 
     private Deactivator deactivator;
 
@@ -35,4 +35,12 @@ public class Invincibility : Power
     }
     
     protected override float IsReady { get { return 0.0f; } }
+
+    public override Power Generate()
+    {
+
+        return new Invincibility();
+
+    }
+
 }

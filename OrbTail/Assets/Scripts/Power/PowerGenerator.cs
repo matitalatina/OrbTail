@@ -47,7 +47,7 @@ public class PowerGenerator : MonoBehaviour {
                 time_accumulator = 0.0f;
 
                 var detached_orbs = DetachedOrbs;
-
+                
                 var index = rng.Next(0, detached_orbs.Count());
 
                 foreach (GameObject orb in detached_orbs)
@@ -84,14 +84,14 @@ public class PowerGenerator : MonoBehaviour {
         if (Network.isServer)
         {
 
-            networkView.RPC("SpawnPower", RPCMode.OthersBuffered, orb.networkView.viewID);
+            networkView.RPC("RPCSpawnPower", RPCMode.OthersBuffered, orb.networkView.viewID);
 
         }
 
     }
 
     [RPC]
-    private void SpawnPower(NetworkViewID orb_view_id)
+    private void RPCSpawnPower(NetworkViewID orb_view_id)
     {
 
         SpawnPower(NetworkView.Find(orb_view_id).gameObject);

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Missle : Power
+public class Missile : Power
 {
     private const float power_time = 7.0f;
 	private const float missileforwardOffset = 2f;
 
-    public Missle() : base(MainPowerGroup.Instance.groupID, float.MaxValue) { }
+    public Missile() : base(MainPowerGroup.Instance.groupID, float.MaxValue, "Missile") { }
     
     public override void Fire()
     {
@@ -58,4 +58,12 @@ public class Missle : Power
     }
 
     protected override float IsReady { get { return 1.0f; } }
+
+    public override Power Generate()
+    {
+
+        return new Missile();
+
+    }
+
 }

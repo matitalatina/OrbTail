@@ -2,75 +2,42 @@
 using System;
 using System.Collections.Generic;
 
-static class PowerFactory
-{
-    public static Power GetPower()
-    {
-        System.Random rng = new System.Random();
-
-        switch (rng.Next(0, 5))
-        {
-            case 1:
-            case 3:
-            case 0:{ 
-                return new Missle();
-            }
-            /*case 1: { 
-                return new Magnet();
-            }*/
-            case 2: { 
-                return new Invincibility();
-            }
-            /*case 3: { 
-                return new TailSwap();
-            }*/
-            case 4: { 
-                return new OrbSteal();
-            }
-            case 5: { 
-                return new Jam();
-            }
-            default: {
-                System.Diagnostics.Debug.Assert(false);
-                return null;
-            }
-        }
-    }
-}
-
 public class RandomPowerAttacher : MonoBehaviour
 {
 
     private GameObject particle_dummy;
 
+    private EventLogger event_logger_;
+
     void OnCollisionEnter(Collision collision)
     {
-        var collidedObj = collision.gameObject;
 
-        if (collidedObj.tag == Tags.Ship)
+        if (!Network.isClient)
         {
 
-			RemoveFX();
+            var collidedObj = collision.gameObject;
 
-            if (!Network.isClient)
+            if (collidedObj.tag == Tags.Ship)
             {
 
-                Power randomPower = PowerFactory.GetPower();
+                RemoveFX();
 
-				randomPower.Activate(collidedObj);
+                Power randomPower = PowerFactory.Instance.RandomPower;
+
+                randomPower.Activate(collidedObj);
 
                 collidedObj.GetComponent<PowerController>().AddPower(randomPower);
 
+                
+
+                if (Network.peerType != NetworkPeerType.Disconnected)
+                {
+
+                    networkView.RPC("RemoveFX", RPCMode.Others);
+
+                }
 
             }
-
-			if (Network.peerType != NetworkPeerType.Disconnected)
-			{
-
-            	networkView.RPC("RemoveFX", RPCMode.Others);
-
-			}
-
 
         }  
 
@@ -79,12 +46,10 @@ public class RandomPowerAttacher : MonoBehaviour
     void Start()
     {
 
+        event_logger_ = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
+
         AddFX();
         
-    }
-
-    void Update()
-    {
     }
 
     [RPC]

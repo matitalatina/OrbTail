@@ -10,7 +10,7 @@ public class Boost : Power
 
     private Deactivator deactivator;
 
-    public Boost() : base(SpecialPowerGroup.Instance.groupID, float.MaxValue) {}
+    public Boost() : base(SpecialPowerGroup.Instance.groupID, float.MaxValue, "Boost") {}
     
     protected override float IsReady
     {
@@ -39,6 +39,14 @@ public class Boost : Power
 
 			shipOwner.GetComponent<Rigidbody>().AddForce(shipOwner.transform.forward * boost_force, ForceMode.Impulse);
         }
+    }
+
+
+    public override Power Generate()
+    {
+        
+        return new Boost();
+
     }
 
 }
