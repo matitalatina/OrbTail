@@ -37,7 +37,7 @@ public class Boost : Power
         {
             time_accumulator_to_reload = 0.0f;
 
-			shipOwner.GetComponent<Rigidbody>().AddForce(shipOwner.transform.forward * boost_force, ForceMode.Impulse);
+            Owner.GetComponent<Rigidbody>().AddForce(Owner.transform.forward * boost_force, ForceMode.Impulse);
         }
     }
 

@@ -22,6 +22,9 @@ public class PowerController : MonoBehaviour
 
     public void AddPower(Power power)
     {
+        
+        power.Activate(gameObject);
+
         // If exist another power with the same family
         if(powers.ContainsKey(power.Group))
         {
@@ -35,39 +38,95 @@ public class PowerController : MonoBehaviour
 
         power.EventDestroyed += power_EventDestroyed;
 
+        //The server is the only one able to add a power to everyone
+        if (Network.isServer)
+        {
+
+            networkView.RPC("RPCAddPower", RPCMode.Others, power.Name);
+
+        }
+
     }
 
     void power_EventDestroyed(object sender, IGroup group)
     {
 
-        powers.Remove(group);
+        if (powers.ContainsKey(group))
+        {
+
+            var power = powers[group];
+
+            powers.Remove(power.Group);
+
+            if (networkView.isMine &&
+                Network.peerType != NetworkPeerType.Disconnected)
+            {
+
+                //This is sent just for when the power is fired and then destroyed
+                networkView.RPC("RPCRemovePower", RPCMode.Others, power.Name);
+
+            }
+
+        }
 
     }
 
+    [RPC]
+    private void RPCAddPower(string power_name)
+    {
+
+        var power = PowerFactory.Instance.PowerFromName(power_name);
+
+        AddPower(power);
+
+    }
+
+    [RPC]
+    private void RPCRemovePower(string power_name)
+    {
+
+        power_EventDestroyed(this, PowerFactory.Instance.GroupFromName(power_name));
+        
+    }
 
     public void Update()
     {
 
+        //Needed everywhere as orbs could belong to different clients
+
         foreach (Power power in new List<Power>( powers.Values ))
         {
+
             power.Update();
+
         }
 
-        foreach (IGroup group in input.FiredPowerUps)
+        //Needed only owner-side
+
+        if (networkView.isMine ||
+            Network.peerType == NetworkPeerType.Disconnected)
         {
 
-            if (powers.ContainsKey(group)) {
+            foreach (IGroup group in input.FiredPowerUps)
+            {
 
-                powers[group].Fire();
+                if (powers.ContainsKey(group))
+                {
+
+                    powers[group].Fire();
+
+                }
 
             }
-            
+
         }
 
     }
 
     public PowerView GetPowerView(IGroup group)
     {
+
         return powers[group];
+
     }
 }

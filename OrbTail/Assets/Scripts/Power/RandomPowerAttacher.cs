@@ -26,9 +26,7 @@ public class RandomPowerAttacher : MonoBehaviour
 
                 randomPower.Activate(collidedObj);
 
-                collidedObj.GetComponent<PowerController>().AddPower(randomPower);
-
-                
+                collidedObj.GetComponent<PowerController>().AddPower(randomPower);              
 
                 if (Network.peerType != NetworkPeerType.Disconnected)
                 {

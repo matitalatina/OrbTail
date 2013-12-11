@@ -65,6 +65,13 @@ public class PowerFactory
 
     }
 
+    public IGroup GroupFromName(string name)
+    {
+
+        return power_table_[name].Key.Group;
+
+    }
+
     /// <summary>
     /// Register a new power
     /// </summary>

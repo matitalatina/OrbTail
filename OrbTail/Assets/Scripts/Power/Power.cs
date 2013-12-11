@@ -6,7 +6,6 @@ public abstract class Power : PowerView
 {
     protected IGroup group { get; private set; }
     protected float? duration { get; set; }
-    protected GameObject shipOwner { get; private set; }
     protected float activatedTime { get; private set; }
 
     protected float time_accumulator = 0.0f;
@@ -19,6 +18,11 @@ public abstract class Power : PowerView
         this.Name = name;
 
     }
+
+    /// <summary>
+    /// The owner of the power
+    /// </summary>
+    public GameObject Owner { get; private set; }
 
     /// <summary>
     /// Get the power's group
@@ -49,11 +53,13 @@ public abstract class Power : PowerView
     /// Activate the power up
     /// </summary>
     /// <param name="gameObj">Ship with activated power up</param>
-    public virtual void Activate(GameObject gameObj)
+    public virtual void Activate(GameObject owner)
     {
-        this.shipOwner = gameObj;
+
+        this.Owner = owner;
         this.activatedTime = Time.time;
         this.time_accumulator = 0.0f;
+
     }
 
     /// <summary>
