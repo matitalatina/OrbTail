@@ -24,7 +24,7 @@ public class OwnershipManager : MonoBehaviour {
             if (Network.isServer)
             {
 
-                networkView.RPC("RPChangeOwnership", owner, target_view_id, view_id, true);
+                networkView.RPC("RPCChangeOwnership", owner, target_view_id, view_id, true);
 
             }
             else
@@ -44,8 +44,19 @@ public class OwnershipManager : MonoBehaviour {
 
         NetworkPlayer owner = target_view_id.owner;
 
-        networkView.RPC("RPChangeOwnership", owner, target_view_id, view_id, true);
+        if (owner == Network.player)
+        {
 
+            RPCChangeOwnership(target_view_id, view_id, true);
+
+        }
+        else
+        {
+
+            networkView.RPC("RPCChangeOwnership", owner, target_view_id, view_id, true);
+
+        }
+        
     }
     
     [RPC]
