@@ -15,8 +15,6 @@ public class OwnershipManager : MonoBehaviour {
         if (Network.player != owner)
         {
 
-            Debug.Log("Acquiring ownership");
-
             var view_id = AllocateNetworkViewID();
             var target_view_id = game_object.networkView.viewID;
             
@@ -67,8 +65,6 @@ public class OwnershipManager : MonoBehaviour {
 
         if (relay)
         {
-
-            Debug.Log("Relaying");
 
             networkView.RPC("RPCChangeOwnership", RPCMode.Others, target_view_id, view_id, false);
 

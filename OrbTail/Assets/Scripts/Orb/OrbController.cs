@@ -7,8 +7,8 @@ public class OrbController : MonoBehaviour {
 	// Values used to create spring
 	private float dampSpring = 1f;
 	private float forceSpring = 2f;
-	private float minDistance = 5.0f;
-	private float maxDistance = 5.0f;
+	private float minDistance = 1.0f;
+	private float maxDistance = 1.0f;
 
 
 
