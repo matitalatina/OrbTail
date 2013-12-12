@@ -50,7 +50,7 @@ public class Tail : MonoBehaviour {
         if (networkView.isMine)
         {
             
-            ownershipManager.AcquireOwnership(orb);
+            ownershipManager.RequestOwnership(orb);
 
         }
 
