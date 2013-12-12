@@ -56,12 +56,23 @@ public class RPCAccumulator<AccumulatedType>
     public IList<AccumulatedType> Fetch(int unique_id)
     {
 
-        var accumulation_list = accumulation_table_[unique_id];
+        if (accumulation_table_.ContainsKey(unique_id))
+        {
 
-        accumulation_table_.Remove(unique_id);
+            var accumulation_list = accumulation_table_[unique_id];
 
-        return accumulation_list;
+            accumulation_table_.Remove(unique_id);
 
+            return accumulation_list;
+
+        }
+        else
+        {
+
+            return new List<AccumulatedType>();
+
+        }
+        
     }
 
     /// <summary>

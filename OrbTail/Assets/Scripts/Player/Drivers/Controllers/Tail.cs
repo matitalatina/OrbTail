@@ -46,14 +46,6 @@ public class Tail : MonoBehaviour {
         
         }
 
-        //Acquire the ownership
-        if (networkView.isMine)
-        {
-            
-            ownershipManager.AcquireOwnership(orb);
-
-        }
-
         //Attach the orb to this player
         GameObject target;
 
@@ -75,10 +67,18 @@ public class Tail : MonoBehaviour {
         if (Network.isServer)
         {
 
-            networkView.RPC("RPCAttachOrb", RPCMode.OthersBuffered, orb.networkView.viewID);
+            networkView.RPC("RPCAttachOrb", RPCMode.Others, orb.networkView.viewID);
 
         }
-        
+
+        //Acquire the ownership
+        if (networkView.isMine)
+        {
+
+            ownershipManager.AcquireOwnership(orb);
+
+        }
+                
 	}
 
     [RPC]
@@ -121,7 +121,7 @@ public class Tail : MonoBehaviour {
         {
 
             //eventLogger.NotifyOrbAttached(orb, gameObject);
-            networkView.RPC("RPCDetachOrbs", RPCMode.OthersBuffered, nOrbs);
+            networkView.RPC("RPCDetachOrbs", RPCMode.Others, nOrbs);
 
         }
 
