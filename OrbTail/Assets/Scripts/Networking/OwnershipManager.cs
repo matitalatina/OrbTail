@@ -10,7 +10,7 @@ public class OwnershipManager : MonoBehaviour {
     public void AcquireOwnership(GameObject game_object)
     {
 
-        NetworkPlayer owner = game_object.networkView.viewID.owner;
+        NetworkPlayer owner = game_object.networkView.owner;
 
         if (Network.player != owner)
         {
@@ -19,9 +19,9 @@ public class OwnershipManager : MonoBehaviour {
 
             var view_id = AllocateNetworkViewID();
             var target_view_id = game_object.networkView.viewID;
-
+            
             //Tells the previous owner that the ownership has been changed
-            networkView.RPC("RPCChangeOwnership", owner, target_view_id, view_id);
+            networkView.RPC("RPCChangeOwnership", RPCMode.Server, target_view_id, view_id);
 
         }
 
@@ -34,19 +34,16 @@ public class OwnershipManager : MonoBehaviour {
         //Changes the actual owner
         NetworkView.Find(target_view_id).viewID = view_id;
 
-        if (DisposeNetworkViewID(target_view_id))
+        Debug.Log("old -> " + target_view_id.owner + " new -> " + view_id.owner);
+
+        DisposeNetworkViewID(target_view_id);
+
+        if (Network.isServer)
         {
 
-            //The object was mine...
-            Debug.Log("Yielding my ownership");
-            
+            Debug.Log("Relaying to everybody");
+
             networkView.RPC("RPCChangeOwnership", RPCMode.Others, target_view_id, view_id);
-
-        }
-        else
-        {
-
-            Debug.Log("Changing the ownership");
 
         }
 
