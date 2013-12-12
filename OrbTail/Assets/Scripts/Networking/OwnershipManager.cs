@@ -24,39 +24,62 @@ public class OwnershipManager : MonoBehaviour {
             if (Network.isServer)
             {
 
-                RPCChangeOwnership(target_view_id, view_id);
+                networkView.RPC("RPChangeOwnership", owner, target_view_id, view_id, true);
 
             }
             else
             {
 
-                networkView.RPC("RPCChangeOwnership", RPCMode.Server, target_view_id, view_id);
+                networkView.RPC("RPCRedirectToOwner", RPCMode.Server, target_view_id, view_id);
 
             }          
 
         }
 
     }
-    
+
     [RPC]
-    private void RPCChangeOwnership(NetworkViewID target_view_id, NetworkViewID view_id)
+    private void RPCRedirectToOwner(NetworkViewID target_view_id, NetworkViewID view_id)
     {
 
-        //Changes the actual owner
+        NetworkPlayer owner = target_view_id.owner;
+
+        networkView.RPC("RPChangeOwnership", owner, target_view_id, view_id, true);
+
+    }
+    
+    [RPC]
+    private void RPCChangeOwnership(NetworkViewID target_view_id, NetworkViewID view_id, bool relay)
+    {
+
+        SetOwnership(target_view_id, view_id);
+
+        if (relay)
+        {
+
+            Debug.Log("Relaying");
+
+            networkView.RPC("RPCChangeOwnership", RPCMode.Others, target_view_id, view_id, false);
+
+        }
+
+    }
+
+    /// <summary>
+    /// Changes the actual owner
+    /// </summary>
+    /// <param name="target_view_id">Old network view</param>
+    /// <param name="view_id">New network view</param>
+    private void SetOwnership(NetworkViewID target_view_id, NetworkViewID view_id)
+    {
+
         var target_network = NetworkView.Find(target_view_id);
 
         target_network.viewID = view_id;
 
-        Debug.Log("old -> " + target_view_id.owner + " new -> " + view_id.owner);
-
         DisposeNetworkViewID(target_view_id);
 
-        if (Network.isServer)
-        {
-
-            networkView.RPC("RPCChangeOwnership", RPCMode.Others, target_view_id, view_id);
-
-        }
+        Debug.Log("old -> " + target_view_id.owner + " new -> " + view_id.owner);
 
     }
 
