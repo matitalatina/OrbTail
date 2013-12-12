@@ -15,6 +15,8 @@ public class OwnershipManager : MonoBehaviour {
         if (Network.player != owner)
         {
 
+            Debug.Log("Acquiring ownership");
+
             var view_id = AllocateNetworkViewID();
             var target_view_id = game_object.networkView.viewID;
 
