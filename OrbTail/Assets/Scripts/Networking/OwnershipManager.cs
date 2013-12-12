@@ -26,8 +26,6 @@ public class OwnershipManager : MonoBehaviour {
 
                 RPCChangeOwnership(target_view_id, view_id);
 
-                networkView.RPC("RPCChangeOwnership", RPCMode.Others, target_view_id, view_id);
-
             }
             else
             {
@@ -52,6 +50,13 @@ public class OwnershipManager : MonoBehaviour {
         Debug.Log("old -> " + target_view_id.owner + " new -> " + view_id.owner);
 
         DisposeNetworkViewID(target_view_id);
+
+        if (Network.isServer)
+        {
+
+            networkView.RPC("RPCChangeOwnership", RPCMode.Others, target_view_id, view_id);
+
+        }
 
     }
 
