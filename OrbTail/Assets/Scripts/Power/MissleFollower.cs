@@ -11,7 +11,7 @@ public class MissleFollower : MonoBehaviour {
 	private const float timeToLive = 10f;
 
 	void Start () {
-        StartCoroutine("DestroyMissle");
+        StartCoroutine("DestroyMissleTTL");
 	}
 	
 	void Update () {
@@ -38,20 +38,31 @@ public class MissleFollower : MonoBehaviour {
         if ( (collision.gameObject.tag == Tags.Ship) || (collision.gameObject.tag == Tags.Field) )
         {
             Debug.Log("BUM HEADSHOT! Hit: " + collision.gameObject);
+            StartCoroutine("DestroyMissle");
 
             collision.gameObject.GetComponent<TailController>().GetDetacherDriverStack().GetHead().DetachOrbs(int.MaxValue, collision.gameObject.GetComponent<Tail>());
 			collision.gameObject.rigidbody.AddForce(transform.forward * explosionForce, ForceMode.Impulse);
 
-            Target = null;
-            Destroy(this.gameObject);
+            
 		}
+    }
+
+    private IEnumerator DestroyMissleTTL()
+    {
+        yield return new WaitForSeconds(timeToLive);
+        Debug.Log("Missle destroyed without hitting nothing.");
+        StartCoroutine("DestroyMissle");
     }
 
     private IEnumerator DestroyMissle()
     {
-        yield return new WaitForSeconds(timeToLive);
-        Debug.Log("Missile destroyed without hitting nothing.");
         Target = null;
+        collider.enabled = false;
+        particleSystem.enableEmission = false;
+        GetComponent<MeshFilter>().mesh = null;
+
+        // Delayed for GFX
+        yield return new WaitForSeconds(3.0f);
         Destroy(this.gameObject);
     }
 }
