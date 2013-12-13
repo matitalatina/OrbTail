@@ -5,7 +5,7 @@ using UnityEngine;
 public class Missile : Power
 {
     private const float power_time = 7.0f;
-	private const float missileforwardOffset = 2f;
+	private const float missileforwardOffset = 0.3f;
 
     public Missile() : base(MainPowerGroup.Instance.groupID, float.MaxValue, "Missile") { }
     
@@ -13,10 +13,10 @@ public class Missile : Power
     {
         base.Fire();
 
-        Debug.Log("Ship shooted Missile!");
+        Debug.Log("Ship "+ Owner +" shooted Missile!");
 
         var missileRes = Resources.Load("Prefabs/Missle");
-        GameObject missile = GameObject.Instantiate(missileRes, Owner.transform.position + Owner.transform.forward * missileforwardOffset, Owner.transform.rotation) as GameObject;
+        GameObject missile = GameObject.Instantiate(missileRes, Owner.transform.position + Owner.transform.forward + Owner.rigidbody.velocity * missileforwardOffset, Owner.transform.rotation) as GameObject;
 
         var ships = GameObject.FindGameObjectsWithTag(Tags.Ship);
         float nearestEnemyDistance = float.MaxValue;
@@ -50,8 +50,6 @@ public class Missile : Power
 
     public override void Deactivate()
     {
-
-        Debug.Log("Missile hit an object or it's never been shooted!");
 
         base.Deactivate();
 
