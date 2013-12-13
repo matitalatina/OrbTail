@@ -1,17 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MissleFollower : MonoBehaviour {
+public class MissileFollower : MonoBehaviour {
 
     public GameObject Target { get; set; }
     public GameObject Owner { get; set; }
-    private const float maxMissleSteering = 3.0f;
-    private const float maxMissleSpeed = 15.0f;
+    private const float maxMissileSteering = 3.0f;
+    private const float maxMissileSpeed = 15.0f;
 	private const float explosionForce = 100.0f;
 	private const float timeToLive = 10f;
 
 	void Start () {
-        StartCoroutine("DestroyMissleTTL");
+        StartCoroutine("DestroyMissileTTL");
 	}
 	
 	void Update () {
@@ -22,7 +22,7 @@ public class MissleFollower : MonoBehaviour {
         {
             Vector3 direction = Target.transform.position - this.transform.position;
             direction.Normalize();
-            Vector3 new_forward  = Vector3.RotateTowards(transform.forward, direction, Time.deltaTime * maxMissleSteering, 0);
+            Vector3 new_forward  = Vector3.RotateTowards(transform.forward, direction, Time.deltaTime * maxMissileSteering, 0);
             new_forward.Normalize();
             float dot = Mathf.Clamp01(Vector3.Dot( direction, new_forward) );
             this.transform.rotation = Quaternion.LookRotation(new_forward, -floating.ArenaDown);
@@ -30,7 +30,7 @@ public class MissleFollower : MonoBehaviour {
         Vector3 forwardProjected = Vector3.Cross(floating.ArenaDown,
                                                     Vector3.Cross(-floating.ArenaDown, this.transform.forward)
                                                     ).normalized;
-        this.GetComponent<Rigidbody>().AddForce(forwardProjected * maxMissleSpeed, ForceMode.VelocityChange);
+        this.GetComponent<Rigidbody>().AddForce(forwardProjected * maxMissileSpeed, ForceMode.VelocityChange);
 	}
 
     void OnCollisionEnter(Collision collision)
@@ -38,7 +38,7 @@ public class MissleFollower : MonoBehaviour {
         if ( (collision.gameObject.tag == Tags.Ship) || (collision.gameObject.tag == Tags.Field) )
         {
             Debug.Log("BUM HEADSHOT! Hit: " + collision.gameObject);
-            StartCoroutine("DestroyMissle");
+            StartCoroutine("DestroyMissile");
 
             collision.gameObject.GetComponent<TailController>().GetDetacherDriverStack().GetHead().DetachOrbs(int.MaxValue, collision.gameObject.GetComponent<Tail>());
 			collision.gameObject.rigidbody.AddForce(transform.forward * explosionForce, ForceMode.Impulse);
@@ -47,14 +47,14 @@ public class MissleFollower : MonoBehaviour {
 		}
     }
 
-    private IEnumerator DestroyMissleTTL()
+    private IEnumerator DestroyMissileTTL()
     {
         yield return new WaitForSeconds(timeToLive);
-        Debug.Log("Missle destroyed without hitting nothing.");
-        StartCoroutine("DestroyMissle");
+        Debug.Log("Missile destroyed without hitting nothing.");
+        StartCoroutine("DestroyMissile");
     }
 
-    private IEnumerator DestroyMissle()
+    private IEnumerator DestroyMissile()
     {
         var explosionRes = Resources.Load("Prefabs/Power/Explosion");
         GameObject explosion = GameObject.Instantiate(explosionRes, this.gameObject.transform.position, Quaternion.identity) as GameObject;

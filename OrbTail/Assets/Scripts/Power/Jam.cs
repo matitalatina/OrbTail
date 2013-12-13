@@ -12,14 +12,12 @@ public class Jam : Power
 
     private Deactivator deactivator;
 
-    public override void Activate(UnityEngine.GameObject gameObj)
+    public override void ActivateClient()
     {
 
-        Debug.Log("Ship: " + gameObj + " Jammed!");
+        Debug.Log("Ship: " + Owner + " Jammed!");
 
-        base.Activate(gameObj);
-
-        var wheel_stack = gameObj.GetComponent<MovementController>().GetWheelDriverStack();
+        var wheel_stack = Owner.GetComponent<MovementController>().GetWheelDriverStack();
 
         deactivator = wheel_stack.Push( new JammedWheelDriver( wheel_stack.GetPrototype().GetSteering() ));
         
@@ -31,7 +29,10 @@ public class Jam : Power
 
         base.Deactivate();
 
-        deactivator.Deactivate();
+        if (Network.isServer || Network.peerType != NetworkPeerType.Disconnected)
+        {
+            deactivator.Deactivate();
+        }
     }
     
     protected override float IsReady { get { return 0.0f; } }

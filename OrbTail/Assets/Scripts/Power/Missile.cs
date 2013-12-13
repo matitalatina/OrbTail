@@ -7,16 +7,25 @@ public class Missile : Power
     private const float power_time = 7.0f;
 	private const float missileforwardOffset = 0.3f;
 
-    public Missile() : base(MainPowerGroup.Instance.groupID, float.MaxValue, "Missle") { }
+    public Missile() : base(MainPowerGroup.Instance.groupID, float.MaxValue, "Missile") { }
     
     public override void Fire()
     {
         base.Fire();
 
-        Debug.Log("Ship "+ Owner +" shooted Missle!");
+        Debug.Log("Ship "+ Owner +" shooted Missile!");
 
-        var missileRes = Resources.Load("Prefabs/Power/MissleRocket");
-        GameObject missile = GameObject.Instantiate(missileRes, Owner.transform.position + Owner.transform.forward + Owner.rigidbody.velocity * missileforwardOffset, Owner.transform.rotation) as GameObject;
+        var missileRes = Resources.Load("Prefabs/Power/MissileRocket");
+        GameObject missile;
+        
+        if(Network.peerType == NetworkPeerType.Disconnected)
+        {
+            missile = GameObject.Instantiate(missileRes, Owner.transform.position + Owner.transform.forward + Owner.rigidbody.velocity * missileforwardOffset, Owner.transform.rotation) as GameObject;
+        }
+        else
+        {
+            missile = Network.Instantiate(missileRes, Owner.transform.position + Owner.transform.forward + Owner.rigidbody.velocity * missileforwardOffset, Owner.transform.rotation, 0) as GameObject;
+        }        
 
         var ships = GameObject.FindGameObjectsWithTag(Tags.Ship);
         float nearestEnemyDistance = float.MaxValue;
@@ -38,20 +47,15 @@ public class Missile : Power
             }
         }
 
-        var missileFollower = missile.AddComponent<MissleFollower>();
+        //var missileFollower = missile.AddComponent<MissileFollower>();
+        // TODO: IMPOSTARE IN REMOTO SIA IL TARGET CHE L'OWNER
+
         // Shoot to nearest enemy ship
         missileFollower.Target = nearestEnemyShip;
         missileFollower.Owner = Owner;
 
         //Once fire it is destroyed
         Deactivate();
-
-    }
-
-    public override void Deactivate()
-    {
-
-        base.Deactivate();
 
     }
 

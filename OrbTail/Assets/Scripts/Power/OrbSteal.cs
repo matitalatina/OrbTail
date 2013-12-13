@@ -10,17 +10,14 @@ public class OrbSteal : Power
 
     public OrbSteal() : base(MainPowerGroup.Instance.groupID, float.MaxValue, "OrbSteal") { }
 
-    public override void Activate(GameObject gameObj)
+    public override void ActivateServer(GameObject gameObj)
     {
-        base.Activate(gameObj);
 
         Debug.Log("OrbSteal: " + gameObj + " activated");
 
         eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
 
         eventLogger.EventFight += eventLogger_EventFight;
-
-
     }
 
     void eventLogger_EventFight(object sender, IList<GameObject> orbs, GameObject attacker, GameObject defender)

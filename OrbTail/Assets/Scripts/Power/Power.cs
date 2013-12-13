@@ -55,14 +55,41 @@ public abstract class Power : PowerView
     /// Activate the power up
     /// </summary>
     /// <param name="gameObj">Ship with activated power up</param>
-    public virtual void Activate(GameObject owner)
+    public sealed void Activate(GameObject owner)
     {
-
         this.Owner = owner;
         this.activatedTime = Time.time;
         this.time_accumulator = 0.0f;
 
         AddFX();
+
+        ActivateShared();
+        if(Network.isServer || Network.peerType != NetworkPeerType.Disconnected)
+        {
+            ActivateServer();
+        }
+        if ((Network.isClient && Network.player == Owner.networkView.viewID.owner) || Network.peerType != NetworkPeerType.Disconnected)
+        {
+            ActivateClient();
+        }
+    }
+
+    protected virtual void ActivateShared()
+    {
+    
+    }
+    /// <summary>
+    /// Modify TailController and Tail
+    /// </summary>
+    protected virtual void ActivateServer()
+    {
+    
+    }
+    /// <summary>
+    /// Modify movement controller
+    /// </summary>
+    protected virtual void ActivateClient()
+    {
 
     }
 
@@ -74,7 +101,6 @@ public abstract class Power : PowerView
         RemoveFX();
 
         Destroy(group);
-
     }
 
     /// <summary>

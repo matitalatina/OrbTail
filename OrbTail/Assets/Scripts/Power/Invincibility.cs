@@ -10,17 +10,13 @@ public class Invincibility : Power
 
     private Deactivator deactivator;
 
-    public override void Activate(UnityEngine.GameObject gameObj)
+    public override void ActivateServer()
     {
+        Debug.Log("Ship: "+ Owner +" Invincible!");
 
-        Debug.Log("Ship: "+ gameObj +" Invincible!");
-
-        base.Activate(gameObj);
-
-        var tail_stack = gameObj.GetComponent<TailController>().GetDetacherDriverStack();
+        var tail_stack = Owner.GetComponent<TailController>().GetDetacherDriverStack();
 
         deactivator = tail_stack.Push( new InvincibleDetacherDriver());
-        
     }
 
     public override void Deactivate()
@@ -30,7 +26,10 @@ public class Invincibility : Power
 
         base.Deactivate();
 
-        deactivator.Deactivate();
+        if (deactivator != null)
+        { 
+            deactivator.Deactivate();
+        }
 
     }
     

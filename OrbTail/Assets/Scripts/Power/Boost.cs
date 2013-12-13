@@ -41,7 +41,6 @@ public class Boost : Power
         }
     }
 
-
     public override Power Generate()
     {
         
