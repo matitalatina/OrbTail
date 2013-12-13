@@ -13,7 +13,7 @@ public class Invincibility : Power
     public override void Activate(UnityEngine.GameObject gameObj)
     {
 
-        Debug.Log("Ship Invincible!");
+        Debug.Log("Ship: "+ gameObj +" Invincible!");
 
         base.Activate(gameObj);
 

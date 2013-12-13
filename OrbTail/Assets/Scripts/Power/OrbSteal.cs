@@ -14,7 +14,7 @@ public class OrbSteal : Power
     {
         base.Activate(gameObj);
 
-        Debug.Log("OrbSteal activated");
+        Debug.Log("OrbSteal: " + gameObj + " activated");
 
         eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
 

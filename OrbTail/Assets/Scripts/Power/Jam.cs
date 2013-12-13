@@ -15,7 +15,7 @@ public class Jam : Power
     public override void Activate(UnityEngine.GameObject gameObj)
     {
 
-        Debug.Log("Ship Jammed!");
+        Debug.Log("Ship: " + gameObj + " Jammed!");
 
         base.Activate(gameObj);
 
