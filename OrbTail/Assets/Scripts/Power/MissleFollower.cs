@@ -56,13 +56,18 @@ public class MissleFollower : MonoBehaviour {
 
     private IEnumerator DestroyMissle()
     {
+        var explosionRes = Resources.Load("Prefabs/Power/Explosion");
+        GameObject explosion = GameObject.Instantiate(explosionRes, this.gameObject.transform.position, Quaternion.identity) as GameObject;
+
         Target = null;
         collider.enabled = false;
         particleSystem.enableEmission = false;
         GetComponent<MeshFilter>().mesh = null;
 
         // Delayed for GFX
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(1.0f);
+
+        Destroy(explosion);
         Destroy(this.gameObject);
     }
 }
