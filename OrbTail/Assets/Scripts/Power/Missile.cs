@@ -47,12 +47,11 @@ public class Missile : Power
             }
         }
 
-        //var missileFollower = missile.AddComponent<MissileFollower>();
+        
         // TODO: IMPOSTARE IN REMOTO SIA IL TARGET CHE L'OWNER
+        var follower = missile.GetComponent<MissileBehavior>();
 
-        // Shoot to nearest enemy ship
-        missileFollower.Target = nearestEnemyShip;
-        missileFollower.Owner = Owner;
+        follower.SetTarget(nearestEnemyShip, Owner);
 
         //Once fire it is destroyed
         Deactivate();

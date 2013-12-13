@@ -64,11 +64,11 @@ public abstract class Power : PowerView
         AddFX();
 
         ActivateShared();
-        if(Network.isServer || Network.peerType != NetworkPeerType.Disconnected)
+        if(Network.isServer || Network.peerType == NetworkPeerType.Disconnected)
         {
             ActivateServer();
         }
-        if ((Network.isClient && Network.player == Owner.networkView.viewID.owner) || Network.peerType != NetworkPeerType.Disconnected)
+        if ((Network.isClient && Network.player == Owner.networkView.viewID.owner) || Network.peerType == NetworkPeerType.Disconnected)
         {
             ActivateClient();
         }
@@ -129,7 +129,6 @@ public abstract class Power : PowerView
     /// </summary>
     public virtual void Fire() { }
 
-    [RPC]
     private void AddFX()
     {
         Debug.Log("AddFX Name: " + Name);
@@ -138,10 +137,11 @@ public abstract class Power : PowerView
         fx.transform.parent = Owner.transform;
     }
 
-    [RPC]
     private void RemoveFX()
     {
+
         GameObject.Destroy(fx);
+
     }
 
 }

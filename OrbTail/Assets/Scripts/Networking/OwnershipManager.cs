@@ -86,7 +86,7 @@ public class OwnershipManager : MonoBehaviour {
 
         DisposeNetworkViewID(target_view_id);
 
-        Debug.Log("old -> " + target_view_id.owner + " new -> " + view_id.owner);
+        //Debug.Log("old -> " + target_view_id.owner + " new -> " + view_id.owner);
 
     }
 

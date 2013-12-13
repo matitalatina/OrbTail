@@ -58,6 +58,13 @@ public class ServerBuilder : PlayerBuilder {
 
         base.Update();
 
+        foreach (NetworkPlayer player in Network.connections)
+        {
+
+            Debug.Log(player.ipAddress + ": " + Network.GetLastPing(player));
+
+        }
+
     }
 
     // A new level has been loaded

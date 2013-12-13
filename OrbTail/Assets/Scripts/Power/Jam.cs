@@ -29,7 +29,7 @@ public class Jam : Power
 
         base.Deactivate();
 
-        if (Network.isServer || Network.peerType != NetworkPeerType.Disconnected)
+        if (deactivator != null)
         {
             deactivator.Deactivate();
         }
