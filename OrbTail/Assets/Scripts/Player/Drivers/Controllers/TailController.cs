@@ -14,6 +14,8 @@ public class TailController : MonoBehaviour {
 	public Tail Tail { get; set;}
 
 	private float dotProductAttackThreshold = 0.2f;
+	// Range [-1, 1] 
+	private float velocityAttackThreshold = 0.5f;
 
 
 	/// <summary>
@@ -104,6 +106,8 @@ public class TailController : MonoBehaviour {
 	private bool IsAttack(GameObject attacker) {
 		Vector3 relVector = this.transform.position - attacker.transform.position;
 		float dotProduct = Vector3.Dot(attacker.transform.forward, relVector.normalized);
-		return dotProduct >= dotProductAttackThreshold;
+
+		float attackVelocity = Vector3.Dot (attacker.rigidbody.velocity.normalized, attacker.transform.forward);
+		return dotProduct >= dotProductAttackThreshold && attackVelocity > velocityAttackThreshold;
 	}
 }
