@@ -52,7 +52,7 @@ public class RandomPowerAttacher : MonoBehaviour
     private void AddFX()
     {
 
-        var particle_dummy_resource = Resources.Load("Prefabs/PowerGlow");
+        var particle_dummy_resource = Resources.Load("Prefabs/Power/PowerGlow");
 
         particle_dummy = GameObject.Instantiate(particle_dummy_resource, gameObject.transform.position, Quaternion.identity) as GameObject;
 

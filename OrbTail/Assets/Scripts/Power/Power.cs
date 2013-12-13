@@ -10,6 +10,8 @@ public abstract class Power : PowerView
 
     protected float time_accumulator = 0.0f;
 
+    private GameObject fx;
+
     protected Power(IGroup group, float? duration, string name)
     {
 
@@ -60,6 +62,8 @@ public abstract class Power : PowerView
         this.activatedTime = Time.time;
         this.time_accumulator = 0.0f;
 
+        AddFX();
+
     }
 
     /// <summary>
@@ -67,6 +71,7 @@ public abstract class Power : PowerView
     /// </summary>
     public virtual void Deactivate()
     {
+        RemoveFX();
 
         Destroy(group);
 
@@ -97,5 +102,20 @@ public abstract class Power : PowerView
     /// Fire avaiable power up
     /// </summary>
     public virtual void Fire() { }
+
+    [RPC]
+    private void AddFX()
+    {
+        Debug.Log("AddFX Name: " + Name);
+        var fx_resource = Resources.Load("Prefabs/Power/" + Name);
+        fx = GameObject.Instantiate(fx_resource, Owner.transform.position, Quaternion.identity) as GameObject;
+        fx.transform.parent = Owner.transform;
+    }
+
+    [RPC]
+    private void RemoveFX()
+    {
+        GameObject.Destroy(fx);
+    }
 
 }

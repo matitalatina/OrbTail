@@ -7,15 +7,15 @@ public class Missile : Power
     private const float power_time = 7.0f;
 	private const float missileforwardOffset = 0.3f;
 
-    public Missile() : base(MainPowerGroup.Instance.groupID, float.MaxValue, "Missile") { }
+    public Missile() : base(MainPowerGroup.Instance.groupID, float.MaxValue, "Missle") { }
     
     public override void Fire()
     {
         base.Fire();
 
-        Debug.Log("Ship "+ Owner +" shooted Missile!");
+        Debug.Log("Ship "+ Owner +" shooted Missle!");
 
-        var missileRes = Resources.Load("Prefabs/Missle");
+        var missileRes = Resources.Load("Prefabs/Power/MissleRocket");
         GameObject missile = GameObject.Instantiate(missileRes, Owner.transform.position + Owner.transform.forward + Owner.rigidbody.velocity * missileforwardOffset, Owner.transform.rotation) as GameObject;
 
         var ships = GameObject.FindGameObjectsWithTag(Tags.Ship);
