@@ -47,7 +47,7 @@ public class ShipPrototype : MonoBehaviour {
     {
 
         //Everyone have a tail
-        Tail tail = gameObject.AddComponent<Tail>();
+        gameObject.AddComponent<Tail>();
 
         //Server side controls the collisions
         if (Network.peerType == NetworkPeerType.Disconnected ||
@@ -75,7 +75,7 @@ public class ShipPrototype : MonoBehaviour {
 
         }
 
-        PowerController power_controller = gameObject.AddComponent<PowerController>();
+        gameObject.AddComponent<PowerController>();
 
     }
 

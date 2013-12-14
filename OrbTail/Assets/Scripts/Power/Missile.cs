@@ -25,6 +25,10 @@ public class Missile : Power
         else
         {
             missile = Network.Instantiate(missileRes, Owner.transform.position + Owner.transform.forward + Owner.rigidbody.velocity * missileforwardOffset, Owner.transform.rotation, 0) as GameObject;
+
+            Debug.Log(Owner);
+
+
         }        
 
         var ships = GameObject.FindGameObjectsWithTag(Tags.Ship);

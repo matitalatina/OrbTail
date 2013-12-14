@@ -25,17 +25,20 @@ public class PowerController : MonoBehaviour
         
         power.Activate(gameObject);
 
-        // If exist another power with the same family
+        // If exists another power with the same family
         if(powers.ContainsKey(power.Group))
         {
+
             powers[power.Group].Deactivate();
             powers[power.Group] = power;
+
         }
         else
         {
             powers.Add(power.Group, power);
         }
 
+        //Only the owner can destroy the power
         power.EventDestroyed += power_EventDestroyed;
 
         //The server is the only one able to add a power to everyone
@@ -58,8 +61,8 @@ public class PowerController : MonoBehaviour
 
             powers.Remove(power.Group);
 
-            if (networkView.isMine &&
-                Network.peerType != NetworkPeerType.Disconnected)
+            if (Network.peerType != NetworkPeerType.Disconnected &&
+                networkView.isMine)
             {
 
                 //This is sent just for when the power is fired and then destroyed

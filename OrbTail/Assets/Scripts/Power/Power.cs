@@ -55,7 +55,7 @@ public abstract class Power : PowerView
     /// Activate the power up
     /// </summary>
     /// <param name="gameObj">Ship with activated power up</param>
-    public sealed void Activate(GameObject owner)
+    public void Activate(GameObject owner)
     {
         this.Owner = owner;
         this.activatedTime = Time.time;
@@ -114,14 +114,14 @@ public abstract class Power : PowerView
         // If power up time is expired, deactivate power up
         if (time_accumulator > (duration ?? float.MaxValue))
         {
-            
+
             time_accumulator = 0.0f;
             duration = null;
 
             Deactivate();
 
         }
-
+        
     }
 
     /// <summary>

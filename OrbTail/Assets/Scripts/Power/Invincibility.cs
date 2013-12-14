@@ -10,7 +10,7 @@ public class Invincibility : Power
 
     private Deactivator deactivator;
 
-    public override void ActivateServer()
+    protected override void ActivateServer()
     {
         Debug.Log("Ship: "+ Owner +" Invincible!");
 

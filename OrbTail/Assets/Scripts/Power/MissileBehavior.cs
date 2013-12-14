@@ -52,7 +52,7 @@ public class MissileBehavior : MonoBehaviour {
             direction.Normalize();
             Vector3 new_forward = Vector3.RotateTowards(transform.forward, direction, Time.deltaTime * maxMissileSteering, 0);
             new_forward.Normalize();
-            float dot = Mathf.Clamp01(Vector3.Dot(direction, new_forward));
+            
             this.transform.rotation = Quaternion.LookRotation(new_forward, -floating.ArenaDown);
         }
         Vector3 forwardProjected = Vector3.Cross(floating.ArenaDown,
@@ -63,22 +63,23 @@ public class MissileBehavior : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision)
     {
-        if ((collision.gameObject.tag == Tags.Ship) || (collision.gameObject.tag == Tags.Field))
-        {
-            Debug.Log("BUM HEADSHOT! Hit: " + collision.gameObject);
-            StartCoroutine("DestroyMissile");
 
-            if( Network.isServer ||
-                Network.peerType == NetworkPeerType.Disconnected)
+        if (Network.isServer ||
+            Network.peerType == NetworkPeerType.Disconnected)
+        {
+
+            if ((collision.gameObject.tag == Tags.Ship))
             {
+                Debug.Log("BUM HEADSHOT! Hit: " + collision.gameObject);
+
+                OnImpact(collision.gameObject);
 
                 collision.gameObject.GetComponent<TailController>().GetDetacherDriverStack().GetHead().DetachOrbs(int.MaxValue, collision.gameObject.GetComponent<Tail>());
 
             }
-            
-            collision.gameObject.rigidbody.AddForce(transform.forward * explosionForce, ForceMode.Impulse);
-            
+
         }
+
     }
 
     private IEnumerator DestroyMissileTTL()
@@ -86,6 +87,31 @@ public class MissileBehavior : MonoBehaviour {
         yield return new WaitForSeconds(timeToLive);
         Debug.Log("Missile destroyed without hitting nothing.");
         StartCoroutine("DestroyMissile");
+    }
+
+    private void OnImpact(GameObject target)
+    {
+
+        StartCoroutine("DestroyMissile");
+
+        target.rigidbody.AddForce(transform.forward * explosionForce, ForceMode.Impulse);
+
+        if (Network.isServer)
+        {
+
+            networkView.RPC("RPCOnImpact", RPCMode.Others, target.networkView.viewID);
+
+        }
+
+    }
+
+
+    [RPC]
+    private void RPCOnImpact(NetworkViewID target_id)
+    {
+
+        OnImpact(NetworkView.Find(target_id).gameObject);
+
     }
 
     private IEnumerator DestroyMissile()

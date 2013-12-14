@@ -12,7 +12,7 @@ public class Jam : Power
 
     private Deactivator deactivator;
 
-    public override void ActivateClient()
+    protected override void ActivateClient()
     {
 
         Debug.Log("Ship: " + Owner + " Jammed!");
