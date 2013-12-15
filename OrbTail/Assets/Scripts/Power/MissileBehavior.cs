@@ -56,11 +56,11 @@ public class MissileBehavior : MonoBehaviour {
             
             this.transform.rotation = Quaternion.LookRotation(new_forward, -floating.ArenaDown);
         }
-        Vector3 forwardProjected /*= Vector3.Cross(floating.ArenaDown,
+        Vector3 forwardProjected = Vector3.Cross(floating.ArenaDown,
                                                     Vector3.Cross(-floating.ArenaDown, this.transform.forward)
-                                                    ).normalized*/;
+                                                    ).normalized;
 
-        forwardProjected = this.transform.forward;
+        forwardProjected = Vector3.Lerp(this.transform.forward, forwardProjected, Time.deltaTime * 0.25f);
 
         this.GetComponent<Rigidbody>().AddForce(forwardProjected * maxMissileSpeed, ForceMode.VelocityChange);
     }
