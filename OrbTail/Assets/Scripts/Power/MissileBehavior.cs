@@ -71,7 +71,6 @@ public class MissileBehavior : MonoBehaviour {
 
             if ((collision.gameObject.tag == Tags.Ship))
             {
-                Debug.Log("BUM HEADSHOT! Hit: " + collision.gameObject);
 
                 OnImpact(collision.gameObject);
 
@@ -86,7 +85,6 @@ public class MissileBehavior : MonoBehaviour {
     private IEnumerator DestroyMissileTTL()
     {
         yield return new WaitForSeconds(timeToLive);
-        Debug.Log("Missile destroyed without hitting nothing.");
         StartCoroutine("DestroyMissile");
     }
 

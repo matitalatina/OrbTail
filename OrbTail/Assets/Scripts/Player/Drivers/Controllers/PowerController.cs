@@ -81,8 +81,6 @@ public class PowerController : MonoBehaviour
         var power = powers[group];
         powers.Remove(power.Group);
 
-        Debug.Log(power.Name + "Removed!");
-        
     }
 
     [RPC]
@@ -105,8 +103,6 @@ public class PowerController : MonoBehaviour
 
         power.Fire();
 
-        Debug.Log(power.Name + " Fired! (RPC)");
-        
     }
 
     public void Update()
@@ -133,8 +129,6 @@ public class PowerController : MonoBehaviour
 
                 if (power.Fire()){
                     
-                    Debug.Log(power.Name + " Fired!");
-
                     if (Network.peerType != NetworkPeerType.Disconnected)
                     {
 
