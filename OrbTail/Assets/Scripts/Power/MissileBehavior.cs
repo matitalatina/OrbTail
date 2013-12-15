@@ -59,8 +59,8 @@ public class MissileBehavior : MonoBehaviour {
         Vector3 forwardProjected = Vector3.Cross(floating.ArenaDown,
                                                     Vector3.Cross(-floating.ArenaDown, this.transform.forward)
                                                     ).normalized;
-
-        forwardProjected = Vector3.Lerp(this.transform.forward, forwardProjected, Time.deltaTime * 0.25f);
+        
+        forwardProjected = Vector3.Lerp(forwardProjected, this.transform.forward, Time.deltaTime * 15.0f);
 
         this.GetComponent<Rigidbody>().AddForce(forwardProjected * maxMissileSpeed, ForceMode.VelocityChange);
     }
