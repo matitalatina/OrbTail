@@ -6,9 +6,7 @@ public class Jam : Power
 {
     private const float power_time = 10.0f;
 
-    static IGroup jam_group = new GroupID();
-
-    public Jam() : base(jam_group, power_time, "Jam") { }
+    public Jam() : base(PowerGroups.Jam, power_time, "Jam") { }
 
     private Deactivator deactivator;
 

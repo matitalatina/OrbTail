@@ -94,36 +94,6 @@ public class EventLogger : MonoBehaviour {
     }
 
     /// <summary>
-    /// Notifies that a power has been attached to a player. This event is not transmitted over the network!
-    /// </summary>
-    /// <param name="power">The power that has been attached</param>
-    /// <param name="ship">The ship who gained the power</param>
-    public void NotifyPowerAttached(string power_name, GameObject ship, GameObject orb)
-    {
-
-        if (!Network.isClient)
-        {
-
-            if (Network.isServer)
-            {
-
-                //RPC to other clients if this is the server
-                networkView.RPC("ReceivePowerAttached", RPCMode.Others, power_name, ship.networkView.viewID, orb.networkView.viewID);
-
-            }
-
-            if (EventPowerAttached != null)
-            {
-
-                EventPowerAttached(this, power_name, ship, orb);
-
-            }
-
-        }
-
-    }
-
-    /// <summary>
     /// Notifies the match's initialization
     /// </summary>
     /// <param name="identities">The identities of the players</param>
@@ -266,11 +236,6 @@ public class EventLogger : MonoBehaviour {
     public delegate void DelegateFight(object sender, IList<GameObject> orbs, GameObject attacker, GameObject defender);
 
     /// <summary>
-    /// Delegate used by EventPowerAttached
-    /// </summary>
-    public delegate void DelegatePowerAttached(object sender, string power_name, GameObject ship, GameObject orb);
-
-    /// <summary>
     /// Delegate used by EventInitializeMatch
     /// </summary>
     public delegate void DelegateInitializeMatch(object sender, IList<PlayerIdentity> identities);
@@ -303,11 +268,6 @@ public class EventLogger : MonoBehaviour {
     /// Raised when two ships have fought
     /// </summary>
     public event DelegateFight EventFight;
-
-    /// <summary>
-    /// Raised when a ship has gained a power
-    /// </summary>
-    public event DelegatePowerAttached EventPowerAttached;
 
     /// <summary>
     /// Raised at match's start
@@ -375,22 +335,6 @@ public class EventLogger : MonoBehaviour {
         {
 
             EventFight(this, orbs, attacker, defender);
-
-        }
-
-    }
-
-    [RPC]
-    private void ReceivePowerAttached(string power_name, NetworkViewID ship_id, NetworkViewID orb_id)
-    {
-
-        GameObject ship = NetworkView.Find(ship_id).gameObject;
-        GameObject orb = NetworkView.Find(orb_id).gameObject;
-
-        if (EventPowerAttached != null)
-        {
-
-            EventPowerAttached(this, power_name, ship, orb);
 
         }
 

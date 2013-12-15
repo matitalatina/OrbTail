@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public abstract class PowerView
 {
 
-    public delegate void DelegateDestroyed(object sender, IGroup group);
+    public delegate void DelegateDestroyed(object sender, int group);
 
     /// <summary>
     /// Fired when the power has been destroyed and cannot be used anymore
@@ -17,14 +17,14 @@ public abstract class PowerView
     /// <summary>
     /// Get the group of this power
     /// </summary>
-    public abstract IGroup Group { get; }
+    public abstract int Group { get; }
     
     /// <summary>
     /// Get the readyness of this power. 1 if ready, less than 1 otherwise
     /// </summary>
     protected abstract float IsReady{ get; }
 
-    protected void Destroy(IGroup group)
+    protected void Destroy(int group)
     {
 
         if (EventDestroyed != null)

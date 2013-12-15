@@ -43,7 +43,7 @@ public class MobileInputBroker: IInputBroker
     /// <summary>
     /// Returns a collection which indicates all the power ups the user wants to fire. The elements indicates just the group of the proper power
     /// </summary>
-    public ICollection<IGroup> FiredPowerUps
+    public ICollection<int> FiredPowerUps
     {
         get { return fired_power_ups_; }
     }
@@ -79,20 +79,20 @@ public class MobileInputBroker: IInputBroker
 
 		if (Input.touchCount > 0 ) {
 
-			fired_power_ups_.Add(MainPowerGroup.Instance.groupID);
+			fired_power_ups_.Add(PowerGroups.Main);
 
 		}
 
 		// TODO: to enhance 
 		if (Input.acceleration.sqrMagnitude > kBoostThreshold) {
 
-			fired_power_ups_.Add(SpecialPowerGroup.Instance.groupID);
+			fired_power_ups_.Add(PowerGroups.Passive);
 
 		}
 
 		Steering = Mathf.Clamp(delta.z * kSteeringExponent, -1f, 1f);
     }
 
-    private IList<IGroup> fired_power_ups_ = new List<IGroup>();
+    private IList<int> fired_power_ups_ = new List<int>();
 
 }

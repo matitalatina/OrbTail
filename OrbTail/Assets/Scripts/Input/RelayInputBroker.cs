@@ -13,7 +13,7 @@ public class RelayInputBroker: IInputBroker
     public RelayInputBroker()
     {
 
-        fired_powers_ = new List<IGroup>();
+        fired_powers_ = new List<int>();
         acceleration_ = 0;
         steering_ = 0;
         
@@ -49,7 +49,7 @@ public class RelayInputBroker: IInputBroker
 
     }
 
-    public ICollection<IGroup> FiredPowerUps
+    public ICollection<int> FiredPowerUps
     {
         get
         {
@@ -72,6 +72,6 @@ public class RelayInputBroker: IInputBroker
     /// </summary>
     private float steering_;
 
-    private IList<IGroup> fired_powers_;
+    private IList<int> fired_powers_;
 
 }

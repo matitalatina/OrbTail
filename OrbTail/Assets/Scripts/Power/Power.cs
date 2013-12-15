@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public abstract class Power : PowerView
 {
-    protected IGroup group { get; private set; }
+    protected int group { get; private set; }
     protected float? duration { get; set; }
     protected float activatedTime { get; private set; }
 
@@ -12,7 +12,7 @@ public abstract class Power : PowerView
 
     private GameObject fx;
 
-    protected Power(IGroup group, float? duration, string name)
+    protected Power(int group, float? duration, string name)
     {
 
         this.group = group;
@@ -29,7 +29,7 @@ public abstract class Power : PowerView
     /// <summary>
     /// Get the power's group
     /// </summary>
-    public override IGroup Group
+    public override int Group
     {
         get
         {

@@ -18,7 +18,8 @@ public class MissileBehavior : MonoBehaviour {
         Target = target;
         Owner = owner;
 
-        if (networkView.isMine)
+        if (Network.peerType != NetworkPeerType.Disconnected &&
+            networkView.isMine)
         {
 
             networkView.RPC("RPCSetTarget", RPCMode.Others, target.networkView.viewID, owner.networkView.viewID);

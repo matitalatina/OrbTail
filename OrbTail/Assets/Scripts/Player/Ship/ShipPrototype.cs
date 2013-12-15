@@ -42,8 +42,7 @@ public class ShipPrototype : MonoBehaviour {
 
 	}
 
-    // Use this for initialization
-    void Start()
+    void Awake()
     {
 
         //Everyone have a tail
@@ -73,6 +72,13 @@ public class ShipPrototype : MonoBehaviour {
             movement_controller.GetWheelDriverStack().Push(new DefaultWheelDriver(steering));
 
         }
+
+    }
+
+    // Use this for initialization
+    void Start()
+    {
+
 
 
     }

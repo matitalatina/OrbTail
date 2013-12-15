@@ -8,7 +8,7 @@ public class OrbSteal : Power
     private const float power_time = 10.0f;
     private EventLogger eventLogger;
 
-    public OrbSteal() : base(MainPowerGroup.Instance.groupID, float.MaxValue, "OrbSteal") { }
+    public OrbSteal() : base(PowerGroups.Main, float.MaxValue, "OrbSteal") { }
 
     protected override void ActivateServer()
     {

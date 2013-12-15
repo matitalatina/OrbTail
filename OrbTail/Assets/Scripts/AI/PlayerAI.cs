@@ -6,6 +6,7 @@ public class PlayerAI : MonoBehaviour {
 
 	private RelayInputBroker inputBroker = new RelayInputBroker();
 	private EventLogger eventLogger;
+    private PowerController powerController;
 
 	private GameObject target = null;
 	private Vector3 desideredDirection;
@@ -35,7 +36,10 @@ public class PlayerAI : MonoBehaviour {
 		eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
 		eventLogger.EventFight += OnEventFight;
 		eventLogger.EventOrbAttached += OnEventOrbAttached;
-		eventLogger.EventPowerAttached += OnEventPowerAttached;
+
+        powerController = GetComponent<PowerController>();
+
+        powerController.EventPowerAttached += OnEventPowerAttached;
 		checkpoints = new HashSet<GameObject>(GameObject.FindGameObjectsWithTag(Tags.AICheckpoint));
 	}
 	
@@ -167,7 +171,7 @@ public class PlayerAI : MonoBehaviour {
 		}
 	}
 
-	private void OnEventPowerAttached(object sender, string power, GameObject ship, GameObject orb) {
+	private void OnEventPowerAttached(object sender, GameObject ship, Power power) {
 		if (ship == gameObject) {
 			StartCoroutine("FirePowerUp");
 		}
@@ -177,7 +181,7 @@ public class PlayerAI : MonoBehaviour {
 		inputBroker.FiredPowerUps.Clear();
 		float timeToWait = Random.value * maxTimeToFirePowerUp;
 		yield return new WaitForSeconds(timeToWait);
-		inputBroker.FiredPowerUps.Add(MainPowerGroup.Instance.groupID);
+		inputBroker.FiredPowerUps.Add(PowerGroups.Main);
 	}
 
 	private bool IsFreeOrb(GameObject orb) {

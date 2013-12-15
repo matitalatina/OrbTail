@@ -35,7 +35,7 @@ class DesktopInputBroker: IInputBroker
     /// <summary>
     /// Returns a collection which indicates all the power ups the user wants to fire. The elements indicates just the group of the proper power
     /// </summary>
-    public ICollection<IGroup> FiredPowerUps
+    public ICollection<int> FiredPowerUps
     {
         get { return fired_power_ups_; }
     }
@@ -56,21 +56,21 @@ class DesktopInputBroker: IInputBroker
         if (Input.GetAxis(fire_special_axis_name) > 0.0f)
         {
 
-            fired_power_ups_.Add(SpecialPowerGroup.Instance.groupID);
+            fired_power_ups_.Add(PowerGroups.Passive);
 
         }
 
         if (Input.GetAxis(fire_main_axis_name) > 0.0f)
         {
 
-            fired_power_ups_.Add(MainPowerGroup.Instance.groupID);
+            fired_power_ups_.Add(PowerGroups.Main);
 
         }
 
     }
 
 
-    private IList<IGroup> fired_power_ups_ = new List<IGroup>();
+    private IList<int> fired_power_ups_ = new List<int>();
 
 }
 

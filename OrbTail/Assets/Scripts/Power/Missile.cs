@@ -7,7 +7,7 @@ public class Missile : Power
     private const float power_time = 7.0f;
 	private const float missileforwardOffset = 3f;
 
-    public Missile() : base(MainPowerGroup.Instance.groupID, float.MaxValue, "Missile") { }
+    public Missile() : base(PowerGroups.Main, float.MaxValue, "Missile") { }
     
     public override bool Fire()
     {

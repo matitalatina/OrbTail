@@ -10,7 +10,7 @@ public class Boost : Power
 
     private Deactivator deactivator;
 
-    public Boost() : base(SpecialPowerGroup.Instance.groupID, float.MaxValue, "Boost") {}
+    public Boost() : base(PowerGroups.Passive, float.MaxValue, "Boost") {}
     
     protected override float IsReady
     {

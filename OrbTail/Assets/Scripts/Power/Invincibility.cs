@@ -6,7 +6,7 @@ public class Invincibility : Power
 {
     private const float power_time = 10.0f;
 
-    public Invincibility() : base(MainPowerGroup.Instance.groupID, power_time, "Invincibility") { }
+    public Invincibility() : base(PowerGroups.Main, power_time, "Invincibility") { }
 
     private Deactivator deactivator;
 

@@ -22,7 +22,7 @@ public interface IInputBroker
     /// <summary>
     /// Returns a collection which indicates all the power ups the user wants to fire. The elements indicates just the group of the proper power
     /// </summary>
-    ICollection<IGroup> FiredPowerUps { get; }
+    ICollection<int> FiredPowerUps { get; }
 
     /// <summary>
     /// Updates the broker

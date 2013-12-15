@@ -66,7 +66,7 @@ public class PowerFactory
 
     }
 
-    public IGroup GroupFromName(string name)
+    public int GroupFromName(string name)
     {
 
         return power_table_[name].Key.Group;

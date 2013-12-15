@@ -5,19 +5,29 @@ using System.Linq;
 
 public class PowerController : MonoBehaviour
 {
-    private Dictionary<IGroup, Power> powers;
+
+    public delegate void DelegatePowerAttached(object sender, GameObject ship, Power power);
+
+    /// <summary>
+    /// Fired when a power has been attached
+    /// </summary>
+    public event DelegatePowerAttached EventPowerAttached;
+
+    private EventLogger event_logger;
+    private Dictionary<int, Power> powers;
     private InputProxy input;
 
     public void Start()
     {
 
         input = GetComponent<InputProxy>();
+        event_logger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
 
     }
 
     public void Awake(){
 
-        powers = new Dictionary<IGroup, Power>();
+        powers = new Dictionary<int, Power>();
 
     }
 
@@ -44,8 +54,6 @@ public class PowerController : MonoBehaviour
 
         power.EventDestroyed += RemovePower;
 
-        Debug.Log(power.Name + "Added!");
-
         //Relay the call to others
 
         if (Network.isServer)
@@ -55,9 +63,18 @@ public class PowerController : MonoBehaviour
 
         }
 
+        //Fires the attach event
+        if (EventPowerAttached != null)
+        {
+
+            EventPowerAttached(this, gameObject, power);
+
+        }
+
+
     }
 
-    void RemovePower(object sender, IGroup group)
+    void RemovePower(object sender, int group)
     {
 
         //Removes the power
@@ -109,7 +126,7 @@ public class PowerController : MonoBehaviour
 
             Power power;
 
-            foreach (IGroup group in input.FiredPowerUps.Where((IGroup g) => { return powers.ContainsKey(g); }))
+            foreach (int group in input.FiredPowerUps.Where((int g) => { return powers.ContainsKey(g); }))
             {
 
                 power = powers[group];
@@ -133,7 +150,7 @@ public class PowerController : MonoBehaviour
 
     }
 
-    public PowerView GetPowerView(IGroup group)
+    public PowerView GetPowerView(int group)
     {
 
         return powers[group];

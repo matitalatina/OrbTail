@@ -120,12 +120,12 @@ public class InputProxy : MonoBehaviour, IInputBroker{
     /// <summary>
     /// Returns a collection which indicates all the power ups the user wants to fire. The elements indicates just the group of the proper power
     /// </summary>
-    public ICollection<IGroup> FiredPowerUps
+    public ICollection<int> FiredPowerUps
     {
 
         get
         {
-            return new List<IGroup>(fired_powers_);
+            return new List<int>(fired_powers_);
         }
 
     }
@@ -139,15 +139,18 @@ public class InputProxy : MonoBehaviour, IInputBroker{
         float acceleration = Acceleration;
         float steering = Steering;
         float powers_count = fired_powers_.Count;
+        int group;
 
         stream.Serialize(ref acceleration);
         stream.Serialize(ref steering);
         stream.Serialize(ref powers_count);
 
-        foreach (IGroup power_group in fired_powers_)
+        
+        foreach (int power_group in fired_powers_)
         {
 
-            power_group.Serialize(stream);
+            group = power_group;
+            stream.Serialize(ref group);
 
         }
 
@@ -162,7 +165,7 @@ public class InputProxy : MonoBehaviour, IInputBroker{
         float acceleration = 0.0f;
         float steering = 0.0f;
         float powers_count = 0.0f;
-        IGroup group;
+        int group = 0;
 
         stream.Serialize(ref acceleration);
         stream.Serialize(ref steering);
@@ -170,13 +173,14 @@ public class InputProxy : MonoBehaviour, IInputBroker{
 
         Acceleration = acceleration;
         Steering = steering;
-        fired_powers_ = new List<IGroup>();
+        fired_powers_ = new List<int>();
 
+        
         for (; powers_count > 0; powers_count--)
         {
 
-            group = new GroupID();
-            group.Deserialize(stream);
+            stream.Serialize(ref group);
+
             fired_powers_.Add(group);
 
         }
@@ -191,6 +195,6 @@ public class InputProxy : MonoBehaviour, IInputBroker{
     /// <summary>
     /// The list of the powerups to be fired
     /// </summary>
-    private ICollection<IGroup> fired_powers_ = new List<IGroup>();
+    private ICollection<int> fired_powers_ = new List<int>();
 
 }

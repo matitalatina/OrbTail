@@ -12,7 +12,7 @@ public class RandomPowerAttacher : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
 
-        if (!Network.isClient)
+        if (NetworkHelper.IsServerSide())
         {
 
             var collidedObj = collision.gameObject;
@@ -26,7 +26,7 @@ public class RandomPowerAttacher : MonoBehaviour
 
                 collidedObj.GetComponent<PowerController>().AddPower(randomPower);              
 
-                if (Network.peerType != NetworkPeerType.Disconnected)
+                if (Network.isServer)
                 {
 
                     networkView.RPC("RemoveFX", RPCMode.Others);
