@@ -36,6 +36,16 @@ public class Tail : MonoBehaviour {
 	/// <param name="orb">The orb to attach</param>
 	public void AttachOrb(GameObject orb) {
 
+        //First removes the randompowerattacher
+        var power_attacher = orb.GetComponent<RandomPowerAttacher>();
+
+        if (power_attacher != null)
+        {
+
+            power_attacher.RemoveFX();
+
+        }
+
         if (networkView.isMine ||
             Network.peerType == NetworkPeerType.Disconnected)
         {

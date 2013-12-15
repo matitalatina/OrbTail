@@ -7,8 +7,6 @@ public class RandomPowerAttacher : MonoBehaviour
 
     private GameObject particle_dummy;
 
-    private EventLogger event_logger_;
-
     void OnCollisionEnter(Collision collision)
     {
 
@@ -20,18 +18,9 @@ public class RandomPowerAttacher : MonoBehaviour
             if (collidedObj.tag == Tags.Ship)
             {
 
-                RemoveFX();
-
                 Power randomPower = PowerFactory.Instance.RandomPower;
 
                 collidedObj.GetComponent<PowerController>().AddPower(randomPower);              
-
-                if (Network.isServer)
-                {
-
-                    networkView.RPC("RemoveFX", RPCMode.Others);
-
-                }
 
             }
 
@@ -41,8 +30,6 @@ public class RandomPowerAttacher : MonoBehaviour
 
     void Start()
     {
-
-        event_logger_ = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
 
         AddFX();
         
@@ -60,8 +47,7 @@ public class RandomPowerAttacher : MonoBehaviour
 
     }
 
-    [RPC]
-    private void RemoveFX()
+    public void RemoveFX()
     {
 
         Destroy(particle_dummy);
