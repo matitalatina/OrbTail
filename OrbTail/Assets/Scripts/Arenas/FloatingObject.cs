@@ -2,10 +2,11 @@
 using System.Collections;
 
 public class FloatingObject : MonoBehaviour {
-	
-	public float hoverForce = 9.8f;
+
+    public float hoverForce = 20.0f;//9.8f;
 	public float hoverDistance = 5f;
 	public float hoverDampen = 0f;
+    private GravityField gravity_field;
 
 	public Vector3 ArenaDown { get; set; } 
 
@@ -13,9 +14,10 @@ public class FloatingObject : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
-		ArenaDown = Vector3.down;
+
+        ArenaDown = Vector3.zero;
 		FloatingBody = GetComponent<Rigidbody>();
+        gravity_field = GameObject.FindGameObjectWithTag(Tags.Arena).GetComponent<GravityField>();
 
 	}
 
@@ -28,7 +30,9 @@ public class FloatingObject : MonoBehaviour {
 		//ArenaDown = -transform.position.normalized;
 		//
 
-		if(Physics.Raycast(transform.position, ArenaDown, out hit, hoverDistance * 5, Layers.Field)) {
+        gravity_field.SetGravity(this);
+
+		if(Physics.Raycast(transform.position, ArenaDown, out hit, Layers.Field)) {
 
 			if (hit.collider.gameObject.tag == Tags.Field) {
 

@@ -84,7 +84,7 @@ public class PlayerBuilder : MonoBehaviour {
     /// <param name="id">The unique id of the player</param>
     /// <param name="position">The ship's position</param>
     [RPC]
-    public void InitializePlayer(int id, Vector3 position)
+    public void InitializePlayer(int id)
     {
 
         PlayerIdentity.id = id;
@@ -92,7 +92,18 @@ public class PlayerBuilder : MonoBehaviour {
         //Network-instantiate the ship of this player
         var ship_object = Resources.Load("Prefabs/" + PlayerIdentity.ship_name);
 
-        Network.Instantiate(ship_object, position, Quaternion.identity, 0);
+        Network.Instantiate(ship_object, 
+                            GetSpawnPosition(), 
+                            Quaternion.identity, 0);
+
+    }
+
+    private Vector3 GetSpawnPosition()
+    {
+
+        GameObject[] spawn_point = GameObject.FindGameObjectsWithTag(Tags.SpawnPoint);
+
+        return spawn_point[PlayerIdentity.id].transform.position;
 
     }
 

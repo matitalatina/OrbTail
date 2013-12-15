@@ -8,4 +8,6 @@ public class Tags {
 	public const string Game = "Game";
 	public const string AICheckpoint = "AICheckpoint";
     public const string MainCamera = "MainCamera";
+    public const string Arena = "Arena";
+    public const string SpawnPoint = "SpawnPoint";
 }

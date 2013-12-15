@@ -147,13 +147,13 @@ public class ServerBuilder : PlayerBuilder {
         int unique_id = 0;
 
         //Initializes the server's ship
-        InitializePlayer(unique_id, Vector3.up * 10.0f);
+        InitializePlayer(unique_id);
 
         //Initializes the clients' ship
         foreach (NetworkPlayer connection in Network.connections)
         {
 
-            networkView.RPC("InitializePlayer", connection, ++unique_id, Vector3.up * 10.0f);
+            networkView.RPC("InitializePlayer", connection, ++unique_id);
             
         }
 
