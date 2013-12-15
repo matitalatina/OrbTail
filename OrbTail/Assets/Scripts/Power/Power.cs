@@ -57,27 +57,36 @@ public abstract class Power : PowerView
     /// <param name="gameObj">Ship with activated power up</param>
     public void Activate(GameObject owner)
     {
+
         this.Owner = owner;
         this.activatedTime = Time.time;
         this.time_accumulator = 0.0f;
 
-        AddFX();
-
         ActivateShared();
-        if(Network.isServer || Network.peerType == NetworkPeerType.Disconnected)
+
+        if(NetworkHelper.IsServerSide())
         {
+            
             ActivateServer();
+
         }
-        if ((Network.isClient && Network.player == Owner.networkView.viewID.owner) || Network.peerType == NetworkPeerType.Disconnected)
+
+        if (NetworkHelper.IsOwnerSide(Owner.networkView))
         {
+            
             ActivateClient();
+
         }
+
     }
 
     protected virtual void ActivateShared()
     {
-    
+
+        AddFX();
+
     }
+
     /// <summary>
     /// Modify TailController and Tail
     /// </summary>
@@ -109,6 +118,16 @@ public abstract class Power : PowerView
     public virtual void Update()
     {
 
+        UpdateTimeToLive();
+                
+    }
+
+    /// <summary>
+    /// Updates the time to live of the power and eventually destroy it
+    /// </summary>
+    private void UpdateTimeToLive()
+    {
+
         time_accumulator += Time.deltaTime;
 
         // If power up time is expired, deactivate power up
@@ -121,26 +140,39 @@ public abstract class Power : PowerView
             Deactivate();
 
         }
-        
+
     }
 
     /// <summary>
     /// Fire avaiable power up
     /// </summary>
-    public virtual void Fire() { }
+    public virtual bool Fire() { return false; }
 
     private void AddFX()
     {
-        Debug.Log("AddFX Name: " + Name);
+
         var fx_resource = Resources.Load("Prefabs/Power/" + Name);
         fx = GameObject.Instantiate(fx_resource, Owner.transform.position, Quaternion.identity) as GameObject;
         fx.transform.parent = Owner.transform;
+
     }
 
     private void RemoveFX()
     {
 
         GameObject.Destroy(fx);
+
+    }
+
+    protected override float IsReady
+    {
+
+        get
+        {
+
+            return 0.0f;
+
+        }
 
     }
 

@@ -29,16 +29,25 @@ public class Boost : Power
     }
 
     /// <summary>
-    /// Activate boost on ship if it's avaiable
+    /// Activate boost on ship if it's available
     /// </summary>
-    public override void Fire()
+    public override bool Fire()
     {
         if (IsReady >= 1.0f)
         {
             time_accumulator_to_reload = 0.0f;
 
             Owner.GetComponent<Rigidbody>().AddForce(Owner.transform.forward * boost_force, ForceMode.Impulse);
+
+            return true;
         }
+        else
+        {
+
+            return false;
+
+        }
+
     }
 
     public override Power Generate()

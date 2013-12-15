@@ -5,40 +5,63 @@ using UnityEngine;
 public class Missile : Power
 {
     private const float power_time = 7.0f;
-	private const float missileforwardOffset = 0.3f;
+	private const float missileforwardOffset = 3f;
 
     public Missile() : base(MainPowerGroup.Instance.groupID, float.MaxValue, "Missile") { }
     
-    public override void Fire()
+    public override bool Fire()
     {
-        base.Fire();
 
-        Debug.Log("Ship "+ Owner +" shooted Missile!");
-
-        var missileRes = Resources.Load("Prefabs/Power/MissileRocket");
-        GameObject missile;
-        
-        if(Network.peerType == NetworkPeerType.Disconnected)
+        if (NetworkHelper.IsOwnerSide(Owner.networkView))
         {
-            missile = GameObject.Instantiate(missileRes, Owner.transform.position + Owner.transform.forward + Owner.rigidbody.velocity * missileforwardOffset, Owner.transform.rotation) as GameObject;
+
+            //Create a new rocket
+            var missileRes = Resources.Load("Prefabs/Power/MissileRocket");
+            GameObject missile;
+
+            if (Network.peerType == NetworkPeerType.Disconnected)
+            {
+               
+                missile = GameObject.Instantiate(missileRes, Owner.transform.position + Owner.transform.forward * missileforwardOffset , Owner.transform.rotation) as GameObject;
+            
+            }
+            else
+            {
+
+                missile = Network.Instantiate(missileRes, Owner.transform.position + Owner.transform.forward * missileforwardOffset, Owner.transform.rotation, 0) as GameObject;
+
+            }
+
+            //The missile should have at least the speed of its owner...
+            missile.rigidbody.AddForce(Owner.rigidbody.velocity, ForceMode.VelocityChange);
+
+            //Set its target
+            missile.GetComponent<MissileBehavior>().SetTarget(FindTarget(Owner),
+                                                              Owner);
+
         }
-        else
-        {
-            missile = Network.Instantiate(missileRes, Owner.transform.position + Owner.transform.forward + Owner.rigidbody.velocity * missileforwardOffset, Owner.transform.rotation, 0) as GameObject;
 
-            Debug.Log(Owner);
+        //Once fire it is destroyed
+        Deactivate();
 
+        return true;
 
-        }        
+    }
+
+    private GameObject FindTarget(GameObject owner)
+    {
 
         var ships = GameObject.FindGameObjectsWithTag(Tags.Ship);
         float nearestEnemyDistance = float.MaxValue;
         GameObject nearestEnemyShip = null;
+
         foreach (GameObject ship in ships)
         {
             if (ship == Owner)
             {
+
                 continue;
+
             }
 
             Vector3 distanceVector = (ship.transform.position - Owner.transform.position);
@@ -46,19 +69,15 @@ public class Missile : Power
 
             if (distance < nearestEnemyDistance)
             {
+
                 nearestEnemyShip = ship;
                 nearestEnemyDistance = distance;
+
             }
+
         }
 
-        
-        // TODO: IMPOSTARE IN REMOTO SIA IL TARGET CHE L'OWNER
-        var follower = missile.GetComponent<MissileBehavior>();
-
-        follower.SetTarget(nearestEnemyShip, Owner);
-
-        //Once fire it is destroyed
-        Deactivate();
+        return nearestEnemyShip;
 
     }
 

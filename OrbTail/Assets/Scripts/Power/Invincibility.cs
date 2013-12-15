@@ -12,7 +12,6 @@ public class Invincibility : Power
 
     protected override void ActivateServer()
     {
-        Debug.Log("Ship: "+ Owner +" Invincible!");
 
         var tail_stack = Owner.GetComponent<TailController>().GetDetacherDriverStack();
 
@@ -21,8 +20,6 @@ public class Invincibility : Power
 
     public override void Deactivate()
     {
-
-        Debug.Log("Ship no more Invincible!");
 
         base.Deactivate();
 

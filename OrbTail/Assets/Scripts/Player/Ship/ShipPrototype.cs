@@ -30,15 +30,15 @@ public class ShipPrototype : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        if (NetworkHelper.IsServerSide())
+        {
+
+            //Adds a boost to the ship, only it this is the server
+            gameObject.GetComponent<PowerController>().AddPower(new Boost());
+
+        }
+
         this.enabled = false;
-
-        var boost = new Boost();
-
-        boost.Activate(gameObject);
-
-        var power_controller = gameObject.GetComponent<PowerController>();
-
-        power_controller.AddPower(boost);
 
 	}
 
@@ -48,10 +48,10 @@ public class ShipPrototype : MonoBehaviour {
 
         //Everyone have a tail
         gameObject.AddComponent<Tail>();
+        gameObject.AddComponent<PowerController>();
 
         //Server side controls the collisions
-        if (Network.peerType == NetworkPeerType.Disconnected ||
-            Network.peerType == NetworkPeerType.Server)
+        if (NetworkHelper.IsServerSide())
         {
 
             TailController tail_controller = gameObject.AddComponent<TailController>();
@@ -64,8 +64,7 @@ public class ShipPrototype : MonoBehaviour {
         }
 
         //Client side controls the movement
-        if (Network.peerType == NetworkPeerType.Disconnected ||
-            networkView.isMine)
+        if (NetworkHelper.IsOwnerSide(networkView))
         {
 
             MovementController movement_controller = gameObject.AddComponent<MovementController>();
@@ -75,7 +74,6 @@ public class ShipPrototype : MonoBehaviour {
 
         }
 
-        gameObject.AddComponent<PowerController>();
 
     }
 

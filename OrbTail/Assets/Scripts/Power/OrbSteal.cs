@@ -13,8 +13,6 @@ public class OrbSteal : Power
     protected override void ActivateServer()
     {
 
-        Debug.Log("OrbSteal: " + Owner + " activated");
-
         eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
 
         eventLogger.EventFight += eventLogger_EventFight;
@@ -30,8 +28,6 @@ public class OrbSteal : Power
 
     public override void Deactivate()
     {
-
-        Debug.Log("OrbSteal deactivated");
 
         base.Deactivate();
 

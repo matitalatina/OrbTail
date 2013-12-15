@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class PowerController : MonoBehaviour
 {
@@ -22,26 +23,31 @@ public class PowerController : MonoBehaviour
 
     public void AddPower(Power power)
     {
+
+        //Deactivate any previous power
+
+        Power old_power = null;
         
+        if( powers.TryGetValue(power.Group, out old_power))
+        {
+
+            old_power.Deactivate();
+            powers.Remove(old_power.Group);
+
+        }
+
+        //Activate and add the power to the bag
+
         power.Activate(gameObject);
 
-        // If exists another power with the same family
-        if(powers.ContainsKey(power.Group))
-        {
+        powers.Add(power.Group, power);
 
-            powers[power.Group].Deactivate();
-            powers[power.Group] = power;
+        power.EventDestroyed += RemovePower;
 
-        }
-        else
-        {
-            powers.Add(power.Group, power);
-        }
+        Debug.Log(power.Name + "Added!");
 
-        //Only the owner can destroy the power
-        power.EventDestroyed += power_EventDestroyed;
+        //Relay the call to others
 
-        //The server is the only one able to add a power to everyone
         if (Network.isServer)
         {
 
@@ -51,31 +57,19 @@ public class PowerController : MonoBehaviour
 
     }
 
-    void power_EventDestroyed(object sender, IGroup group)
+    void RemovePower(object sender, IGroup group)
     {
 
-        if (powers.ContainsKey(group))
-        {
+        //Removes the power
+        var power = powers[group];
+        powers.Remove(power.Group);
 
-            var power = powers[group];
-
-            powers.Remove(power.Group);
-
-            if (Network.peerType != NetworkPeerType.Disconnected &&
-                networkView.isMine)
-            {
-
-                //This is sent just for when the power is fired and then destroyed
-                networkView.RPC("RPCRemovePower", RPCMode.Others, power.Name);
-
-            }
-
-        }
-
+        Debug.Log(power.Name + "Removed!");
+        
     }
 
     [RPC]
-    private void RPCAddPower(string power_name)
+    public void RPCAddPower(string power_name)
     {
 
         var power = PowerFactory.Instance.PowerFromName(power_name);
@@ -85,18 +79,23 @@ public class PowerController : MonoBehaviour
     }
 
     [RPC]
-    private void RPCRemovePower(string power_name)
+    public void RPCFirePower(string power_name)
     {
 
-        power_EventDestroyed(this, PowerFactory.Instance.GroupFromName(power_name));
+        var group = PowerFactory.Instance.GroupFromName(power_name);
+
+        var power = powers[group];
+
+        power.Fire();
+
+        Debug.Log(power.Name + " Fired! (RPC)");
         
     }
 
     public void Update()
     {
 
-        //Needed everywhere as orbs could belong to different clients
-
+        //Shared update for each power
         foreach (Power power in new List<Power>( powers.Values ))
         {
 
@@ -104,19 +103,27 @@ public class PowerController : MonoBehaviour
 
         }
 
-        //Needed only owner-side
-
-        if (networkView.isMine ||
-            Network.peerType == NetworkPeerType.Disconnected)
+        //Only the owner of the power can shoot it
+        if (NetworkHelper.IsOwnerSide(networkView))
         {
 
-            foreach (IGroup group in input.FiredPowerUps)
+            Power power;
+
+            foreach (IGroup group in input.FiredPowerUps.Where((IGroup g) => { return powers.ContainsKey(g); }))
             {
 
-                if (powers.ContainsKey(group))
-                {
+                power = powers[group];
 
-                    powers[group].Fire();
+                if (power.Fire()){
+                    
+                    Debug.Log(power.Name + " Fired!");
+
+                    if (Network.peerType != NetworkPeerType.Disconnected)
+                    {
+
+                        networkView.RPC("RPCFirePower", RPCMode.Others, power.Name);
+
+                    }
 
                 }
 
