@@ -8,6 +8,7 @@ public class GUIServerClient : MonoBehaviour {
     GameObject server_button;
     GameObject client_button;
     GameObject start_button;
+	GameObject single_player_button;
 
 	// Use this for initialization
 	void Start () {
@@ -15,6 +16,8 @@ public class GUIServerClient : MonoBehaviour {
         server_button = GameObject.Find("ServerButton");
         client_button = GameObject.Find("ClientButton");
         start_button = GameObject.Find("StartButton");
+
+		single_player_button = GameObject.Find("SinglePlayerButton");
 
         //This should not be active at the beginning
         start_button.SetActive(false);
@@ -45,6 +48,7 @@ public class GUIServerClient : MonoBehaviour {
                     //Loads the server builder
                     gameObject.AddComponent<ServerBuilder>().EventMatchCreated += GUIServerClient_EventMatchCreated;
                     
+					single_player_button.SetActive(false);
                     server_button.gameObject.SetActive(false);
                     client_button.gameObject.SetActive(false);
 
@@ -55,10 +59,15 @@ public class GUIServerClient : MonoBehaviour {
                     //Loads the client builder
                     gameObject.AddComponent<ClientBuilder>().EventServerReady += GUIServerClient_EventServerReady;
 
+					single_player_button.SetActive(false);
                     server_button.gameObject.SetActive(false);
                     client_button.gameObject.SetActive(false);
 
                 }
+				else if (raycast_hit.collider.gameObject == single_player_button)
+				{
+					StartSinglePlayer();
+				}
                 else if (raycast_hit.collider.gameObject == start_button)
                 {
 
@@ -85,6 +94,11 @@ public class GUIServerClient : MonoBehaviour {
         Application.LoadLevel("NetworkTest");
 
     }
+
+	private void StartSinglePlayer() {
+		Destroy(this);
+		Application.LoadLevel("ShipTest");
+	}
 
     void GUIServerClient_EventMatchCreated(object sender)
     {
