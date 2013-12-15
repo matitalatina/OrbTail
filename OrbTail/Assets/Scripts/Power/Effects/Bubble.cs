@@ -11,6 +11,6 @@ public class Bubble : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         float bubblingFactor = Mathf.Cos(Time.time * 2.0f);
-        this.transform.localScale = Vector3.one * (5 + bubblingFactor * 0.5f);
+        this.transform.localScale = Vector3.one * (2 + bubblingFactor * 0.5f);
 	}
 }
