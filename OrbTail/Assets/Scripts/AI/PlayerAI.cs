@@ -168,7 +168,6 @@ public class PlayerAI : MonoBehaviour {
 	}
 
 	private void OnEventPowerAttached(object sender, string power, GameObject ship, GameObject orb) {
-
 		if (ship == gameObject) {
 			StartCoroutine("FirePowerUp");
 		}
