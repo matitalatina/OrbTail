@@ -4,12 +4,10 @@ using System.Collections;
 public class CameraMovement : MonoBehaviour {
 
 	public float smooth = 10f;         // The relative speed at which the camera will catch up.
-	public float relDistancePos = -7f;
+	public float relDistancePos = 7f;
 	public float relHighPos = 2.2f;
 	
 	private Transform player;           // Reference to the player's transform.
-	private Vector3 relCameraPos;       // The relative position of the camera from the player.
-	private float relCameraPosMag;      // The distance of the camera from the player.
 	private Vector3 newPos;             // The position the camera is trying to reach.
 
 
@@ -22,9 +20,6 @@ public class CameraMovement : MonoBehaviour {
         player = target.transform;
         FloatingComponent = target.GetComponent<FloatingObject>();
 
-        // Setting the relative position as the initial relative position of the camera in the scene.
-        relCameraPos = transform.position - player.position;
-        relCameraPosMag = relCameraPos.magnitude - 0.5f;
 	
     }
 
@@ -40,6 +35,10 @@ public class CameraMovement : MonoBehaviour {
 			Vector3 arenaDown = FloatingComponent.ArenaDown;
 
 			Vector3 standardPos = player.position + player.forward * relDistancePos + relHighPos * -arenaDown;
+
+			if (Physics.Raycast(standardPos, player.position - standardPos, (player.position - standardPos).magnitude, Layers.Obstacles)) {
+				standardPos = player.position + player.forward * relDistancePos / 4f + relHighPos * 5f * -arenaDown;
+			}
 		
 			newPos = standardPos;
 			// Lerp the camera's position between it's current position and it's new position.
@@ -56,7 +55,7 @@ public class CameraMovement : MonoBehaviour {
 		RaycastHit hit;
 		
 		// If a raycast from the check position to the player hits something...
-		if(Physics.Raycast(checkPos, player.position - checkPos, out hit, relCameraPosMag))
+		if(Physics.Raycast(checkPos, player.position - checkPos, out hit, (player.position - checkPos).magnitude - 0.5f))
 			// ... if it is not the player...
 			if(hit.transform != player)
 				// This position isn't appropriate.
