@@ -18,7 +18,7 @@ public class PlayerAI : MonoBehaviour {
 	private float maxTimeToGoAway = 4f;
 	private float maxTimeToFirePowerUp = 5f;
 	private float maxVisibility = 60f;
-	private float maxAcceleration = 0.8f;
+	private float maxAcceleration = 0.9f;
 	private int minOrbsToStartFight = 5;
 	private float thresholdToGiveUp = 0.4f;
 	private float sqrCheckpointDistanceThreshold = 15f;

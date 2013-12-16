@@ -15,7 +15,7 @@ public class TailController : MonoBehaviour {
 
 	private float dotProductAttackThreshold = 0.2f;
 	// Range [-1, 1] 
-	private float velocityAttackThreshold = 0.35f;
+	private float velocityAttackThreshold = 0.3f;
 
 
 	/// <summary>
@@ -71,15 +71,7 @@ public class TailController : MonoBehaviour {
 	void OnCollisionEnter(Collision collision) {
 		GameObject collidedObj = collision.gameObject;
 
-		if (collidedObj.tag == Tags.Orb) {
-			OrbController orbController = collidedObj.GetComponent<OrbController>();
-
-			if (!orbController.IsAttached()) {
-				attacherDriverStack.GetHead().AttachOrbs(collidedObj, Tail);
-			}
-
-		}
-		else if (collidedObj.tag == Tags.Ship) {
+		if (collidedObj.tag == Tags.Ship) {
 
 			if (IsAttack(collidedObj)) {
 				float damage = collidedObj.GetComponent<TailController>().GetOffenceDriverStack().GetHead().GetDamage(this.gameObject, collision);
@@ -91,6 +83,20 @@ public class TailController : MonoBehaviour {
 
 		}
 	}
+
+	public void OnProximityEnter(Collider other) {
+		GameObject collidedObj = other.gameObject;
+		
+		if (collidedObj.tag == Tags.Orb) {
+			OrbController orbController = collidedObj.GetComponent<OrbController>();
+			
+			if (!orbController.IsAttached()) {
+				attacherDriverStack.GetHead().AttachOrbs(collidedObj, Tail);
+			}
+			
+		}
+	}
+	
 
 	// Update is called once per frame
 	void Update () {

@@ -90,7 +90,7 @@ public class PlayerBuilder : MonoBehaviour {
         PlayerIdentity.id = id;
 
         //Network-instantiate the ship of this player
-        var ship_object = Resources.Load("Prefabs/" + PlayerIdentity.ship_name);
+        var ship_object = Resources.Load("Prefabs/Ships/" + PlayerIdentity.ship_name);
 
         Network.Instantiate(ship_object, 
                             GetSpawnPosition(), 
