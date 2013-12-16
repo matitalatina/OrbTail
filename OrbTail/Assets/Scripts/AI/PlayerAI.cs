@@ -30,6 +30,20 @@ public class PlayerAI : MonoBehaviour {
 		return inputBroker;
 	}
 
+	public void JustSeen(Collider other) {
+		GameObject colObject = other.gameObject;
+		
+		if (target == null || IsPatrolling()) {
+			if (colObject.tag == Tags.Ship && colObject.GetComponent<Tail>().GetOrbCount() >= minOrbsToStartFight) {
+				target = colObject;
+			}
+			else if (IsFreeOrb(colObject)) {
+				target = colObject;
+				orbController = colObject.GetComponent<OrbController>();
+			}
+		}
+	}
+
 	// Use this for initialization
 	void Start () {
 		floatingObject = GetComponent<FloatingObject>();
@@ -137,20 +151,6 @@ public class PlayerAI : MonoBehaviour {
 			ResetTarget();
 		}
 
-	}
-
-	void OnTriggerStay(Collider other) {
-		GameObject colObject = other.gameObject;
-		
-		if (target == null || IsPatrolling()) {
-			if (colObject.tag == Tags.Ship && colObject.GetComponent<Tail>().GetOrbCount() >= minOrbsToStartFight) {
-				target = colObject;
-			}
-			else if (IsFreeOrb(colObject)) {
-				target = colObject;
-				orbController = colObject.GetComponent<OrbController>();
-			}
-		}
 	}
 
 	private void CheckVisibility() {
