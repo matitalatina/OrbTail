@@ -23,6 +23,32 @@ public class PowerController : MonoBehaviour
         input = GetComponent<InputProxy>();
         event_logger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
 
+        if (NetworkHelper.IsServerSide())
+        {
+            
+            // Link proximity field
+            ProximityHandler proximityField = GetComponentInChildren<ProximityHandler>();
+            proximityField.EventOnProximityEnter += proximityField_EventOnProximityEnter;
+
+        }
+
+    }
+
+    void proximityField_EventOnProximityEnter(object sender, Collider other)
+    {
+
+        var collidedObj = other.gameObject;
+
+        if (collidedObj.tag == Tags.Orb &&
+            collidedObj.GetComponent<RandomPowerAttacher>())
+        {
+
+            Power randomPower = PowerFactory.Instance.RandomPower;
+
+            AddPower(randomPower);
+
+        }
+
     }
 
     public void Awake(){

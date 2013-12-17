@@ -17,6 +17,13 @@ public class AIFieldOfView : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
-		EventOnFieldOfViewEnter(this, other);
+        
+        if (EventOnFieldOfViewEnter != null)
+        {
+
+            EventOnFieldOfViewEnter(this, other);
+
+        }
+		
 	}
 }

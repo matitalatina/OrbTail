@@ -17,6 +17,14 @@ public class ProximityHandler : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
-		EventOnProximityEnter(this, other);
-	}
+
+        if (EventOnProximityEnter != null)
+        {
+
+            EventOnProximityEnter(this, other);
+
+        }
+
+    }
+
 }
