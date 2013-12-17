@@ -32,6 +32,15 @@ public class FloatingObject : MonoBehaviour {
 
         gravity_field.SetGravity(this);
 
+        if (Vector3.Dot(ArenaDown, transform.up) > 0.5f)
+        {
+
+            var q = Quaternion.FromToRotation(transform.up, -ArenaDown);
+
+            transform.rotation *= q;
+
+        }
+
 		if(Physics.Raycast(transform.position, ArenaDown, out hit, Layers.Field)) {
 
 			if (hit.collider.gameObject.tag == Tags.Field) {
