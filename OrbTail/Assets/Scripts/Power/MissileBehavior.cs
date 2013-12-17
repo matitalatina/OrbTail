@@ -39,7 +39,10 @@ public class MissileBehavior : MonoBehaviour {
 
     void Start()
     {
-        StartCoroutine("DestroyMissileTTL");
+		if(NetworkHelper.IsServerSide())
+		{
+			StartCoroutine("DestroyMissileTTL");
+		}
     }
 
     void Update()
@@ -68,8 +71,7 @@ public class MissileBehavior : MonoBehaviour {
     void OnCollisionEnter(Collision collision)
     {
 
-        if (Network.isServer ||
-            Network.peerType == NetworkPeerType.Disconnected)
+		if(NetworkHelper.IsServerSide())
         {
 
             if ((collision.gameObject.tag == Tags.Ship))
@@ -94,7 +96,8 @@ public class MissileBehavior : MonoBehaviour {
     private void OnImpact(GameObject target)
     {
 
-        StartCoroutine("DestroyMissile");
+        
+		StartCoroutine("DestroyMissile");
 
         target.rigidbody.AddForce(transform.forward * explosionForce, ForceMode.Impulse);
 
