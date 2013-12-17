@@ -7,27 +7,6 @@ public class RandomPowerAttacher : MonoBehaviour
 
     private GameObject particle_dummy;
 
-    void OnTriggerEnter(Collider collision)
-    {
-
-        if (NetworkHelper.IsServerSide())
-        {
-
-            var collidedObj = collision.gameObject;
-
-            if (collidedObj.tag == Tags.Ship)
-            {
-
-                Power randomPower = PowerFactory.Instance.RandomPower;
-
-                collidedObj.GetComponent<PowerController>().AddPower(randomPower);              
-
-            }
-
-        }  
-
-    }
-
     void Start()
     {
 
