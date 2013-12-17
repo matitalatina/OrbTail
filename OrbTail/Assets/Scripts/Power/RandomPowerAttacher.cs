@@ -7,7 +7,7 @@ public class RandomPowerAttacher : MonoBehaviour
 
     private GameObject particle_dummy;
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collision)
     {
 
         if (NetworkHelper.IsServerSide())
