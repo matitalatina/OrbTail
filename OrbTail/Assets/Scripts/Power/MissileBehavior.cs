@@ -90,7 +90,13 @@ public class MissileBehavior : MonoBehaviour {
     private IEnumerator DestroyMissileTTL()
     {
         yield return new WaitForSeconds(timeToLive);
-        StartCoroutine("DestroyMissile");
+        RPCDestroyMissile();
+
+        if (Network.isServer)
+        {
+            networkView.RPC("RPCDestroyMissile", RPCMode.Others);
+        }
+
     }
 
     private void OnImpact(GameObject target)
@@ -117,6 +123,12 @@ public class MissileBehavior : MonoBehaviour {
 
         OnImpact(NetworkView.Find(target_id).gameObject);
 
+    }
+
+    [RPC]
+    private void RPCDestroyMissile()
+    {
+        StartCoroutine("DestroyMissile");
     }
 
     private IEnumerator DestroyMissile()
