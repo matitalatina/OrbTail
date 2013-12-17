@@ -66,6 +66,10 @@ public class TailController : MonoBehaviour {
 
 	void Start () {
 		Tail = GetComponent<Tail>();
+
+		// Link proximity field
+		ProximityHandler proximityField = GetComponentInChildren<ProximityHandler>();
+		proximityField.EventOnProximityEnter += OnProximityEnter;
 	}
 
 	void OnCollisionEnter(Collision collision) {
@@ -84,7 +88,7 @@ public class TailController : MonoBehaviour {
 		}
 	}
 
-	public void OnProximityEnter(Collider other) {
+	void OnProximityEnter(object sender, Collider other) {
 		GameObject collidedObj = other.gameObject;
 		
 		if (collidedObj.tag == Tags.Orb) {

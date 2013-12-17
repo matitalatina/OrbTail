@@ -2,11 +2,13 @@
 using System.Collections;
 
 public class ProximityHandler : MonoBehaviour {
-	TailController tailController;
+
+	public delegate void DelegateOnProximityEnter(object sender, Collider other);
+
+	public event DelegateOnProximityEnter EventOnProximityEnter;
 
 	// Use this for initialization
 	void Start () {
-		tailController = transform.parent.gameObject.GetComponent<TailController>();
 	}
 	
 	// Update is called once per frame
@@ -15,6 +17,6 @@ public class ProximityHandler : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
-		tailController.OnProximityEnter(other);
+		EventOnProximityEnter(this, other);
 	}
 }

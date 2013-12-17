@@ -2,11 +2,13 @@
 using System.Collections;
 
 public class AIFieldOfView : MonoBehaviour {
-	PlayerAI playerAI;
+
+	public delegate void DelegateOnFieldOfViewEnter(object sender, Collider other);
+	
+	public event DelegateOnFieldOfViewEnter EventOnFieldOfViewEnter;
 
 	// Use this for initialization
 	void Start () {
-		playerAI = transform.parent.gameObject.GetComponent<PlayerAI>();
 	}
 	
 	// Update is called once per frame
@@ -15,6 +17,6 @@ public class AIFieldOfView : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
-		playerAI.JustSeen(other);
+		EventOnFieldOfViewEnter(this, other);
 	}
 }

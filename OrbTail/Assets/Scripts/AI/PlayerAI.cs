@@ -30,7 +30,7 @@ public class PlayerAI : MonoBehaviour {
 		return inputBroker;
 	}
 
-	public void JustSeen(Collider other) {
+	private void OnFieldOfViewEnter(object sender, Collider other) {
 		GameObject colObject = other.gameObject;
 		
 		if (target == null || IsPatrolling()) {
@@ -54,6 +54,9 @@ public class PlayerAI : MonoBehaviour {
         powerController = GetComponent<PowerController>();
 
         powerController.EventPowerAttached += OnEventPowerAttached;
+
+		// Attaching field of view notification
+		GetComponentInChildren<AIFieldOfView>().EventOnFieldOfViewEnter += OnFieldOfViewEnter;
 		checkpoints = new HashSet<GameObject>(GameObject.FindGameObjectsWithTag(Tags.AICheckpoint));
 	}
 	
