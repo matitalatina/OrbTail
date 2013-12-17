@@ -39,7 +39,7 @@ public class MissileBehavior : MonoBehaviour {
 
     void Start()
     {
-		if(NetworkHelper.IsServerSide())
+		if(NetworkHelper.IsOwnerSide(networkView))
 		{
 			StartCoroutine("DestroyMissileTTL");
 		}
