@@ -2,11 +2,20 @@
 using System.Collections;
 
 public class ProximityHandler : MonoBehaviour {
-	TailController tailController;
+	
+    TailController tailController;
+    PowerController powerController;
 
 	// Use this for initialization
 	void Start () {
-		tailController = transform.parent.gameObject.GetComponent<TailController>();
+
+        if (NetworkHelper.IsServerSide()) {
+
+            tailController = transform.parent.gameObject.GetComponent<TailController>();
+            powerController = transform.parent.gameObject.GetComponent<PowerController>();
+
+        }
+        
 	}
 	
 	// Update is called once per frame
