@@ -29,6 +29,7 @@ public class Missile : Power
             else
             {
 
+                //TODO: fix this SH!T
                 var missileRes = Resources.Load(missile_prefab_path);
                 missile = Network.Instantiate(missileRes, Owner.transform.position + Owner.transform.forward * missileforwardOffset, Owner.transform.rotation, 0) as GameObject;
 
