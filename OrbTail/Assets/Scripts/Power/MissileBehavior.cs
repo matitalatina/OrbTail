@@ -6,11 +6,16 @@ public class MissileBehavior : MonoBehaviour {
 
     public GameObject Target { get; set; }
     public GameObject Owner { get; set; }
+<<<<<<< HEAD
     public const string explosion_prefab_path = "Prefabs/Power/Explosion";
     private const float maxMissileSteering = 6.0f;
     private const float maxMissileSpeed = 15.0f;
+=======
+    private const float maxMissileSteering = 3.0f;
+    private const float maxMissileSpeed = 8.0f;
+>>>>>>> 2c2e17ff3dbf636ece5f85a1a5f1ed0ae1c63a93
     private const float explosionForce = 100.0f;
-    private const float timeToLive = 5f;
+    private const float timeToLive = 2.5f;
 
 
     public void SetTarget(GameObject target, GameObject owner)
