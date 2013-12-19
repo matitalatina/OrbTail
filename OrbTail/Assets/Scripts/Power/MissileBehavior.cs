@@ -6,10 +6,11 @@ public class MissileBehavior : MonoBehaviour {
 
     public GameObject Target { get; set; }
     public GameObject Owner { get; set; }
-    private const float maxMissileSteering = 3.0f;
+    private const float maxMissileSteering = 6.0f;
     private const float maxMissileSpeed = 8.0f;
     private const float explosionForce = 100.0f;
     private const float timeToLive = 2.5f;
+	private const float smoothCurve = 10f;
 
 
     public void SetTarget(GameObject target, GameObject owner)
@@ -63,7 +64,7 @@ public class MissileBehavior : MonoBehaviour {
                                                     Vector3.Cross(-floating.ArenaDown, this.transform.forward)
                                                     ).normalized;
         
-        forwardProjected = Vector3.Lerp(forwardProjected, this.transform.forward, Time.deltaTime * 5.0f);
+		forwardProjected = Vector3.Lerp(this.transform.forward, forwardProjected, Time.deltaTime * smoothCurve);
 
         this.GetComponent<Rigidbody>().AddForce(forwardProjected * maxMissileSpeed, ForceMode.VelocityChange);
     }
