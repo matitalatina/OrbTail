@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public abstract class Power : PowerView
 {
+
+    public const string power_prefab_path = "Prefabs/Power/";
+
     protected int group { get; private set; }
     protected float? duration { get; set; }
     protected float activatedTime { get; private set; }
@@ -151,8 +154,8 @@ public abstract class Power : PowerView
     private void AddFX()
     {
 
-        var fx_resource = Resources.Load("Prefabs/Power/" + Name);
-        fx = GameObject.Instantiate(fx_resource, Owner.transform.position, Quaternion.identity) as GameObject;
+        fx = GameObjectFactory.Instance.Instantiate(power_prefab_path + Name, Owner.transform.position, Quaternion.identity);
+
         fx.transform.parent = Owner.transform;
 
     }
@@ -160,7 +163,7 @@ public abstract class Power : PowerView
     private void RemoveFX()
     {
 
-        GameObject.Destroy(fx);
+        GameObjectFactory.Instance.Destroy(power_prefab_path + Name, fx);
 
     }
 

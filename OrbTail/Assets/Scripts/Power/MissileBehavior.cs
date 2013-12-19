@@ -6,6 +6,7 @@ public class MissileBehavior : MonoBehaviour {
 
     public GameObject Target { get; set; }
     public GameObject Owner { get; set; }
+    public const string explosion_prefab_path = "Prefabs/Power/Explosion";
     private const float maxMissileSteering = 6.0f;
     private const float maxMissileSpeed = 15.0f;
     private const float explosionForce = 100.0f;
@@ -133,8 +134,8 @@ public class MissileBehavior : MonoBehaviour {
 
     private IEnumerator DestroyMissile()
     {
-        var explosionRes = Resources.Load("Prefabs/Power/Explosion");
-        GameObject explosion = GameObject.Instantiate(explosionRes, this.gameObject.transform.position, Quaternion.identity) as GameObject;
+        
+        var explosion = GameObjectFactory.Instance.Instantiate(explosion_prefab_path, this.gameObject.transform.position, Quaternion.identity);
 
         Target = null;
         collider.enabled = false;
@@ -144,8 +145,9 @@ public class MissileBehavior : MonoBehaviour {
         // Delayed for GFX
         yield return new WaitForSeconds(1.0f);
 
-        Destroy(explosion);
-        Destroy(this.gameObject);
+        GameObjectFactory.Instance.Destroy(explosion_prefab_path, explosion);
+        GameObjectFactory.Instance.Destroy(Missile.missile_prefab_path, this.gameObject);
+        
     }
 
 }

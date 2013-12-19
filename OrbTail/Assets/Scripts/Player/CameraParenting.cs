@@ -18,7 +18,7 @@ public class CameraParenting : MonoBehaviour {
 
         }
 
-        Destroy(this);
+        this.enabled = false;
 
 	}
 	

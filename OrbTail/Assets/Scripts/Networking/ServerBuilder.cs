@@ -117,6 +117,8 @@ public class ServerBuilder : PlayerBuilder {
         Debug.Log("A player has been disconnected!");
 
         Network.RemoveRPCs(player);
+
+        //TODO: returns the orbs to the server!!!
         Network.DestroyPlayerObjects(player);
 
         pending_players.Remove(player);

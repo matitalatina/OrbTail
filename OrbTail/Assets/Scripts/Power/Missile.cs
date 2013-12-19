@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Missile : Power
 {
+
+    public const string missile_prefab_path = "Prefabs/Power/MissileRocket";
     private const float power_time = 7.0f;
 	private const float missileforwardOffset = 3f;
 
@@ -16,18 +18,18 @@ public class Missile : Power
         {
 
             //Create a new rocket
-            var missileRes = Resources.Load("Prefabs/Power/MissileRocket");
             GameObject missile;
 
             if (Network.peerType == NetworkPeerType.Disconnected)
             {
-               
-                missile = GameObject.Instantiate(missileRes, Owner.transform.position + Owner.transform.forward * missileforwardOffset , Owner.transform.rotation) as GameObject;
-            
+
+                missile = GameObjectFactory.Instance.Instantiate(missile_prefab_path, Owner.transform.position + Owner.transform.forward * missileforwardOffset, Owner.transform.rotation);
+
             }
             else
             {
 
+                var missileRes = Resources.Load(missile_prefab_path);
                 missile = Network.Instantiate(missileRes, Owner.transform.position + Owner.transform.forward * missileforwardOffset, Owner.transform.rotation, 0) as GameObject;
 
             }

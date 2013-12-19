@@ -88,7 +88,8 @@ public class GUIServerClient : MonoBehaviour {
     private void NextLevel()
     {
         
-        Destroy(this);                      //The component should be destroyed
+        this.enabled = false;
+
         DontDestroyOnLoad(gameObject);      //The Game should be preserved
 
         Application.LoadLevel("NetworkTest");
@@ -96,7 +97,9 @@ public class GUIServerClient : MonoBehaviour {
     }
 
 	private void StartSinglePlayer() {
-		Destroy(this);
+
+        this.enabled = false;
+
 		Application.LoadLevel("ShipTest");
 	}
 

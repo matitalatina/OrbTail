@@ -26,10 +26,6 @@ public class FloatingObject : MonoBehaviour {
 	void FixedUpdate () {
 		RaycastHit hit;
 
-		//TODO: Uncomment for spherical arena :D
-		//ArenaDown = -transform.position.normalized;
-		//
-
         gravity_field.SetGravity(this);
 
         if (Vector3.Dot(ArenaDown, transform.up) > 0.5f)

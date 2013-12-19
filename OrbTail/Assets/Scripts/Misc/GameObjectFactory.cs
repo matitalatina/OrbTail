@@ -7,10 +7,27 @@ using System.Collections.Generic;
 /// </summary>
 public class GameObjectFactory {
 
-    public GameObjectFactory()
-    {
+    private static GameObjectFactory instance_;
 
-        resource_table_ = new Dictionary<string, Stack<GameObject>>();
+    /// <summary>
+    /// Returns the singleton's instance
+    /// </summary>
+    public static GameObjectFactory Instance
+    {
+        
+        get
+        {
+
+            if (instance_ == null)
+            {
+
+                instance_ = new GameObjectFactory();
+
+            }
+
+            return instance_;
+
+        }
 
     }
 
@@ -77,6 +94,13 @@ public class GameObjectFactory {
             --count;
 
         }
+
+    }
+
+    private GameObjectFactory()
+    {
+
+        resource_table_ = new Dictionary<string, Stack<GameObject>>();
 
     }
 

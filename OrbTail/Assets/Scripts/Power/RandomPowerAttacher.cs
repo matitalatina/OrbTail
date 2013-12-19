@@ -4,24 +4,23 @@ using System.Collections.Generic;
 
 public class RandomPowerAttacher : MonoBehaviour
 {
-
+    public const string glow_prefab_path = "Prefabs/Power/PowerGlow";
     private GameObject particle_dummy;
 
     void Start()
     {
 
         AddFX();
-        
+
+        Debug.Log("Effetti speciali!");
+
     }
 
     [RPC]
     private void AddFX()
     {
 
-        var particle_dummy_resource = Resources.Load("Prefabs/Power/PowerGlow");
-
-        particle_dummy = GameObject.Instantiate(particle_dummy_resource, gameObject.transform.position, Quaternion.identity) as GameObject;
-
+        particle_dummy = GameObjectFactory.Instance.Instantiate(glow_prefab_path, gameObject.transform.position, Quaternion.identity);
         particle_dummy.transform.parent = gameObject.transform;
 
     }
@@ -29,8 +28,9 @@ public class RandomPowerAttacher : MonoBehaviour
     public void RemoveFX()
     {
 
-        Destroy(particle_dummy);
-        Destroy(this);
+        GameObjectFactory.Instance.Destroy(glow_prefab_path, particle_dummy);
+
+        this.enabled = false;
 
     }
 
