@@ -12,8 +12,6 @@ public class RandomPowerAttacher : MonoBehaviour
 
         AddFX();
 
-        Debug.Log("Effetti speciali!");
-
     }
 
     [RPC]

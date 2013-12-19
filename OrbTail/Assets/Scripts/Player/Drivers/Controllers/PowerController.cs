@@ -40,7 +40,7 @@ public class PowerController : MonoBehaviour
         var collidedObj = other.gameObject;
 
         if (collidedObj.tag == Tags.Orb &&
-            collidedObj.GetComponent<RandomPowerAttacher>())
+            collidedObj.GetComponent<RandomPowerAttacher>().enabled)
         {
 
             Power randomPower = PowerFactory.Instance.RandomPower;

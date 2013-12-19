@@ -18,6 +18,22 @@ public class PowerFactory
         RegisterPower(new Magnet(), 1);
         //RegisterPower(new TailSwap(), 1);   
 
+        PreloadPowers();
+
+    }
+
+    private void PreloadPowers()
+    {
+
+        //Preloads all the power's FXs
+        GameObjectFactory.Instance.Preload(Power.power_prefab_path + "Boost", 4);
+        GameObjectFactory.Instance.Preload(Power.power_prefab_path + "Missile", 4);
+        GameObjectFactory.Instance.Preload(Power.power_prefab_path + "Invincibility", 4);
+        GameObjectFactory.Instance.Preload(Power.power_prefab_path + "OrbSteal", 4);
+        GameObjectFactory.Instance.Preload(Power.power_prefab_path + "Magnet", 4);
+        GameObjectFactory.Instance.Preload(Missile.missile_prefab_path, 4);
+        GameObjectFactory.Instance.Preload(MissileBehavior.explosion_prefab_path, 4);
+
     }
 
     public static PowerFactory Instance{

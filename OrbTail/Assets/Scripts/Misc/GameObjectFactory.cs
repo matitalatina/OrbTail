@@ -50,7 +50,7 @@ public class GameObjectFactory {
             game_object.transform.position = positon;
             game_object.transform.rotation = rotation;
             game_object.SetActive(true);
-            
+
             return game_object;
 
         }
@@ -77,19 +77,37 @@ public class GameObjectFactory {
     }
 
     /// <summary>
-    /// Preloads a some resources
+    /// Preloads a some resources up to count
     /// </summary>
     public void Preload(string resource_path, int count)
     {
 
-        var resource = Resources.Load(resource_path);
-        
         var object_stack = GetDefaultStack(resource_path);
+
+        PreloadMore(resource_path, object_stack.Count + count);
+
+    }
+
+    /// <summary>
+    /// Preloads additional resources
+    /// </summary>
+    public void PreloadMore(string resource_path, int count)
+    {
+
+        var resource = Resources.Load(resource_path);
+
+        var object_stack = GetDefaultStack(resource_path);
+
+        GameObject game_object;
 
         while (count > 0)
         {
 
-            object_stack.Push(GameObject.Instantiate(resource) as GameObject);
+            game_object = GameObject.Instantiate(resource) as GameObject;
+
+            game_object.SetActive(false);
+
+            object_stack.Push(game_object);
 
             --count;
 

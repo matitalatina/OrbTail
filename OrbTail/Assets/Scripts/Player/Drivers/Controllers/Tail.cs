@@ -39,7 +39,7 @@ public class Tail : MonoBehaviour {
         //First removes the randompowerattacher
         var power_attacher = orb.GetComponent<RandomPowerAttacher>();
 
-        if (power_attacher != null)
+        if (power_attacher.enabled)
         {
 
             power_attacher.RemoveFX();

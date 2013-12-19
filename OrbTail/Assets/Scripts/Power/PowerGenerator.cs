@@ -24,7 +24,7 @@ public class PowerGenerator : MonoBehaviour {
             return orbs.Where((GameObject orb) =>
             {
                 return !orb.GetComponent<OrbController>().IsAttached() &&
-                        orb.GetComponent<RandomPowerAttacher>() == null;
+                       !orb.GetComponent<RandomPowerAttacher>().enabled;
             });
         }
     }
@@ -95,6 +95,14 @@ public class PowerGenerator : MonoBehaviour {
     {
 
         SpawnPower(NetworkView.Find(orb_view_id).gameObject);
+
+    }
+
+    void Start()
+    {
+
+        //Preloads some glow FX
+        GameObjectFactory.Instance.Preload(RandomPowerAttacher.glow_prefab_path, 10);
 
     }
 
