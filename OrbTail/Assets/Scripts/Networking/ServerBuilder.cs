@@ -159,8 +159,7 @@ public class ServerBuilder : PlayerBuilder {
             
         }
 
-        game.GetComponent<EventLogger>().NotifyStartMatch();
-              
+ 
     }
 
     /// <summary>
