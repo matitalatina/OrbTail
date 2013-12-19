@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 public class OrbSteal : Power
 {
     private const float power_time = 10.0f;
     private EventLogger eventLogger;
 
-    public OrbSteal() : base(PowerGroups.Main, float.MaxValue, "OrbSteal") { }
+	public OrbSteal() : base(PowerGroups.Main, power_time, "OrbSteal") { }
 
     protected override void ActivateServer()
     {
@@ -16,19 +15,26 @@ public class OrbSteal : Power
         eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
 
         eventLogger.EventFight += eventLogger_EventFight;
+
     }
 
     void eventLogger_EventFight(object sender, IList<GameObject> orbs, GameObject attacker, GameObject defender)
     {
-		foreach (GameObject orb in orbs.Where((GameObject go) => { return !go.GetComponent<OrbController>().IsAttached();}))
-        {
-            attacker.GetComponent<TailController>().GetAttacherDriverStack().GetHead().AttachOrbs(orb, attacker.GetComponent<Tail>());
-        }
+		if (attacker == Owner) {
+
+			foreach (GameObject orb in orbs)
+        	{
+				if (!orb.GetComponent<OrbController>().IsAttached()) {
+            		attacker.GetComponent<TailController>().GetAttacherDriverStack().GetHead().AttachOrbs(orb, attacker.GetComponent<Tail>());
+				}
+        	}
+
+		}
     }
 
     public override void Deactivate()
     {
-
+		eventLogger.EventFight -= eventLogger_EventFight;
         base.Deactivate();
 
     }

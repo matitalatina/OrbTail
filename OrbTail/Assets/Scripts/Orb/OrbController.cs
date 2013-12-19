@@ -9,11 +9,13 @@ public class OrbController : MonoBehaviour {
 	private float forceSpring = 3f;
 	private float minDistance = 1.0f;
 	private float maxDistance = 1.0f;
+	private bool isLinked;
 
 
 
 	// Use this for initialization
 	void Start () {
+		isLinked = this.gameObject.GetComponent<SpringJoint>() != null;
 	}
 
 
@@ -23,7 +25,7 @@ public class OrbController : MonoBehaviour {
 	/// </summary>
 	/// <returns><c>true</c> if this instance is attached; otherwise, <c>false</c>.</returns>
 	public bool IsAttached() {
-		return this.gameObject.GetComponent<SpringJoint>() != null;
+		return isLinked;
 	}
 
 
@@ -32,14 +34,9 @@ public class OrbController : MonoBehaviour {
 	/// </summary>
 	/// <param name="destination">Target.</param>
 	public void LinkTo(GameObject target) {
-		SpringJoint joint = this.GetComponent<SpringJoint>();
+		Unlink();
 
-		if (joint != null) {
-			Object.Destroy(joint);
-		}
-		
-		joint = this.gameObject.AddComponent<SpringJoint>();
-		
+		SpringJoint joint = this.gameObject.AddComponent<SpringJoint>();
 		joint.connectedBody = target.rigidbody;
 		joint.damper = dampSpring;
 		joint.spring = forceSpring;
@@ -48,6 +45,7 @@ public class OrbController : MonoBehaviour {
 		joint.autoConfigureConnectedAnchor = false;
 		joint.anchor = Vector3.zero;
 		joint.connectedAnchor = Vector3.zero;
+		isLinked = true;
 		
 	}
 	
@@ -56,11 +54,12 @@ public class OrbController : MonoBehaviour {
 	/// Unlink this instance removing the joint.
 	/// </summary>
 	public void Unlink() {
-		SpringJoint joint = this.GetComponent<SpringJoint>();
-		
-		if (joint != null) {
-			Object.Destroy(joint);
+
+		foreach (SpringJoint jointToRemove in this.GetComponents<SpringJoint>()) {
+			Object.Destroy(jointToRemove);
 		}
+
+		isLinked = false;
 		
 	}
 
