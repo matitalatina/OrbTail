@@ -20,7 +20,11 @@ public class Magnet : Power {
 
 	public override void Deactivate()
 	{
-		proximityHandler.Radius = oldProximityRadius;
+
+		if (NetworkHelper.IsServerSide()) {
+			proximityHandler.Radius = oldProximityRadius;
+		}
+
 		base.Deactivate();
 		
 	}

@@ -34,7 +34,10 @@ public class OrbSteal : Power
 
     public override void Deactivate()
     {
-		eventLogger.EventFight -= eventLogger_EventFight;
+		if (NetworkHelper.IsServerSide()) {
+			eventLogger.EventFight -= eventLogger_EventFight;
+		}
+
         base.Deactivate();
 
     }
