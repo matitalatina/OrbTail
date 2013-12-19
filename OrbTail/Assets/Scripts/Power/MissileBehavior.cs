@@ -6,14 +6,11 @@ public class MissileBehavior : MonoBehaviour {
 
     public GameObject Target { get; set; }
     public GameObject Owner { get; set; }
-
-    public const string explosion_prefab_path = "Prefabs/Power/Explosion";
-
-    private const float maxMissileSteering = 3.0f;
+    private const float maxMissileSteering = 6.0f;
     private const float maxMissileSpeed = 8.0f;
-
     private const float explosionForce = 100.0f;
     private const float timeToLive = 2.5f;
+	private const float smoothCurve = 10f;
 
 
     public void SetTarget(GameObject target, GameObject owner)
@@ -67,7 +64,7 @@ public class MissileBehavior : MonoBehaviour {
                                                     Vector3.Cross(-floating.ArenaDown, this.transform.forward)
                                                     ).normalized;
         
-        forwardProjected = Vector3.Lerp(forwardProjected, this.transform.forward, Time.deltaTime * 5.0f);
+		forwardProjected = Vector3.Lerp(this.transform.forward, forwardProjected, Time.deltaTime * smoothCurve);
 
         this.GetComponent<Rigidbody>().AddForce(forwardProjected * maxMissileSpeed, ForceMode.VelocityChange);
     }
@@ -137,8 +134,8 @@ public class MissileBehavior : MonoBehaviour {
 
     private IEnumerator DestroyMissile()
     {
-        
-        var explosion = GameObjectFactory.Instance.Instantiate(explosion_prefab_path, this.gameObject.transform.position, Quaternion.identity);
+        var explosionRes = Resources.Load("Prefabs/Power/Explosion");
+        GameObject explosion = GameObject.Instantiate(explosionRes, this.gameObject.transform.position, Quaternion.identity) as GameObject;
 
         Target = null;
         collider.enabled = false;
@@ -148,9 +145,8 @@ public class MissileBehavior : MonoBehaviour {
         // Delayed for GFX
         yield return new WaitForSeconds(1.0f);
 
-        GameObjectFactory.Instance.Destroy(explosion_prefab_path, explosion);
-        GameObjectFactory.Instance.Destroy(Missile.missile_prefab_path, this.gameObject);
-        
+        Destroy(explosion);
+        Destroy(this.gameObject);
     }
 
 }
