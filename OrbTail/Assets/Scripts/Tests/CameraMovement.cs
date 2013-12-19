@@ -34,7 +34,7 @@ public class CameraMovement : MonoBehaviour {
 			//Vector3 standardPos = player.position + relCameraPos;
 			Vector3 arenaDown = FloatingComponent.ArenaDown;
 
-			Vector3 standardPos = player.position + player.forward * relDistancePos + relHighPos * -arenaDown;
+			Vector3 standardPos = player.position - player.forward * relDistancePos + relHighPos * -arenaDown;
 
 			if (Physics.Raycast(standardPos, player.position - standardPos, (player.position - standardPos).magnitude, Layers.Obstacles)) {
 				standardPos = player.position + player.forward * relDistancePos / 4f + relHighPos * 5f * -arenaDown;

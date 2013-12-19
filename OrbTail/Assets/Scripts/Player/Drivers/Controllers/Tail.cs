@@ -12,6 +12,7 @@ public class Tail : MonoBehaviour {
     private float detachForce = 0.06f;
     private float attachForce = 0.03f;
 
+
 	// Use this for initialization
 	void Start () {
         
