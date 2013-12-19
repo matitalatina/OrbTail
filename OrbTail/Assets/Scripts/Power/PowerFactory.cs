@@ -15,7 +15,7 @@ public class PowerFactory
         RegisterPower(new Missile(), 1);
         RegisterPower(new Invincibility(), 1);
         RegisterPower(new OrbSteal(), 0);
-        //RegisterPower(new Magnet(), 1);
+        RegisterPower(new Magnet(), 1);
         //RegisterPower(new TailSwap(), 1);   
 
     }
