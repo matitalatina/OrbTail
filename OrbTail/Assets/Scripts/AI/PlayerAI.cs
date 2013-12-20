@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class PlayerAI : MonoBehaviour {
 
 	private RelayInputBroker inputBroker = new RelayInputBroker();
-	private EventLogger eventLogger;
+	//private EventLogger eventLogger;
     private PowerController powerController;
 
 	private GameObject target = null;
@@ -46,18 +46,24 @@ public class PlayerAI : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        
 		floatingObject = GetComponent<FloatingObject>();
+
+        //TODO:fixme
+        /*
 		eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
 		eventLogger.EventFight += OnEventFight;
 		eventLogger.EventOrbAttached += OnEventOrbAttached;
-
+        
         powerController = GetComponent<PowerController>();
 
         powerController.EventPowerAttached += OnEventPowerAttached;
-
+        */
 		// Attaching field of view notification
 		GetComponentInChildren<AIFieldOfView>().EventOnFieldOfViewEnter += OnFieldOfViewEnter;
 		checkpoints = new HashSet<GameObject>(GameObject.FindGameObjectsWithTag(Tags.AICheckpoint));
+        Debug.Log("Okay");
+
 	}
 	
 	// Update is called once per frame

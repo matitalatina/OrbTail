@@ -6,7 +6,7 @@ public class Tail : MonoBehaviour {
 	
     private Stack<GameObject> orbStack = new Stack<GameObject>();
 	private GameObject firstOrb;
-	private EventLogger eventLogger;
+	//private EventLogger eventLogger;
     private OwnershipManager ownershipManager;
 
     private float detachForce = 0.06f;
@@ -18,7 +18,6 @@ public class Tail : MonoBehaviour {
         
         var game = GameObject.FindGameObjectWithTag(Tags.Game);
 		
-        eventLogger = game.GetComponent<EventLogger>();
         ownershipManager = game.GetComponent<OwnershipManager>();
 
 	}
@@ -51,7 +50,8 @@ public class Tail : MonoBehaviour {
             Network.peerType == NetworkPeerType.Disconnected)
         {
             
-            eventLogger.NotifyOrbAttached(orb, gameObject);
+            //TODO: fixme
+            //eventLogger.NotifyOrbAttached(orb, gameObject);
 
             orb.rigidbody.AddForce(-orb.GetComponent<FloatingObject>().ArenaDown * attachForce, ForceMode.Impulse);
         

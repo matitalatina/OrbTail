@@ -13,7 +13,7 @@ public class PowerController : MonoBehaviour
     /// </summary>
     public event DelegatePowerAttached EventPowerAttached;
 
-    private EventLogger event_logger;
+//    private EventLogger event_logger;
     private Dictionary<int, Power> powers;
     private InputProxy input;
 
@@ -21,7 +21,9 @@ public class PowerController : MonoBehaviour
     {
 
         input = GetComponent<InputProxy>();
-        event_logger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
+
+        //TODO: fixme!
+        //event_logger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
 
         if (NetworkHelper.IsServerSide())
         {

@@ -2,13 +2,16 @@
 using System.Collections;
 
 public class OrbDeactivator : MonoBehaviour {
-	private EventLogger eventLogger;
+	//private EventLogger eventLogger;
 	private float secondsDeactivated = 0.3f;
 
 	// Use this for initialization
 	void Start () {
+        //TODO: fixme
+        /*
 		eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
 		eventLogger.EventFight += OnEventFight; 
+         * */
 	}
 	
 	// Update is called once per frame
@@ -24,7 +27,8 @@ public class OrbDeactivator : MonoBehaviour {
 
 
 	void OnDestroy() {
-		eventLogger.EventFight -= OnEventFight;
+		//TODO: fixme
+        //eventLogger.EventFight -= OnEventFight;
 	}
 
 	// TODO: the ship must be only one object

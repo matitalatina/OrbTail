@@ -100,7 +100,10 @@ public class GUIServerClient : MonoBehaviour {
 
         this.enabled = false;
 
-		Application.LoadLevel("ShipTest");
+		//Application.LoadLevel("ShipTest");
+
+        GetComponent<GameBuilder>().InitializeSinglePlayerMatch("Flat");
+
 	}
 
     void GUIServerClient_EventMatchCreated(object sender)

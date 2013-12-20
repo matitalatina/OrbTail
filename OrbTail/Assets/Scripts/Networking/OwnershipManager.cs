@@ -10,27 +10,32 @@ public class OwnershipManager : MonoBehaviour {
     public void AcquireOwnership(GameObject game_object)
     {
 
-        NetworkPlayer owner = game_object.networkView.owner;
-
-        if (Network.player != owner)
+        if (Network.peerType != NetworkPeerType.Disconnected)
         {
 
-            var view_id = AllocateNetworkViewID();
-            var target_view_id = game_object.networkView.viewID;
-            
-            //Tells the previous owner that the ownership has been changed
-            if (Network.isServer)
+            NetworkPlayer owner = game_object.networkView.owner;
+
+            if (Network.player != owner)
             {
 
-                networkView.RPC("RPCChangeOwnership", owner, target_view_id, view_id, true);
+                var view_id = AllocateNetworkViewID();
+                var target_view_id = game_object.networkView.viewID;
+
+                //Tells the previous owner that the ownership has been changed
+                if (Network.isServer)
+                {
+
+                    networkView.RPC("RPCChangeOwnership", owner, target_view_id, view_id, true);
+
+                }
+                else
+                {
+
+                    networkView.RPC("RPCRedirectToOwner", RPCMode.Server, target_view_id, view_id);
+
+                }
 
             }
-            else
-            {
-
-                networkView.RPC("RPCRedirectToOwner", RPCMode.Server, target_view_id, view_id);
-
-            }          
 
         }
 

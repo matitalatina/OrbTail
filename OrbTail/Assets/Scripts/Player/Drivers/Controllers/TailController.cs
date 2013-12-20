@@ -9,7 +9,7 @@ public class TailController : MonoBehaviour {
 	private DriverStack<IOffenceDriver> offenceDriverStack;
 	private DriverStack<IDefenceDriver> defenceDriverStack;
 
-	private EventLogger eventLogger;
+	//private EventLogger eventLogger;
 
 	public Tail Tail { get; set;}
 
@@ -61,7 +61,8 @@ public class TailController : MonoBehaviour {
 		offenceDriverStack = new DriverStack<IOffenceDriver>();
 		defenceDriverStack = new DriverStack<IDefenceDriver>();
 
-		eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
+        //TODO: fixme
+		//eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
 	}
 
 	void Start () {
@@ -82,7 +83,8 @@ public class TailController : MonoBehaviour {
 				int nOrbsToDetach = defenceDriverStack.GetHead().DamageToOrbs(damage);
 				List<GameObject> orbsDetached = detacherDriverStack.GetHead().DetachOrbs(nOrbsToDetach, this.Tail);
 
-				eventLogger.NotifyFight(orbsDetached, collidedObj, this.gameObject);
+                //TODO: fixme
+				//eventLogger.NotifyFight(orbsDetached, collidedObj, this.gameObject);
 			}
 
 		}
