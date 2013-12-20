@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Tail : MonoBehaviour {
-	
+
     private Stack<GameObject> orbStack = new Stack<GameObject>();
 	private GameObject firstOrb;
     private OwnershipManager ownershipManager;
+	private AudioClip gatherOrbSound;
 
     private float detachForce = 0.06f;
     private float attachForce = 0.03f;
@@ -26,6 +27,8 @@ public class Tail : MonoBehaviour {
         var game = GameObject.FindGameObjectWithTag(Tags.Game);
 		
         ownershipManager = game.GetComponent<OwnershipManager>();
+
+		gatherOrbSound = Resources.Load<AudioClip>("Sounds/Ship/AttachOrb");
 
 	}
 
@@ -62,6 +65,7 @@ public class Tail : MonoBehaviour {
 			}
 
             orb.rigidbody.AddForce(-orb.GetComponent<FloatingObject>().ArenaDown * attachForce, ForceMode.Impulse);
+			AudioSource.PlayClipAtPoint(gatherOrbSound, orb.transform.position);
         
         }
 
