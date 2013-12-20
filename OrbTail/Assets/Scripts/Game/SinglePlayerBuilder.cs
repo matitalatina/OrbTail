@@ -49,10 +49,9 @@ public class SinglePlayerBuilder : MonoBehaviour {
             }
             else
             {
-
+				player.AddComponent<AudioListener>();
                 GameObject.FindGameObjectWithTag(Tags.MainCamera).GetComponent<CameraMovement>().LookAt(player);
                 GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>().ActivePlayer = player;
-
             }
 
             ++player_id;

@@ -10,4 +10,5 @@ public class Tags {
     public const string MainCamera = "MainCamera";
     public const string Arena = "Arena";
     public const string SpawnPoint = "SpawnPoint";
+	public const string HUD = "HUD";
 }

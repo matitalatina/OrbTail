@@ -7,6 +7,8 @@ public class MovementController : MonoBehaviour {
 	public float maxSpeedForce = 100.0f;
 	public float maxRoll = 80f;
 	public float rotationSmooth = 10f;
+
+	private float smoothSound = 7f;
 	
 	public FloatingObject FloatingBody {get; private set;}
 
@@ -15,6 +17,8 @@ public class MovementController : MonoBehaviour {
 	private DriverStack<IWheelDriver> wheelDriverStack;
 
 	private InputProxy inputProxy;
+
+	private float actualPitchSound;
 
 
 	void Awake() {
@@ -26,6 +30,8 @@ public class MovementController : MonoBehaviour {
 	void Start () {
 		FloatingBody = this.GetComponent<FloatingObject>();
 		inputProxy = this.GetComponent<InputProxy>();
+
+		actualPitchSound = audio.pitch;
 	}
 	
 	// Update is called once per frame
@@ -39,6 +45,8 @@ public class MovementController : MonoBehaviour {
 
 		float wheelSteer = wheelDriverStack.GetHead().GetDirection(inputProxy.Steering);
 		float engineForce = engineDriverStack.GetHead().GetForce();
+
+		PlaySoundEngine(engineForce);
 
 		Vector3 forwardProjected = Vector3.Cross(arenaDown,
 		                                         Vector3.Cross(-arenaDown, this.transform.forward)
@@ -71,6 +79,10 @@ public class MovementController : MonoBehaviour {
 	/// <returns>The wheel driver stack.</returns>
 	public DriverStack<IWheelDriver> GetWheelDriverStack() {
 		return wheelDriverStack;
+	}
+
+	private void PlaySoundEngine(float engineForce) {
+		audio.pitch = Mathf.Lerp(Mathf.Abs(engineForce) + 2f, actualPitchSound, smoothSound * Time.deltaTime);
 	}
 
 
