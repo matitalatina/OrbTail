@@ -3,6 +3,11 @@ using System.Collections;
 
 public class Game : MonoBehaviour {
 
+    /// <summary>
+    /// Returns the active player
+    /// </summary>
+    public GameObject ActivePlayer { get; set; }
+
 	// Use this for initialization
 	void Start () {
 	
@@ -13,6 +18,7 @@ public class Game : MonoBehaviour {
 	
 	}
 
+    
     
 
 

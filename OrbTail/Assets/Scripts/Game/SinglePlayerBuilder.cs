@@ -51,6 +51,7 @@ public class SinglePlayerBuilder : MonoBehaviour {
             {
 
                 GameObject.FindGameObjectWithTag(Tags.MainCamera).GetComponent<CameraMovement>().LookAt(player);
+                GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>().ActivePlayer = player;
 
             }
 
