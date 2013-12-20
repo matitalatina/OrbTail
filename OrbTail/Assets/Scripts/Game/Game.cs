@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Game : MonoBehaviour {
 
@@ -7,6 +8,7 @@ public class Game : MonoBehaviour {
     /// Returns the active player
     /// </summary>
     public GameObject ActivePlayer { get; set; }
+	public List<GameObject> ShipsInGame { get; set; }
 
 	// Use this for initialization
 	void Start () {

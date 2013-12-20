@@ -6,12 +6,19 @@ public class Tail : MonoBehaviour {
 	
     private Stack<GameObject> orbStack = new Stack<GameObject>();
 	private GameObject firstOrb;
-	//private EventLogger eventLogger;
     private OwnershipManager ownershipManager;
 
     private float detachForce = 0.06f;
     private float attachForce = 0.03f;
 
+	public delegate void DelegateOnOrbAttached(object sender, GameObject orb, GameObject ship);
+
+	/// <summary>
+	/// Notifies than an orb has been attached
+	/// </summary>
+	/// <param name="orb">The orb that has been attached</param>
+	/// <param name="ship">The ship that has been attached</param>
+	public event DelegateOnOrbAttached OnEventOrbAttached;
 
 	// Use this for initialization
 	void Start () {
@@ -50,8 +57,9 @@ public class Tail : MonoBehaviour {
             Network.peerType == NetworkPeerType.Disconnected)
         {
             
-            //TODO: fixme
-            //eventLogger.NotifyOrbAttached(orb, gameObject);
+			if (OnEventOrbAttached != null) {
+				OnEventOrbAttached(this, orb, gameObject);
+			}
 
             orb.rigidbody.AddForce(-orb.GetComponent<FloatingObject>().ArenaDown * attachForce, ForceMode.Impulse);
         

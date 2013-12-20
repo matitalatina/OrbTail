@@ -9,7 +9,15 @@ public class TailController : MonoBehaviour {
 	private DriverStack<IOffenceDriver> offenceDriverStack;
 	private DriverStack<IDefenceDriver> defenceDriverStack;
 
-	//private EventLogger eventLogger;
+	public delegate void DelegateOnFight(object sender, IList<GameObject> orbs, GameObject attacker, GameObject defender);
+
+	/// <summary>
+	/// Notify that two ships have fought
+	/// </summary>
+	/// <param name="orbs">The list of the orbs lost by the defender</param>
+	/// <param name="attacker">The attacker's ship</param>
+	/// <param name="defender">The defender's ship</param>
+	public event DelegateOnFight OnEventFight;
 
 	public Tail Tail { get; set;}
 
@@ -52,17 +60,13 @@ public class TailController : MonoBehaviour {
 	public DriverStack<IDefenceDriver> GetDefenceDriverStack() {
 		return defenceDriverStack;
 	}
-
-
+	
 
 	void Awake() {
 		attacherDriverStack = new DriverStack<IAttacherDriver>();
 		detacherDriverStack = new DriverStack<IDetacherDriver>();
 		offenceDriverStack = new DriverStack<IOffenceDriver>();
 		defenceDriverStack = new DriverStack<IDefenceDriver>();
-
-        //TODO: fixme
-		//eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
 	}
 
 	void Start () {
@@ -83,8 +87,11 @@ public class TailController : MonoBehaviour {
 				int nOrbsToDetach = defenceDriverStack.GetHead().DamageToOrbs(damage);
 				List<GameObject> orbsDetached = detacherDriverStack.GetHead().DetachOrbs(nOrbsToDetach, this.Tail);
 
-                //TODO: fixme
-				//eventLogger.NotifyFight(orbsDetached, collidedObj, this.gameObject);
+                
+				if (OnEventFight != null) {
+					OnEventFight(this, orbsDetached, collidedObj, this.gameObject);
+				}
+
 			}
 
 		}
@@ -108,6 +115,7 @@ public class TailController : MonoBehaviour {
 	void Update () {
 	
 	}
+
 
 
 	/// <summary>

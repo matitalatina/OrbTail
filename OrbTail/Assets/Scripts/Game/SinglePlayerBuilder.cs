@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 public class SinglePlayerBuilder : MonoBehaviour {
@@ -28,6 +29,8 @@ public class SinglePlayerBuilder : MonoBehaviour {
 
         var factory = GameObjectFactory.Instance;
         GameObject player;
+		List<GameObject> shipsInGame = new List<GameObject>();
+		Game globalDataGame = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
 
         foreach (PlayerIdentity identity in identities)
         {
@@ -35,6 +38,7 @@ public class SinglePlayerBuilder : MonoBehaviour {
             player = factory.Instantiate("Prefabs/Ships/" + identity.ShipName, 
                                          spawn_points[player_id].transform.position, 
                                          Quaternion.identity) as GameObject;
+			shipsInGame.Add(player);
 
             identity.CopyTo(player.GetComponent<PlayerIdentity>());
 
@@ -51,7 +55,7 @@ public class SinglePlayerBuilder : MonoBehaviour {
             {
 				player.AddComponent<AudioListener>();
                 GameObject.FindGameObjectWithTag(Tags.MainCamera).GetComponent<CameraMovement>().LookAt(player);
-                GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>().ActivePlayer = player;
+				globalDataGame.ActivePlayer = player;
             }
 
             ++player_id;
@@ -59,6 +63,9 @@ public class SinglePlayerBuilder : MonoBehaviour {
             Destroy(identity);
 
         }
+
+		globalDataGame.ShipsInGame = shipsInGame;
+
 
     }
 

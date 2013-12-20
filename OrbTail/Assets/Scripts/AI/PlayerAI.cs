@@ -49,20 +49,20 @@ public class PlayerAI : MonoBehaviour {
         
 		floatingObject = GetComponent<FloatingObject>();
 
-        //TODO:fixme
-        /*
-		eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
-		eventLogger.EventFight += OnEventFight;
-		eventLogger.EventOrbAttached += OnEventOrbAttached;
-        
-        powerController = GetComponent<PowerController>();
 
-        powerController.EventPowerAttached += OnEventPowerAttached;
-        */
+		powerController = GetComponent<PowerController>();
+		powerController.EventPowerAttached += OnEventPowerAttached;
+
+		// Listen all event fights
+		foreach (GameObject ship in GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>().ShipsInGame) {
+			TailController tailController = ship.GetComponent<TailController>();
+			tailController.OnEventFight += OnEventFight;
+		}
+
+		gameObject.GetComponent<Tail>().OnEventOrbAttached += OnEventOrbAttached;
 		// Attaching field of view notification
 		GetComponentInChildren<AIFieldOfView>().EventOnFieldOfViewEnter += OnFieldOfViewEnter;
 		checkpoints = new HashSet<GameObject>(GameObject.FindGameObjectsWithTag(Tags.AICheckpoint));
-        Debug.Log("Okay");
 
 	}
 	

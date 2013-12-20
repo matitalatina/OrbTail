@@ -5,19 +5,20 @@ using UnityEngine;
 public class OrbSteal : Power
 {
     private const float power_time = 10.0f;
-    //private EventLogger eventLogger;
+    private List<TailController> tailControllers;
 
 	public OrbSteal() : base(PowerGroups.Main, power_time, "OrbSteal") { }
 
     protected override void ActivateServer()
     {
+		tailControllers = new List<TailController>();
 
-        //TODO: fixme
-        /*
-        eventLogger = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<EventLogger>();
+		foreach (GameObject ship in GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>().ShipsInGame) {
+			TailController tailController = ship.GetComponent<TailController>();
+			tailController.OnEventFight += eventLogger_EventFight;
+			tailControllers.Add(tailController);
+		}
 
-        eventLogger.EventFight += eventLogger_EventFight;
-        */
     }
 
     void eventLogger_EventFight(object sender, IList<GameObject> orbs, GameObject attacker, GameObject defender)
@@ -36,12 +37,15 @@ public class OrbSteal : Power
 
     public override void Deactivate()
     {
-        //TODO: fixme
-        /*
+
 		if (NetworkHelper.IsServerSide()) {
-			eventLogger.EventFight -= eventLogger_EventFight;
+
+			foreach (TailController tailController in tailControllers) {
+				tailController.OnEventFight -= eventLogger_EventFight;
+			}
+
 		}
-        */
+
         base.Deactivate();
 
     }
