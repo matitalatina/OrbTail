@@ -1,34 +1,116 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Diagnostics;
 
 /// <summary>
-/// Represents a player identity
+/// Represents a player identity, this script shold be attached to every ship
 /// </summary>
 public class PlayerIdentity : MonoBehaviour {
 
     /// <summary>
     /// The ordinal number of the player
     /// </summary>
-    public int id = 0;
+    public int Id;
 
     /// <summary>
     /// The nickname of the player
     /// </summary>
-    public string player_name = "";
+    public string Name;
 
     /// <summary>
-    /// The name of the ship prefab used by the player
+    /// Is the player human?
     /// </summary>
-    public string ship_name = "Ship";
+    public bool IsHuman;
 
-	// Use this for initialization
-	void Start () {
-	
+    /// <summary>
+    /// Is the player local?
+    /// </summary>
+    public bool IsLocal
+    {
+        get
+        {
+            return NetworkHelper.IsOwnerSide(gameObject.networkView);
+        }
+    }
+
+    /// <summary>
+    /// The score of the player
+    /// </summary>
+    public int Score;
+
+    /// <summary>
+    /// Returns the color of the ship
+    /// </summary>
+    public Color Color
+    {
+
+        get
+        {
+
+            switch (Id)
+            {
+                case 0:
+
+                    return Color.red;
+                    
+                case 1:
+
+                    return Color.blue;
+
+                case 2:
+
+                    return Color.green;
+
+                case 3:
+
+                    return Color.yellow;
+
+                default:
+
+                    System.Diagnostics.Debug.Assert(false, "The id is invalid!");
+                    break;
+
+            }
+
+            return Color.black;
+
+        }
+
+    }
+    
+    /// <summary>
+    /// Returns the tail length
+    /// </summary>
+    public int TailLength
+    {
+
+        get
+        {
+
+            return tail_.GetOrbCount();
+
+        }
+
+    }
+
+	void Awake () {
+
+        Score = 0;
+        Id = 0;
+        Name = "";
+
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
+    void Start()
+    {
+
+        tail_ = GetComponent<Tail>();
+
+    }
+
+    /// <summary>
+    /// The tail controller
+    /// </summary>
+    private Tail tail_;
 
 }

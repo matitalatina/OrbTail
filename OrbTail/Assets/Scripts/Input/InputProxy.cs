@@ -7,38 +7,25 @@ using System.Collections.Generic;
 /// </summary>
 public class InputProxy : MonoBehaviour, IInputBroker{
 
-    public enum InputProxyType
-    {
-
-        Human,      //The player is a local human
-        AI          //The player has an AI
-
-    }
-
-    /// <summary>
-    /// The input proxy type
-    /// </summary>
-    public InputProxyType proxy_type = InputProxyType.Human;
-
     // Use this for initialization
 	public void Start () {
         
-        if (networkView.isMine ||
-            ( !Network.isClient &&
-              !Network.isServer ))
+        if (NetworkHelper.IsOwnerSide(networkView))
         {
 
-            if (proxy_type == InputProxyType.AI)
+            var identity = GetComponent<PlayerIdentity>();
+
+            if (!identity.IsHuman)
             {
 
-                //This ship is a local AI
+                //AI
                 InputBroker = GetComponent<PlayerAI>().GetInputBroker();
 				
             }
-            else if (proxy_type == InputProxyType.Human)
+            else
             {
 
-                //This ship is a local human
+                //Human
                 if (SystemInfo.supportsAccelerometer)
                 {
 
@@ -60,7 +47,7 @@ public class InputProxy : MonoBehaviour, IInputBroker{
         else
         {
 
-            //This ship will take the input from the network
+            //Remote, don't care
             InputBroker = null;
 
         }

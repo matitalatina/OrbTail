@@ -86,7 +86,8 @@ public class PlayerBuilder : MonoBehaviour {
     [RPC]
     public void InitializePlayer(int id)
     {
-
+        //TODO: fixme!
+        /**
         PlayerIdentity.id = id;
 
         //Network-instantiate the ship of this player
@@ -95,15 +96,17 @@ public class PlayerBuilder : MonoBehaviour {
         Network.Instantiate(ship_object, 
                             GetSpawnPosition(), 
                             Quaternion.identity, 0);
-
+        */
     }
 
     private Vector3 GetSpawnPosition()
     {
-
+        //TODO: fixme!
         GameObject[] spawn_point = GameObject.FindGameObjectsWithTag(Tags.SpawnPoint);
-
+        /*
         return spawn_point[PlayerIdentity.id].transform.position;
+        */
+        return Vector3.zero;
 
     }
 

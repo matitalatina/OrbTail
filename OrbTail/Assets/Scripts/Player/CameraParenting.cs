@@ -6,10 +6,8 @@ public class CameraParenting : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        if( ( networkView.isMine ||
-              (!Network.isServer &&
-               !Network.isClient ) ) &&
-            GetComponent<InputProxy>().proxy_type == InputProxy.InputProxyType.Human)
+        if( NetworkHelper.IsOwnerSide(networkView) &&
+            GetComponent<PlayerIdentity>().IsHuman)
         {
 
             GameObject camera = GameObject.FindGameObjectWithTag(Tags.MainCamera);
