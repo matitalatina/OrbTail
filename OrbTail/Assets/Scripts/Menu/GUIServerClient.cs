@@ -46,7 +46,7 @@ public class GUIServerClient : MonoBehaviour {
                 {
 
                     //Loads the server builder
-                    gameObject.AddComponent<ServerBuilder>().EventMatchCreated += GUIServerClient_EventMatchCreated;
+                    gameObject.AddComponent<ServerBuilder_d>().EventMatchCreated += GUIServerClient_EventMatchCreated;
                     
 					single_player_button.SetActive(false);
                     server_button.gameObject.SetActive(false);
@@ -57,7 +57,7 @@ public class GUIServerClient : MonoBehaviour {
                 {
 
                     //Loads the client builder
-                    gameObject.AddComponent<ClientBuilder>().EventServerReady += GUIServerClient_EventServerReady;
+                    gameObject.AddComponent<ClientBuilder_d>().EventServerReady += GUIServerClient_EventServerReady;
 
 					single_player_button.SetActive(false);
                     server_button.gameObject.SetActive(false);
@@ -100,9 +100,10 @@ public class GUIServerClient : MonoBehaviour {
 
         this.enabled = false;
 
-		//Application.LoadLevel("ShipTest");
+        var builder = GetComponent<GameBuilder>();
 
-        GetComponent<GameBuilder>().InitializeSinglePlayerMatch("Flat");
+        builder.ArenaName = "Flat";
+        builder.InitializeSinglePlayer();
 
 	}
 

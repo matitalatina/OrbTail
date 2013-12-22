@@ -7,7 +7,10 @@ public class SinglePlayerBuilder : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+
+        //Loads the proper arena
+        Application.LoadLevel(GetComponent<GameBuilder>().ArenaName);
+
 	}
 	
 	// Update is called once per frame
@@ -29,6 +32,8 @@ public class SinglePlayerBuilder : MonoBehaviour {
 
         var factory = GameObjectFactory.Instance;
         GameObject player;
+
+        //TODO: remove this
 		List<GameObject> shipsInGame = new List<GameObject>();
 		Game globalDataGame = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
 
@@ -53,6 +58,7 @@ public class SinglePlayerBuilder : MonoBehaviour {
             }
             else
             {
+                //TODO: remove this
 				player.AddComponent<AudioListener>();
                 GameObject.FindGameObjectWithTag(Tags.MainCamera).GetComponent<CameraMovement>().LookAt(player);
 				globalDataGame.ActivePlayer = player;
@@ -64,9 +70,9 @@ public class SinglePlayerBuilder : MonoBehaviour {
 
         }
 
+        //TODO: remove this
 		globalDataGame.ShipsInGame = shipsInGame;
-
-
+        
     }
 
 }

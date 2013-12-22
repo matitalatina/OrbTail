@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ServerBuilder : PlayerBuilder {
+public class ServerBuilder_d : PlayerBuilder {
 
     /// <summary>
     /// Maximum players per match
@@ -57,15 +57,7 @@ public class ServerBuilder : PlayerBuilder {
     {
 
         base.Update();
-        /*
-        foreach (NetworkPlayer player in Network.connections)
-        {
-
-            Debug.Log(player.ipAddress + ": " + Network.GetLastPing(player));
-
-        }
-        */
-
+      
     }
 
     // A new level has been loaded

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ClientBuilder : PlayerBuilder {
+public class ClientBuilder_d : PlayerBuilder {
 
     void Awake()
     {
