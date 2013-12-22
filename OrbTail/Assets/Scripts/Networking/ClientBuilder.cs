@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HostBuilder : MonoBehaviour {
+public class ClientBuilder : NetworkPlayerBuilder {
 
 	// Use this for initialization
 	void Start () {
@@ -12,4 +12,5 @@ public class HostBuilder : MonoBehaviour {
 	void Update () {
 	
 	}
+
 }

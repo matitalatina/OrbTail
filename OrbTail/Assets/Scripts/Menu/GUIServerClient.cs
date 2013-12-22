@@ -45,28 +45,20 @@ public class GUIServerClient : MonoBehaviour {
                 if (raycast_hit.collider.gameObject == server_button)
                 {
 
-                    //Loads the server builder
-                    gameObject.AddComponent<ServerBuilder_d>().EventMatchCreated += GUIServerClient_EventMatchCreated;
-                    
-					single_player_button.SetActive(false);
-                    server_button.gameObject.SetActive(false);
-                    client_button.gameObject.SetActive(false);
-
+                    StartHost();
+					
                 }
                 else if (raycast_hit.collider.gameObject == client_button)
                 {
 
-                    //Loads the client builder
-                    gameObject.AddComponent<ClientBuilder_d>().EventServerReady += GUIServerClient_EventServerReady;
-
-					single_player_button.SetActive(false);
-                    server_button.gameObject.SetActive(false);
-                    client_button.gameObject.SetActive(false);
+                    StartClient();
 
                 }
 				else if (raycast_hit.collider.gameObject == single_player_button)
 				{
+
 					StartSinglePlayer();
+
 				}
                 else if (raycast_hit.collider.gameObject == start_button)
                 {
@@ -106,6 +98,30 @@ public class GUIServerClient : MonoBehaviour {
         builder.InitializeSinglePlayer();
 
 	}
+
+    private void StartHost()
+    {
+
+        this.enabled = false;
+
+        var builder = GetComponent<GameBuilder>();
+
+        builder.ArenaName = "Flat";
+        builder.InitializeHost();
+
+    }
+
+    private void StartClient()
+    {
+
+        this.enabled = false;
+
+        var builder = GetComponent<GameBuilder>();
+
+        builder.ArenaName = "Flat";
+        builder.InitializeClient();
+
+    }
 
     void GUIServerClient_EventMatchCreated(object sender)
     {
