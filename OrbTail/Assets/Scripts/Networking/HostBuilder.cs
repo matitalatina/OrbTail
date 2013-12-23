@@ -68,6 +68,7 @@ public class HostBuilder : NetworkPlayerBuilder
 
         //This prevents multiple registrations
         Registered = false;
+        RejectAllConnections = false;
 
         Debug.Log("Registering to master server...");
 
@@ -144,6 +145,25 @@ public class HostBuilder : NetworkPlayerBuilder
 
     }
 
+    void OnPlayerConnected(NetworkPlayer player)
+    {
+
+        if (!RejectAllConnections)
+        {
+
+            player_ids_.Add(player, 0);
+
+        }
+        else
+        {
+
+            Debug.Log("A player has been rejected");
+            Network.CloseConnection(player, true);
+
+        }
+
+    }
+
     void OnPlayerDisconnected(NetworkPlayer player)
     {
 
@@ -193,6 +213,8 @@ public class HostBuilder : NetworkPlayerBuilder
         PlayerIdentity identity = GetComponents<PlayerIdentity>().SkipWhile((PlayerIdentity p) => { return !p.IsHuman; }).First();
 
         //Register the server identity
+        player_ids_.Add(Network.player, available_ids_.Pop());
+
         RPCRegisterPlayer(Network.player, identity.Name);
         
     }
@@ -220,6 +242,8 @@ public class HostBuilder : NetworkPlayerBuilder
             ready_players_.Count > 1)
         {
 
+            RejectAllConnections = true;
+
             ready_players_.Clear();
 
             Debug.Log("All players are ready");
@@ -240,26 +264,31 @@ public class HostBuilder : NetworkPlayerBuilder
 
     protected override void RegisterPlayer(NetworkPlayer player, string name)
     {
- 	    
-        var id = available_ids_.Pop();
 
-        Debug.Log("Player " + id + " is now online");
-
-        player_ids_.Add(player, id);
-
-        networkView.RPC("RPCPlayerRegistered", RPCMode.AllBuffered, id, name);
-
-        if (Network.player.Equals(player))
+        if (player_ids_.ContainsKey(player))
         {
 
-            RPCIdAcquired(id);
+            var id = available_ids_.Pop();
 
-        }
-        else
-        {
+            Debug.Log("Player " + id + " is now online");
 
-            networkView.RPC("RPCIdAcquired", player, id);
+            player_ids_[player] = id;
 
+            networkView.RPC("RPCPlayerRegistered", RPCMode.AllBuffered, id, name);
+
+            if (Network.player.Equals(player))
+            {
+
+                RPCIdAcquired(id);
+
+            }
+            else
+            {
+
+                networkView.RPC("RPCIdAcquired", player, id);
+
+            }
+        
         }
         
     }
@@ -343,5 +372,10 @@ public class HostBuilder : NetworkPlayerBuilder
     /// Is the host registered?
     /// </summary>
     private bool Registered { get; set; }
+
+    /// <summary>
+    /// Indicate whether the server should reject all the incoming connection (when the match started, for example)
+    /// </summary>
+    private bool RejectAllConnections { get; set; }
 
 }
