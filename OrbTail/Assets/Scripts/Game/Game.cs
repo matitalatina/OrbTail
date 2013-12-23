@@ -7,7 +7,7 @@ public class Game : MonoBehaviour {
 
     #region Events
 
-    public delegate void DelegateGameStart(object sender);
+    public delegate void DelegateGameStart(object sender, int countdown);
 
     public delegate void DelegateGameEnd(object sender);
 
@@ -19,54 +19,61 @@ public class Game : MonoBehaviour {
 
     public event DelegateGameTick EventTick;
 
-    [RPC]
-    private void RPCNotifyStart()
+    private void NotifyStart(int countdown)
     {
 
-        if (EventStart != null)
+        if (NetworkHelper.IsServerSide())
         {
 
-            EventStart(this);
+            if (EventStart != null)
+            {
+
+                EventStart(this, countdown);
+
+            }
+
+            if (Network.isServer)
+            {
+
+                networkView.RPC("RPCNotifyStart", RPCMode.Others);
+
+            }
 
         }
-
-        if (Network.isServer)
-        {
-
-            networkView.RPC("RPCNotifyStart", RPCMode.Others);
-
-        }
-
+       
     }
+
+    private void NotifyEnd()
+    {
+
+        if (NetworkHelper.IsServerSide())
+        {
+
+            if (EventEnd != null)
+            {
+
+                EventEnd(this);
+
+            }
+
+            if (Network.isServer)
+            {
+
+                networkView.RPC("RPCNotifyEnd", RPCMode.Others);
+
+            }
+
+        }
         
-    [RPC]
-    private void RPCNotifyEnd()
-    {
-
-        if (EventEnd != null)
-        {
-
-            EventEnd(this);
-
-        }
-
-        if (Network.isServer)
-        {
-
-            networkView.RPC("RPCNotifyEnd", RPCMode.Others);
-
-        }
-
-
     }
 
-    private void NotifyTick()
+    private void NotifyTick(int time_left)
     {
 
         if (EventTick != null)
         {
 
-            EventTick(this, TimeLeft);
+            EventTick(this, time_left);
 
         }
 
@@ -74,11 +81,15 @@ public class Game : MonoBehaviour {
 
     #endregion
 
-
     /// <summary>
     /// Match duration in seconds
     /// </summary>
     public int MatchDuration;
+
+    /// <summary>
+    /// Countdown duration in seconds
+    /// </summary>
+    public int CountdownDuration;
 
     /// <summary>
     /// Returns the active player
@@ -129,63 +140,75 @@ public class Game : MonoBehaviour {
 
     }
 
-    /// <summary>
-    /// Time left
-    /// </summary>
-    public int TimeLeft { get; private set; }
-
 	// Use this for initialization
 	void Start () {
 
-        start_time = Time.time;
-
-        TimeLeft = MatchDuration;
-
-        tick_accumulator = 0.0f;
-
-        EventTick += Game_EventTick;
+        StartCoroutine("UpdateCountdown");
 
 	}
-
-    void Game_EventTick(object sender, int time_left)
-    {
-
-        Debug.Log(time_left);
-
-    }
 	
 	// Update is called once per frame
 	void Update () {
 
-        TimeLeft = Mathf.Max(0, MatchDuration - Mathf.FloorToInt(Time.time - start_time));
 
-        tick_accumulator += Time.deltaTime;
-
-        if (tick_accumulator >= 1.0f)
-        {
-
-            NotifyTick();
-            tick_accumulator = 0.0f;
-
-        }
-
-        if (TimeLeft <= 0 &&
-            NetworkHelper.IsServerSide())
-        {
-
-            RPCNotifyEnd();
-
-        }
+     
 
 	}
+
+    /// <summary>
+    /// Used to update the countdown timer
+    /// </summary>
+    private IEnumerator UpdateCountdown()
+    {
+
+        int counter = CountdownDuration;
+
+        do
+        {
+
+            NotifyStart(counter);
+
+            yield return new WaitForSeconds(1);
+
+            counter--;
+
+        } while (counter > 0);
+
+        //End of the countdown
+        NotifyStart(0);
+
+        StartCoroutine("UpdateGameTime");
+        
+    }
+
+    /// <summary>
+    /// Used to update the game time
+    /// </summary>
+    private IEnumerator UpdateGameTime()
+    {
+
+        int counter = MatchDuration;
+
+        do
+        {
+
+            NotifyTick(counter);
+
+            yield return new WaitForSeconds(1);
+
+            counter--;
+
+        } while (counter > 0);
+
+        //End of the game
+        NotifyEnd();
+
+    }
 
     private IEnumerable<GameObject> ships_ = null;
 
     private GameObject active_player_ = null;
 
-    private float start_time = 0.0f;
-
-    private float tick_accumulator = 0.0f;
     
 
 }
