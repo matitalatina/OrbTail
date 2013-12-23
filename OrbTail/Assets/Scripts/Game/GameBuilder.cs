@@ -9,12 +9,12 @@ public class GameBuilder : MonoBehaviour {
 
     public const int kMaxPlayerCount = 4;
     public const int kServerPort = 6059;
-    public const string kGameName = "OrbTail";
+    public const string kGameTypeName = "OrbTail";
 
     /// <summary>
     /// The current arena name
     /// </summary>
-    public string ArenaName { get; set; }
+    public string ArenaName;
 
     /// <summary>
     /// Initialize a local match, only one human is allowed! (the identities are attached to the master game object)
@@ -25,7 +25,7 @@ public class GameBuilder : MonoBehaviour {
 
         DontDestroyOnLoad(gameObject);
 
-        GetComponent<SinglePlayerBuilder>().enabled = true;
+        gameObject.AddComponent<SinglePlayerBuilder>();
 
         this.enabled = false;
 
@@ -39,14 +39,23 @@ public class GameBuilder : MonoBehaviour {
 
         DontDestroyOnLoad(gameObject);
 
-        GetComponent<HostBuilder>().enabled = true;
+        gameObject.AddComponent<HostBuilder>();
 
         this.enabled = false;
 
     }
 
+    /// <summary>
+    /// Initializes a client
+    /// </summary>
     public void InitializeClient()
     {
+
+        DontDestroyOnLoad(gameObject);
+
+        gameObject.AddComponent<ClientBuilder>();
+
+        this.enabled = false;
 
     }
 

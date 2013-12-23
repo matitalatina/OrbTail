@@ -10,13 +10,9 @@ public class HostBuilder : NetworkPlayerBuilder
 
     public delegate void DelegateRegistrationSucceeded(object sender);
 
-    public delegate void DelegatePlayerDisconnected(object sender, NetworkPlayer network_player);
-
     public delegate void DelegateErrorOccurred(object sender, string message);
 
     public event DelegateRegistrationSucceeded EventRegistrationSucceeded;
-
-    public event DelegatePlayerDisconnected EventPlayerDisconnected;
 
     public event DelegateErrorOccurred EventErrorOccurred;
 
@@ -27,18 +23,6 @@ public class HostBuilder : NetworkPlayerBuilder
         {
 
             EventRegistrationSucceeded(this);
-
-        }
-
-    }
-
-    private void NotifyPlayerDisconnected(NetworkPlayer network_player)
-    {
-
-        if (EventPlayerDisconnected != null)
-        {
-
-            EventPlayerDisconnected(this, network_player);
 
         }
 
@@ -78,7 +62,12 @@ public class HostBuilder : NetworkPlayerBuilder
             available_ids_.Push(i);
 
         }
-        
+
+        //This prevents multiple registrations
+        Registered = false;
+
+        Debug.Log("Registering to master server...");
+
         //Register the match
         if (!LocalMasterServer)
         {
@@ -91,8 +80,7 @@ public class HostBuilder : NetworkPlayerBuilder
                                      GameBuilder.kServerPort,
                                      !Network.HavePublicAddress());
 
-            MasterServer.RegisterHost(GameBuilder.kGameName,
-                                      random.Next().ToString(),
+            MasterServer.RegisterHost(GameBuilder.kGameTypeName,
                                       GetComponent<GameBuilder>().ArenaName);
 
         }
@@ -120,9 +108,19 @@ public class HostBuilder : NetworkPlayerBuilder
 
             case MasterServerEvent.RegistrationSucceeded:
 
-                NotifyRegistrationSucceeded();
-                break;
+                if (!Registered)
+                {
 
+                    Debug.Log("Registration successful");
+
+                    Registered = true;
+
+                    NotifyRegistrationSucceeded();
+
+                }
+
+                break;
+                
             case MasterServerEvent.RegistrationFailedNoServer:
 
                 NotifyErrorOccurred("The server is unreachable.");
@@ -150,6 +148,9 @@ public class HostBuilder : NetworkPlayerBuilder
 
         if (player_ids_.TryGetValue(player, out id))
         {
+
+            Debug.Log("Player " + id + " is now offline");
+
 
             available_ids_.Push(id);
             ready_players_.Remove(id);
@@ -192,12 +193,14 @@ public class HostBuilder : NetworkPlayerBuilder
         {
             
             ready_players_.Add(id);
+            Debug.Log("Player " + id + " is ready");
 
         }
         else
         {
 
             ready_players_.Remove(id);
+            Debug.Log("Player " + id + " is not ready anymore");
 
         }
         
@@ -205,18 +208,20 @@ public class HostBuilder : NetworkPlayerBuilder
         if (ready_players_.Count == player_ids_.Count)
         {
 
+            Debug.Log("All players are ready");
             //Every player is ready
             //TODO: do something good :D
 
         }
 
     }
-    	
-    [RPC]
-    private void RPCRegisterPlayer(NetworkPlayer player, string name)
-    {
 
+    protected override void RegisterPlayer(NetworkPlayer player, string name)
+    {
+ 	    
         var id = available_ids_.Pop();
+
+        Debug.Log("Player " + id + " is now online");
 
         player_ids_.Add(player, id);
 
@@ -235,7 +240,6 @@ public class HostBuilder : NetworkPlayerBuilder
 
         }
         
-        
     }
 
     /// <summary>
@@ -252,5 +256,10 @@ public class HostBuilder : NetworkPlayerBuilder
     /// The set of all ready players
     /// </summary>
     private HashSet<int> ready_players_;
+
+    /// <summary>
+    /// Is the host registered?
+    /// </summary>
+    private bool Registered { get; set; }
 
 }

@@ -63,8 +63,6 @@ public class GUIServerClient : MonoBehaviour {
                 else if (raycast_hit.collider.gameObject == start_button)
                 {
 
-                    MasterServer.UnregisterHost();      //No more connections are allowed from now on
-
                     NextLevel();
 
                 }
@@ -94,7 +92,6 @@ public class GUIServerClient : MonoBehaviour {
 
         var builder = GetComponent<GameBuilder>();
 
-        builder.ArenaName = "Flat";
         builder.InitializeSinglePlayer();
 
 	}
@@ -106,7 +103,6 @@ public class GUIServerClient : MonoBehaviour {
 
         var builder = GetComponent<GameBuilder>();
 
-        builder.ArenaName = "Flat";
         builder.InitializeHost();
 
     }
@@ -118,7 +114,6 @@ public class GUIServerClient : MonoBehaviour {
 
         var builder = GetComponent<GameBuilder>();
 
-        builder.ArenaName = "Flat";
         builder.InitializeClient();
 
     }

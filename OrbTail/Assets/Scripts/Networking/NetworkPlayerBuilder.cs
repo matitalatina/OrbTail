@@ -73,7 +73,7 @@ public class NetworkPlayerBuilder : MonoBehaviour
 
         if (EventIdAcquired != null)
         {
-
+        
             EventIdAcquired(this, id);
 
         }
@@ -148,5 +148,21 @@ public class NetworkPlayerBuilder : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Request the registration of a player
+    /// </summary>
+    [RPC]
+    protected void RPCRegisterPlayer(NetworkPlayer player, string name)
+    {
+
+        RegisterPlayer(player, name);
+
+    }
+
+    protected virtual void RegisterPlayer(NetworkPlayer player, string name){
+
+        //Let the host builder implement this
+
+    }
 
 }
