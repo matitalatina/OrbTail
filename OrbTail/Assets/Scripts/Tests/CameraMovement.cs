@@ -26,14 +26,6 @@ public class CameraMovement : MonoBehaviour {
     void Start()
     {
 
-        var game = GameObject.FindGameObjectWithTag(Tags.Game);
-
-        if (game != null)
-        {
-
-            LookAt(game.GetComponent<Game>().ActivePlayer);
-
-        }
         
     }
 

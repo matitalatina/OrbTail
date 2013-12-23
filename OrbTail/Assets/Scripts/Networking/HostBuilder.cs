@@ -170,6 +170,14 @@ public class HostBuilder : NetworkPlayerBuilder
         }
 
     }
+    
+    // A new level has been loaded
+    void OnLevelWasLoaded(int level)
+    {
+
+        ArenaLoaded(Id);
+
+    }
 
     private void HostBuilder_EventErrorOccurred(object sender, string message)
     {
@@ -211,6 +219,8 @@ public class HostBuilder : NetworkPlayerBuilder
         if (ready_players_.Count == player_ids_.Count &&
             ready_players_.Count > 1)
         {
+
+            ready_players_.Clear();
 
             Debug.Log("All players are ready");
 
@@ -254,10 +264,63 @@ public class HostBuilder : NetworkPlayerBuilder
         
     }
 
-    protected override void ArenaLoaded(NetworkPlayer player)
+    protected override void ArenaLoaded(int id)
     {
-        
-        //Wait for every client then start the initialization of the ships
+
+        ready_players_.Add(id);
+
+        if (ready_players_.Count == player_ids_.Count)
+        {
+
+            //Everyone loaded the arena, start intializing
+            ready_players_.Clear();
+
+            //Create the game
+            var game_resource = Resources.Load("Prefabs/Game");
+
+            GameObject game = Network.Instantiate(game_resource, Vector3.zero, Quaternion.identity, 0) as GameObject;
+            
+            //Create the ships
+            GameObject[] spawn_points = GameObject.FindGameObjectsWithTag(Tags.SpawnPoint);
+
+            foreach (KeyValuePair<NetworkPlayer, int> player_id in player_ids_)
+            {
+
+                if (!player_id.Key.Equals(Network.player))
+                {
+
+                    networkView.RPC("RPCCreatePlayer", player_id.Key, spawn_points[player_id.Value].transform.position);
+
+                }
+                else
+                {
+
+                    RPCCreatePlayer(spawn_points[player_id.Value].transform.position);
+
+                }
+
+            }
+
+        }
+
+    }
+
+    protected override void PlayerCreated(int id)
+    {
+
+        ready_players_.Add(id);
+
+        if (ready_players_.Count == player_ids_.Count)
+        {
+
+            //Everyone created its own ship, start the match!
+            ready_players_.Clear();
+
+            var game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
+
+            game.networkView.RPC("RPCGameEnable", RPCMode.All, true);
+
+        }
 
     }
 

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 public class NetworkPlayerBuilder : MonoBehaviour
 {
@@ -91,26 +92,7 @@ public class NetworkPlayerBuilder : MonoBehaviour
         networkView.RPC("RPCPlayerReady", RPCMode.All, Id, value);
 
     }
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
     
-    // A new level has been loaded
-    void OnLevelWasLoaded(int level)
-    {
-
-        //Tells the server that the arena was loaded successfully
-        networkView.RPC("RPCArenaLoaded", RPCMode.Server, Network.player);
-
-    }
-
     /// <summary>
     /// Called when this device has acquired an id
     /// </summary>
@@ -186,20 +168,62 @@ public class NetworkPlayerBuilder : MonoBehaviour
     /// Called when the arena has been loaded
     /// </summary>
     [RPC]
-    protected void RPCArenaLoaded(NetworkPlayer player)
+    protected void RPCArenaLoaded(int id)
     {
 
-        ArenaLoaded(player);
+        ArenaLoaded(id);
 
     }
-    
+
+    [RPC]
+    protected void RPCCreatePlayer(Vector3 position)
+    {
+
+        //Player identity. Assuming that only one player identity exists
+        var identity = GetComponent<PlayerIdentity>();
+
+        var player_ship = Resources.Load("Prefabs/Ships/" + identity.ShipName);
+
+        GameObject player = Network.Instantiate( player_ship, position, Quaternion.identity, 0) as GameObject;
+
+        identity.CopyTo(player.GetComponent<PlayerIdentity>());
+
+        player.AddComponent<AudioListener>();
+        player.GetComponent<GameIdentity>().Id = Id;
+
+        Destroy(identity);
+
+        //Tells the server that the player is ready to go
+        networkView.RPC("RPCPlayerCreated", RPCMode.Server, Id);
+
+        //Find the camera
+        GameObject.FindGameObjectWithTag(Tags.MainCamera).GetComponent<CameraMovement>().LookAt(player);
+
+    }
+
+    [RPC]
+    protected void RPCPlayerCreated(int id)
+    {
+
+        PlayerCreated(id);
+
+    }
+
     protected virtual void RegisterPlayer(NetworkPlayer player, string name){
 
         //Let the host builder implement this
 
     }
 
-    protected virtual void ArenaLoaded(NetworkPlayer player) {
+    protected virtual void ArenaLoaded(int id)
+    {
+
+        //Let the host builder implement this
+
+    }
+
+    protected virtual void PlayerCreated(int id)
+    {
 
         //Let the host builder implement this
 

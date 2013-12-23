@@ -58,6 +58,8 @@ public class SinglePlayerBuilder : MonoBehaviour {
 
 				player.AddComponent<AudioListener>();
 
+                GameObject.FindGameObjectWithTag(Tags.MainCamera).GetComponent<CameraMovement>().LookAt(player);
+
             }
 
             ++player_id;

@@ -135,6 +135,16 @@ public class ClientBuilder : NetworkPlayerBuilder {
         }
 
     }
+    
+    // A new level has been loaded
+    void OnLevelWasLoaded(int level)
+    {
+
+        //Tells the server that the arena was loaded successfully
+        networkView.RPC("RPCArenaLoaded", RPCMode.Server, Id);
+
+    }
+
 
     private void ClientBuilder_EventIdAcquired(object sender, int id)
     {
