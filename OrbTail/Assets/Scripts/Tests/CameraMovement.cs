@@ -23,6 +23,15 @@ public class CameraMovement : MonoBehaviour {
 	
     }
 
+    void Start()
+    {
+
+        var game = GameObject.FindGameObjectWithTag(Tags.Game);
+
+        LookAt(game.GetComponent<Game>().ActivePlayer);
+
+    }
+
 	void Awake ()
 	{
 	}

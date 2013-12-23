@@ -34,8 +34,7 @@ public class SinglePlayerBuilder : MonoBehaviour {
         GameObject player;
 
         //TODO: remove this
-		List<GameObject> shipsInGame = new List<GameObject>();
-		Game globalDataGame = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
+		Game game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
 
         foreach (PlayerIdentity identity in identities)
         {
@@ -43,25 +42,23 @@ public class SinglePlayerBuilder : MonoBehaviour {
             player = factory.Instantiate("Prefabs/Ships/" + identity.ShipName, 
                                          spawn_points[player_id].transform.position, 
                                          Quaternion.identity) as GameObject;
-			shipsInGame.Add(player);
 
             identity.CopyTo(player.GetComponent<PlayerIdentity>());
 
             player.GetComponent<GameIdentity>().Id = player_id;
 
+            //TODO: find a better way
             if (!identity.IsHuman)
             {
 
-                //That's an AI!
                 player.AddComponent<PlayerAI>();
 
             }
             else
             {
-                //TODO: remove this
+
 				player.AddComponent<AudioListener>();
-                GameObject.FindGameObjectWithTag(Tags.MainCamera).GetComponent<CameraMovement>().LookAt(player);
-				globalDataGame.ActivePlayer = player;
+
             }
 
             ++player_id;
@@ -70,9 +67,6 @@ public class SinglePlayerBuilder : MonoBehaviour {
 
         }
 
-        //TODO: remove this
-		globalDataGame.ShipsInGame = shipsInGame;
-        
     }
 
 }
