@@ -60,12 +60,6 @@ public class GUIServerClient : MonoBehaviour {
 					StartSinglePlayer();
 
 				}
-                else if (raycast_hit.collider.gameObject == start_button)
-                {
-
-                    NextLevel();
-
-                }
 
             }
 
@@ -74,18 +68,6 @@ public class GUIServerClient : MonoBehaviour {
 	}
 
     
-
-    private void NextLevel()
-    {
-        
-        this.enabled = false;
-
-        DontDestroyOnLoad(gameObject);      //The Game should be preserved
-
-        Application.LoadLevel("NetworkTest");
-
-    }
-
 	private void StartSinglePlayer() {
 
         this.enabled = false;
@@ -117,20 +99,5 @@ public class GUIServerClient : MonoBehaviour {
         builder.InitializeClient();
 
     }
-
-    void GUIServerClient_EventMatchCreated(object sender)
-    {
-
-        start_button.gameObject.SetActive(true);
-
-    }
-
-    void GUIServerClient_EventServerReady(object sender)
-    {
-
-        NextLevel();
-
-    }
-
 
 }

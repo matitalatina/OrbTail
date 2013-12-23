@@ -28,8 +28,13 @@ public class CameraMovement : MonoBehaviour {
 
         var game = GameObject.FindGameObjectWithTag(Tags.Game);
 
-        LookAt(game.GetComponent<Game>().ActivePlayer);
+        if (game != null)
+        {
 
+            LookAt(game.GetComponent<Game>().ActivePlayer);
+
+        }
+        
     }
 
 	void Awake ()

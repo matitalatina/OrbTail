@@ -42,6 +42,8 @@ public class HostBuilder : NetworkPlayerBuilder
 
     #endregion
 
+    public const int kMatchStartDelay = 5;
+
 	// Use this for initialization
 	void Start () {
 
@@ -54,6 +56,7 @@ public class HostBuilder : NetworkPlayerBuilder
         EventRegistrationSucceeded += HostBuilder_EventRegistrationSucceeded;
         EventErrorOccurred += HostBuilder_EventErrorOccurred;
         EventPlayerReady += HostBuilder_EventPlayerReady;
+        EventIdAcquired += HostBuilder_EventIdAcquired;
 
         //Store the available ids
         for (int i = 0; i < GameBuilder.kMaxPlayerCount; i++)
@@ -205,14 +208,23 @@ public class HostBuilder : NetworkPlayerBuilder
         }
         
 
-        if (ready_players_.Count == player_ids_.Count)
+        if (ready_players_.Count == player_ids_.Count &&
+            ready_players_.Count > 1)
         {
 
             Debug.Log("All players are ready");
-            //Every player is ready
-            //TODO: do something good :D
+
+            //Every device should load the proper arena
+            networkView.RPC("RPCLoadArena", RPCMode.All, GetComponent<GameBuilder>().ArenaName);
 
         }
+
+    }
+
+    void HostBuilder_EventIdAcquired(object sender, int id)
+    {
+
+        SetReady(true);
 
     }
 
@@ -240,6 +252,13 @@ public class HostBuilder : NetworkPlayerBuilder
 
         }
         
+    }
+
+    protected override void ArenaLoaded(NetworkPlayer player)
+    {
+        
+        //Wait for every client then start the initialization of the ships
+
     }
 
     /// <summary>

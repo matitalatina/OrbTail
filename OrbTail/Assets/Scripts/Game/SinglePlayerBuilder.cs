@@ -8,6 +8,8 @@ public class SinglePlayerBuilder : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
+        DontDestroyOnLoad(gameObject);
+
         //Loads the proper arena
         Application.LoadLevel(GetComponent<GameBuilder>().ArenaName);
 

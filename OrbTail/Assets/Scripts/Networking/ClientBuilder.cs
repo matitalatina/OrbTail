@@ -141,6 +141,9 @@ public class ClientBuilder : NetworkPlayerBuilder {
 
         Debug.Log("Acquiring id " + id);
 
+        //TODO: remove this
+        SetReady(true);
+
     }
 
     /// <summary>

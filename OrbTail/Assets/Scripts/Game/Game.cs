@@ -59,14 +59,63 @@ public class Game : MonoBehaviour {
     #endregion
 
     /// <summary>
-    /// Match duration in seconds
-    /// </summary>
-    public int MatchDuration;
-
-    /// <summary>
     /// Countdown duration in seconds
     /// </summary>
-    public int CountdownDuration;
+    public int CountdownDuration = 3;
+
+    /// <summary>
+    /// Match duration in seconds
+    /// </summary>
+    public int Duration{
+
+        get
+        {
+
+            return duration_;
+
+        }
+        set
+        {
+
+            duration_ = value;
+
+            if (Network.isServer)
+            {
+
+                networkView.RPC("RPCSetDuration", RPCMode.OthersBuffered, duration_);
+
+            }
+
+        }
+    }
+
+    /// <summary>
+    /// The current game mode
+    /// </summary>
+    public int GameMode
+    {
+
+        get
+        {
+
+            return game_mode_;
+
+        }
+        set
+        {
+
+            game_mode_ = value;
+
+            if (Network.isServer)
+            {
+
+                networkView.RPC("RPCSetGameMode", RPCMode.OthersBuffered, game_mode_);
+
+            }
+
+        }
+
+    }
 
     /// <summary>
     /// Returns the active player
@@ -164,7 +213,7 @@ public class Game : MonoBehaviour {
     private IEnumerator UpdateGameTime()
     {
 
-        int counter = MatchDuration;
+        int counter = Duration;
 
         do
         {
@@ -193,10 +242,36 @@ public class Game : MonoBehaviour {
         
     }
 
+    [RPC]
+    private void RPCSetGameMode(int game_mode)
+    {
+
+        GameMode = game_mode;
+
+    }
+    
+    [RPC]
+    private void RPCSetDuration(int duration)
+    {
+
+        Duration = duration_;
+
+    }
+
+    [RPC]
+    private void RPCGameEnable(bool value)
+    {
+
+        this.enabled = value;
+
+    }
+
     private IEnumerable<GameObject> ships_ = null;
 
     private GameObject active_player_ = null;
 
-    
+    private int game_mode_;
+
+    private int duration_;
 
 }

@@ -102,6 +102,15 @@ public class NetworkPlayerBuilder : MonoBehaviour
 	
 	}
     
+    // A new level has been loaded
+    void OnLevelWasLoaded(int level)
+    {
+
+        //Tells the server that the arena was loaded successfully
+        networkView.RPC("RPCArenaLoaded", RPCMode.Server, Network.player);
+
+    }
+
     /// <summary>
     /// Called when this device has acquired an id
     /// </summary>
@@ -159,7 +168,38 @@ public class NetworkPlayerBuilder : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Loads an arena
+    /// </summary>
+    /// <param name="arena">arena name</param>
+    [RPC]
+    protected void RPCLoadArena(string arena)
+    {
+
+        DontDestroyOnLoad(gameObject);
+
+        Application.LoadLevel(arena);
+
+    }
+
+    /// <summary>
+    /// Called when the arena has been loaded
+    /// </summary>
+    [RPC]
+    protected void RPCArenaLoaded(NetworkPlayer player)
+    {
+
+        ArenaLoaded(player);
+
+    }
+    
     protected virtual void RegisterPlayer(NetworkPlayer player, string name){
+
+        //Let the host builder implement this
+
+    }
+
+    protected virtual void ArenaLoaded(NetworkPlayer player) {
 
         //Let the host builder implement this
 
