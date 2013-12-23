@@ -22,46 +22,23 @@ public class Game : MonoBehaviour {
     private void NotifyStart(int countdown)
     {
 
-        if (NetworkHelper.IsServerSide())
+        if (EventStart != null)
         {
 
-            if (EventStart != null)
-            {
-
-                EventStart(this, countdown);
-
-            }
-
-            if (Network.isServer)
-            {
-
-                networkView.RPC("RPCNotifyStart", RPCMode.Others);
-
-            }
+            EventStart(this, countdown);
 
         }
-       
+
     }
 
+    [RPC]
     private void NotifyEnd()
     {
 
-        if (NetworkHelper.IsServerSide())
+        if (EventEnd != null)
         {
 
-            if (EventEnd != null)
-            {
-
-                EventEnd(this);
-
-            }
-
-            if (Network.isServer)
-            {
-
-                networkView.RPC("RPCNotifyEnd", RPCMode.Others);
-
-            }
+            EventEnd(this);
 
         }
         
@@ -200,9 +177,20 @@ public class Game : MonoBehaviour {
 
         } while (counter > 0);
 
-        //End of the game
-        NotifyEnd();
+        //End of the game (only the server can declare the end of a match)
+        if (Network.isServer)
+        {
 
+            networkView.RPC("NotifyEnd", RPCMode.All);
+
+        }
+        else
+        {
+
+            NotifyEnd();
+
+        }
+        
     }
 
     private IEnumerable<GameObject> ships_ = null;
