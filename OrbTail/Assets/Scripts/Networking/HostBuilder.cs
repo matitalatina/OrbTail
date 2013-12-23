@@ -308,6 +308,9 @@ public class HostBuilder : NetworkPlayerBuilder
             var game_resource = Resources.Load("Prefabs/Game");
 
             GameObject game = Network.Instantiate(game_resource, Vector3.zero, Quaternion.identity, 0) as GameObject;
+
+            //Set the game mode and the arena
+            game.networkView.RPC("RPCSetGame", RPCMode.All, GameModes.Resolve( GetComponent<GameBuilder>().GameMode ) );
             
             //Create the ships
             GameObject[] spawn_points = GameObject.FindGameObjectsWithTag(Tags.SpawnPoint);

@@ -17,6 +17,11 @@ public class GameBuilder : MonoBehaviour {
     public string ArenaName;
 
     /// <summary>
+    /// The current game mode
+    /// </summary>
+    public int GameMode = GameModes.Any;
+
+    /// <summary>
     /// Initialize a local match, only one human is allowed! (the identities are attached to the master game object)
     /// </summary>
     /// <param name="arena_name">The arena to load</param>

@@ -69,10 +69,12 @@ public class SinglePlayerBuilder : MonoBehaviour {
         }
 
         //Loads the Game prefab and enables the Game component
-        var game = GameObjectFactory.Instance.Instantiate("Prefabs/Game", Vector3.zero, Quaternion.identity);
-        
-        game.GetComponent<Game>().enabled = true;
+        var game_obj = GameObjectFactory.Instance.Instantiate("Prefabs/Game", Vector3.zero, Quaternion.identity);
 
+        var game = game_obj.GetComponent<Game>();
+
+        game.GameMode = GameModes.Resolve(GetComponent<GameBuilder>().GameMode);
+        game.enabled = true;
 
     }
 

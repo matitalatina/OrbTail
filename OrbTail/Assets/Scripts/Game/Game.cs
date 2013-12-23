@@ -64,56 +64,20 @@ public class Game : MonoBehaviour {
     public int CountdownDuration = 3;
 
     /// <summary>
-    /// Match duration in seconds
-    /// </summary>
-    public int Duration{
-
-        get
-        {
-
-            return duration_;
-
-        }
-        set
-        {
-
-            duration_ = value;
-
-            if (Network.isServer)
-            {
-
-                networkView.RPC("RPCSetDuration", RPCMode.OthersBuffered, duration_);
-
-            }
-
-        }
-    }
-
-    /// <summary>
     /// The current game mode
     /// </summary>
-    public int GameMode
+    public int GameMode = -1;
+
+    /// <summary>
+    /// The current duration
+    /// </summary>
+    public int Duration = 300;
+
+    [RPC]
+    public void RPCSetGame(int game_mode)
     {
 
-        get
-        {
-
-            return game_mode_;
-
-        }
-        set
-        {
-
-            game_mode_ = value;
-
-            if (Network.isServer)
-            {
-
-                networkView.RPC("RPCSetGameMode", RPCMode.OthersBuffered, game_mode_);
-
-            }
-
-        }
+        GameMode = game_mode;
 
     }
 
