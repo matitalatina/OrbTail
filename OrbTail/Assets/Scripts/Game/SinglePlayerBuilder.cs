@@ -33,9 +33,6 @@ public class SinglePlayerBuilder : MonoBehaviour {
         var factory = GameObjectFactory.Instance;
         GameObject player;
 
-        //TODO: remove this
-		Game game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
-
         foreach (PlayerIdentity identity in identities)
         {
 
