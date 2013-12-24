@@ -22,7 +22,7 @@ public abstract class PowerView
     /// <summary>
     /// Get the readyness of this power. 1 if ready, less than 1 otherwise
     /// </summary>
-    protected abstract float IsReady{ get; }
+    public abstract float IsReady{ get; }
 
     protected void Destroy(int group)
     {

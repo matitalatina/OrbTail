@@ -12,7 +12,7 @@ public class Boost : Power
 
     public Boost() : base(PowerGroups.Passive, float.MaxValue, "Boost") {}
     
-    protected override float IsReady
+    public override float IsReady
     {
         get
         {

@@ -33,7 +33,7 @@ public class Jam : Power
         }
     }
     
-    protected override float IsReady { get { return 0.0f; } }
+    public override float IsReady { get { return 0.0f; } }
 
     public override Power Generate()
     {

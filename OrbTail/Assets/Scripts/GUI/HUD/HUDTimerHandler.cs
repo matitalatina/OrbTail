@@ -28,5 +28,9 @@ public class HUDTimerHandler : MonoBehaviour {
 		var min = timeLeft / 60;
 		var sec = timeLeft % 60;
 		textMesh.text = string.Format("{0:00}:{1:00}", min, sec);
+
+		if (timeLeft <= 10 && timeLeft > 0) {
+			iTween.ColorFrom(gameObject, Color.red, 1f);
+		}
 	}
 }

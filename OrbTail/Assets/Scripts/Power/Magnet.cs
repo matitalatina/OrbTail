@@ -29,7 +29,7 @@ public class Magnet : Power {
 		
 	}
 	
-	protected override float IsReady { get { return 1.0f; } }
+	public override float IsReady { get { return 1.0f; } }
 	
 	public override Power Generate()
 	{

@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public class HUDInitialCountdownHandler : MonoBehaviour {
+public class HUDGamePhaseHandler : MonoBehaviour {
 
 	private TextMesh textMeshCountdown;
 	private Light mainLight;
@@ -13,6 +14,7 @@ public class HUDInitialCountdownHandler : MonoBehaviour {
 	void Start () {
 		Game game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
 		game.EventStart += OnStart;
+		game.EventEnd += OnGameOver;
 		
 		textMeshCountdown = GetComponent<TextMesh>();
 		mainLight = GameObject.FindGameObjectWithTag(Tags.MainLight).GetComponent<Light>();
@@ -46,5 +48,15 @@ public class HUDInitialCountdownHandler : MonoBehaviour {
 
 	private void ChangeLightIntensity(float intensity) {
 		mainLight.intensity = intensity;
+	}
+
+	private void OnGameOver(object sender, System.Collections.Generic.IList<GameObject> rank) {
+		textMeshCountdown.text = "Game Over";
+		iTween.FadeTo(this.gameObject, 1f, 2f);
+		iTween.ValueTo(this.gameObject, iTween.Hash(
+			"from", standardLightPower,
+			"to", initialLightPower,
+			"onUpdate","ChangeLightIntensity"));
+
 	}
 }

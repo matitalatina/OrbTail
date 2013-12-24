@@ -167,7 +167,7 @@ public abstract class Power : PowerView
 
     }
 
-    protected override float IsReady
+    public override float IsReady
     {
 
         get

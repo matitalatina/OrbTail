@@ -72,7 +72,8 @@ public class Tail : MonoBehaviour {
 			}
 
             orb.rigidbody.AddForce(-orb.GetComponent<FloatingObject>().ArenaDown * attachForce, ForceMode.Impulse);
-			AudioSource.PlayClipAtPoint(gatherOrbSound, orb.transform.position);
+			audio.PlayOneShot(gatherOrbSound, 1f);
+			//AudioSource.PlayClipAtPoint(gatherOrbSound, orb.transform.position);
         
         }
 

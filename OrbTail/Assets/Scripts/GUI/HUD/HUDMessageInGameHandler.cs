@@ -12,7 +12,7 @@ public class HUDMessageInGameHandler : MonoBehaviour {
 		GameObject activePlayer = game.ActivePlayer;
 		PowerController powerController = activePlayer.GetComponent<PowerController>();
 		powerController.EventPowerAttached += OnEventPowerAttached;
-		iTween.FadeFrom(gameObject, 0f, 0f);
+		iTween.FadeTo(gameObject, 0f, 0f);
 
 	}
 	
@@ -22,7 +22,7 @@ public class HUDMessageInGameHandler : MonoBehaviour {
 	}
 
 	private void OnEventPowerAttached(object sender, GameObject ship, Power power) {
-		textMesh.text = "Power up " + power.ToString() + " attached!";
+		textMesh.text = power.Name;
 		iTween.FadeFrom(gameObject, 1f, 4f);
 	}
 }

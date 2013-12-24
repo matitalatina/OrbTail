@@ -8,7 +8,6 @@ public class GUIServerClient : MonoBehaviour {
     private GameObject server_button;
 	private GameObject client_button;
 	private GameObject start_button;
-	private GameObject single_player_button;
 	private GameObject master;
 
 	// Use this for initialization
@@ -17,8 +16,6 @@ public class GUIServerClient : MonoBehaviour {
         server_button = GameObject.Find("ServerButton");
         client_button = GameObject.Find("ClientButton");
         start_button = GameObject.Find("StartButton");
-
-		single_player_button = GameObject.Find("SinglePlayerButton");
 
 		master = GameObject.FindGameObjectWithTag(Tags.Master);
 
@@ -57,29 +54,13 @@ public class GUIServerClient : MonoBehaviour {
                     StartClient();
 
                 }
-				else if (raycast_hit.collider.gameObject == single_player_button)
-				{
-
-					StartSinglePlayer();
-
-				}
 
             }
 
         }
 
 	}
-
-    
-	private void StartSinglePlayer() {
-
-        this.enabled = false;
-
-		var builder = master.GetComponent<GameBuilder>();
-
-        builder.InitializeSinglePlayer();
-
-	}
+	
 
     private void StartHost()
     {

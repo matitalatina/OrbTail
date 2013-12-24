@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MovementController : MonoBehaviour {
 
@@ -9,6 +10,8 @@ public class MovementController : MonoBehaviour {
 	public float rotationSmooth = 10f;
 
 	private float smoothSound = 7f;
+
+	private float pitchGap = 2f;
 	
 	public FloatingObject FloatingBody {get; private set;}
 
@@ -30,6 +33,9 @@ public class MovementController : MonoBehaviour {
 	void Start () {
 		FloatingBody = this.GetComponent<FloatingObject>();
 		inputProxy = this.GetComponent<InputProxy>();
+
+		Game game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
+		game.EventEnd += OnEventEnd;
 
 		actualPitchSound = audio.pitch;
 	}
@@ -82,7 +88,11 @@ public class MovementController : MonoBehaviour {
 	}
 
 	private void PlaySoundEngine(float engineForce) {
-		audio.pitch = Mathf.Lerp(Mathf.Abs(engineForce) + 2f, actualPitchSound, smoothSound * Time.deltaTime);
+		audio.pitch = Mathf.Lerp(Mathf.Abs(engineForce) + pitchGap, actualPitchSound, smoothSound * Time.deltaTime);
+	}
+
+	private void OnEventEnd(object sender, IList<GameObject> rank) {
+		iTween.AudioTo(gameObject, 0f, 0f, 2f);
 	}
 
 
