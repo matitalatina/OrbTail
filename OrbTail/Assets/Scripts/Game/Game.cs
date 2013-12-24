@@ -160,10 +160,12 @@ public class Game : MonoBehaviour {
 
             case GameModes.Elimination:
 
+                game_mode_ = new EliminationGameMode(this);
                 break;
 
             default:
 
+                System.Diagnostics.Debug.Assert(false, "No game mode specified");
                 break;
 
         }

@@ -14,12 +14,19 @@ public class Tail : MonoBehaviour {
 
 	public delegate void DelegateOnOrbAttached(object sender, GameObject orb, GameObject ship);
 
+    public delegate void DelegateOnOrbDetached(object sender, GameObject ship);
+
 	/// <summary>
 	/// Notifies than an orb has been attached
 	/// </summary>
 	/// <param name="orb">The orb that has been attached</param>
 	/// <param name="ship">The ship that has been attached</param>
 	public event DelegateOnOrbAttached OnEventOrbAttached;
+
+    /// <summary>
+    /// Notifies that an orb has been detached
+    /// </summary>
+    public event DelegateOnOrbDetached OnEventOrbDetached;
 
 	// Use this for initialization
 	void Start () {
@@ -138,6 +145,12 @@ public class Tail : MonoBehaviour {
 		if (orbStack.Count <= 0) {
 			firstOrb = null;
 		}
+
+
+        if (OnEventOrbDetached != null)
+        {
+            OnEventOrbDetached(this, gameObject);
+        }
 
         //Warns other players
         if (Network.isServer)
