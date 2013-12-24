@@ -69,7 +69,8 @@ public class GUIServerClient : MonoBehaviour {
 
 		var builder = master.GetComponent<GameBuilder>();
 
-        builder.InitializeHost();
+		builder.Action = GameBuilder.BuildMode.RemoteHost;
+        builder.BuildGame();
 
     }
 
@@ -80,7 +81,8 @@ public class GUIServerClient : MonoBehaviour {
 
 		var builder = master.GetComponent<GameBuilder>();
 
-        builder.InitializeClient();
+		builder.Action = GameBuilder.BuildMode.RemoteGuest;
+		builder.BuildGame();;
 
     }
 

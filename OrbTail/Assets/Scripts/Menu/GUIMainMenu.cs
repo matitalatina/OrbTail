@@ -57,8 +57,9 @@ public class GUIMainMenu : MonoBehaviour {
 	private void StartSinglePlayer() {
 		
 		var builder = master.GetComponent<GameBuilder>();
+		builder.Action = GameBuilder.BuildMode.SinglePlayer;
 		
-		builder.InitializeSinglePlayer();
+		builder.BuildGame();
 		
 	}
 	
