@@ -11,4 +11,5 @@ public class Tags {
     public const string Arena = "Arena";
     public const string SpawnPoint = "SpawnPoint";
 	public const string HUD = "HUD";
+	public const string MainLight = "MainLight";
 }
