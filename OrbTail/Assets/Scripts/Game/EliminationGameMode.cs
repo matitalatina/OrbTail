@@ -17,14 +17,40 @@ public class EliminationGameMode: BaseGameMode
 
         ships_ = new List<GameObject>(game.ShipsInGame);
 
+        Tail tail;
+        var tails = new List<Tail>();
+
         foreach (GameObject ship in game.ShipsInGame)
         {
 
-            ship.GetComponent<Tail>().OnEventOrbDetached += EliminationGameMode_OnEventOrbDetached;
+            tail = ship.GetComponent<Tail>();
+
+            tail.OnEventOrbDetached += EliminationGameMode_OnEventOrbDetached;
+            tails.Add( tail ) ;
 
         }
 
-        //TODO: Attach some orbs to begin!
+        //Give some orbs to all ships
+        if (NetworkHelper.IsServerSide())
+        {
+
+            int i = 0;
+
+            foreach (GameObject orb in GameObject.FindGameObjectsWithTag(Tags.Orb))
+            {
+
+                if (orb != null)
+                {
+
+                    tails[i].AttachOrb(orb);
+
+                    i = ++i % ships_.Count;
+
+                }
+                
+            }
+
+        }
 
     }
 
@@ -52,7 +78,7 @@ public class EliminationGameMode: BaseGameMode
 
         }
 
-        //TODO: Remove an orb
+        //TODO: remove an orb from time to time
 
     }
 
