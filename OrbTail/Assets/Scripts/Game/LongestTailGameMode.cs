@@ -17,18 +17,36 @@ public class LongestTailGameMode: BaseGameMode
 
     }
 
-    public override IList<GameObject> Rank
+    public override GameObject Winner
     {
 	 
         get
-        { 
-            
+        {
+
             var ships = from s in GameObject.FindGameObjectsWithTag(Tags.Ship)
                         where s.activeSelf
-                        orderby s.GetComponent<Tail>().GetOrbCount() descending
                         select s;
 
-            return new List<GameObject>( ships );
+            //Find the longest tail
+            int longest_tail = ships.Max((GameObject go) => { return go.GetComponent<Tail>().GetOrbCount(); });
+
+            var winners = from s in ships
+                          where s.GetComponent<Tail>().GetOrbCount() == longest_tail
+                          select s;
+
+            if (winners.Count() == 1)
+            {
+
+                return winners.First();
+
+            }
+            else
+            {
+
+                return null;
+
+            }
+            
 
         }
 

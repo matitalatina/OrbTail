@@ -9,7 +9,7 @@ public class Game : MonoBehaviour {
 
     public delegate void DelegateGameStart(object sender, int countdown);
 
-    public delegate void DelegateGameEnd(object sender, IList<GameObject> rank);
+    public delegate void DelegateGameEnd(object sender, GameObject winner);
 
     public delegate void DelegateGameTick(object sender, int time_left);
 
@@ -34,22 +34,27 @@ public class Game : MonoBehaviour {
     [RPC]
     private void NotifyEnd()
     {
-        
-        GameIdentity gi;
 
-        foreach (GameObject go in game_mode_.Rank)
-        {
+        //TODO: Remove this
+        GameObject winner = game_mode_.Winner;
 
-            gi = go.GetComponent<GameIdentity>();
+        if( winner == null ){
 
-            Debug.Log("Player " + gi.Id + " with " + go.GetComponent<GameIdentity>().Score + " pts");
+            Debug.Log("Tie");
 
+        }else{
+
+            GameIdentity gi = winner.GetComponent<GameIdentity>();
+
+            Debug.Log("Player " + gi.Id + " wins");
+    
         }
+        //
 
         if (EventEnd != null)
         {
 
-            EventEnd(this, game_mode_.Rank);
+            EventEnd(this, game_mode_.Winner);
 
         }
         

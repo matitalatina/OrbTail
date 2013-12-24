@@ -54,13 +54,24 @@ public class EliminationGameMode: BaseGameMode
 
     }
 
-    public override IList<GameObject> Rank
+    public override GameObject Winner
     {
 	 
         get
         {
 
-            return new List<GameObject>(ships_);
+            if (ships_.Count == 1)
+            {
+
+                return ships_.First();
+
+            }
+            else
+            {
+
+                return null;
+
+            }
 
         }
 
@@ -75,6 +86,8 @@ public class EliminationGameMode: BaseGameMode
 
             //The time's up or there are less than one ships in game
             NotifyWin();
+
+            end_of_match = true;
 
         }
 
@@ -92,6 +105,7 @@ public class EliminationGameMode: BaseGameMode
             ships_.Remove(ship);
 
             //TODO: Create the spectator camera, tell the ship that it has been eliminated
+            //TODO: disable the ship properly!
             ship.SetActive(false);
 
         }

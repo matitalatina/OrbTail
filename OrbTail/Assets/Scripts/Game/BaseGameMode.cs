@@ -30,9 +30,9 @@ public abstract class BaseGameMode
     }
 
     /// <summary>
-    /// Return the rank for the current game mode
+    /// Return the winner
     /// </summary>
-    public abstract IList<GameObject> Rank { get; }
+    public abstract GameObject Winner { get; }
 
 }
 
