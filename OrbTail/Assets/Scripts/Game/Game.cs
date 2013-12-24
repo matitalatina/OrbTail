@@ -9,7 +9,7 @@ public class Game : MonoBehaviour {
 
     public delegate void DelegateGameStart(object sender, int countdown);
 
-    public delegate void DelegateGameEnd(object sender);
+    public delegate void DelegateGameEnd(object sender, IList<GameObject> rank);
 
     public delegate void DelegateGameTick(object sender, int time_left);
 
@@ -38,7 +38,7 @@ public class Game : MonoBehaviour {
         if (EventEnd != null)
         {
 
-            EventEnd(this);
+            EventEnd(this, game_mode_.Rank);
 
         }
         
@@ -133,6 +133,9 @@ public class Game : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
+        //Create the proper game mode
+
+
         StartCoroutine("UpdateCountdown");
 
 	}
@@ -218,7 +221,7 @@ public class Game : MonoBehaviour {
     private void RPCSetDuration(int duration)
     {
 
-        Duration = duration_;
+        Duration = duration;
 
     }
 
@@ -233,9 +236,7 @@ public class Game : MonoBehaviour {
     private IEnumerable<GameObject> ships_ = null;
 
     private GameObject active_player_ = null;
-
-    private int game_mode_;
-
-    private int duration_;
+    
+    private IGameMode game_mode_;
 
 }

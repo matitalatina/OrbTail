@@ -123,6 +123,7 @@ public class ClientBuilder : NetworkPlayerBuilder {
             hosts_found_ = new Stack<HostData>(all_hosts.Where((HostData h) =>
             {
 
+                //TODO: filter by game mode
                 return h.connectedPlayers < h.playerLimit &&
                        (h.gameName == arena_name ||
                        arena_name == ""); 
