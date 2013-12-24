@@ -5,10 +5,11 @@ using System.Linq;
 
 public class GUIServerClient : MonoBehaviour {
 
-    GameObject server_button;
-    GameObject client_button;
-    GameObject start_button;
-	GameObject single_player_button;
+    private GameObject server_button;
+	private GameObject client_button;
+	private GameObject start_button;
+	private GameObject single_player_button;
+	private GameObject master;
 
 	// Use this for initialization
 	void Start () {
@@ -18,6 +19,8 @@ public class GUIServerClient : MonoBehaviour {
         start_button = GameObject.Find("StartButton");
 
 		single_player_button = GameObject.Find("SinglePlayerButton");
+
+		master = GameObject.FindGameObjectWithTag(Tags.Master);
 
         //This should not be active at the beginning
         start_button.SetActive(false);
@@ -72,7 +75,7 @@ public class GUIServerClient : MonoBehaviour {
 
         this.enabled = false;
 
-        var builder = GetComponent<GameBuilder>();
+		var builder = master.GetComponent<GameBuilder>();
 
         builder.InitializeSinglePlayer();
 
@@ -83,7 +86,7 @@ public class GUIServerClient : MonoBehaviour {
 
         this.enabled = false;
 
-        var builder = GetComponent<GameBuilder>();
+		var builder = master.GetComponent<GameBuilder>();
 
         builder.InitializeHost();
 
@@ -94,7 +97,7 @@ public class GUIServerClient : MonoBehaviour {
 
         this.enabled = false;
 
-        var builder = GetComponent<GameBuilder>();
+		var builder = master.GetComponent<GameBuilder>();
 
         builder.InitializeClient();
 
