@@ -24,7 +24,7 @@ public class HUDBoostIndicatorHandler : MonoBehaviour {
 	
 	}
 
-	private void OnEventEnd(object sender, System.Collections.Generic.IList<GameObject> rank) {
+	private void OnEventEnd(object sender, GameObject winner) {
 		StopCoroutine("RefreshIndicator");
 	}
 

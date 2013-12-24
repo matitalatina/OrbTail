@@ -91,7 +91,7 @@ public class MovementController : MonoBehaviour {
 		audio.pitch = Mathf.Lerp(Mathf.Abs(engineForce) + pitchGap, actualPitchSound, smoothSound * Time.deltaTime);
 	}
 
-	private void OnEventEnd(object sender, IList<GameObject> rank) {
+	private void OnEventEnd(object sender, GameObject winner) {
 		iTween.AudioTo(gameObject, 0f, 0f, 2f);
 	}
 
