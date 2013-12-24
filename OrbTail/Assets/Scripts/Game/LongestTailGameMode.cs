@@ -24,6 +24,7 @@ public class LongestTailGameMode: BaseGameMode
         { 
             
             var ships = from s in GameObject.FindGameObjectsWithTag(Tags.Ship)
+                        where s.activeSelf
                         orderby s.GetComponent<Tail>().GetOrbCount() descending
                         select s;
 

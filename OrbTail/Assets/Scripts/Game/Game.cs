@@ -18,7 +18,7 @@ public class Game : MonoBehaviour {
     public event DelegateGameEnd EventEnd;
 
     public event DelegateGameTick EventTick;
-
+    
     private void NotifyStart(int countdown)
     {
 
@@ -306,7 +306,7 @@ public class Game : MonoBehaviour {
 
     }
 
-    private IEnumerable<GameObject> ships_ = null;
+    private IList<GameObject> ships_ = null;
 
     private GameObject active_player_ = null;
     

@@ -43,9 +43,10 @@ public class ArcadeGameMode: BaseGameMode
     {
 	 
         get
-        { 
-            
+        {
+
             var ships = from s in GameObject.FindGameObjectsWithTag(Tags.Ship)
+                        where s.activeSelf
                         orderby s.GetComponent<GameIdentity>().Score descending
                         select s;
 
