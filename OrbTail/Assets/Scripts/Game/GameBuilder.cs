@@ -7,9 +7,38 @@ using System.Linq;
 /// </summary>
 public class GameBuilder : MonoBehaviour {
 
+    public enum BuildMode{
+
+        SinglePlayer,
+        RemoteHost,
+        RemoteGuest,
+        LocalHost,
+        LocalGuest
+
+    }
+
     public const int kMaxPlayerCount = 4;
     public const int kServerPort = 6059;
     public const string kGameTypeName = "OrbTail";
+
+    public delegate void DelegateGameBuilt(object sender);
+
+    /// <summary>
+    /// Fired when the game has been properly built
+    /// </summary>
+    public event DelegateGameBuilt EventGameBuilt;
+    
+    public void NotifyGameBuilt()
+    {
+
+        if (EventGameBuilt != null)
+        {
+
+            EventGameBuilt(this);
+
+        }
+
+    }
 
     /// <summary>
     /// The current arena name
@@ -22,42 +51,39 @@ public class GameBuilder : MonoBehaviour {
     public int GameMode = GameModes.Any;
 
     /// <summary>
-    /// Initialize a local match, only one human is allowed! (the identities are attached to the master game object)
+    /// The build mode
     /// </summary>
-    /// <param name="arena_name">The arena to load</param>
-    public void InitializeSinglePlayer()
-    {
-
-        gameObject.AddComponent<SinglePlayerBuilder>();
-
-        this.enabled = false;
-
-    }
+    public BuildMode Action = BuildMode.SinglePlayer;
 
     /// <summary>
-    /// Initializes the host
+    /// Builds the game with the proper arena, game mode and modality
     /// </summary>
-    public void InitializeHost()
+    public void BuildGame()
     {
 
-        gameObject.AddComponent<HostBuilder>();
+        switch (Action)
+        {
+            case BuildMode.SinglePlayer:
+                
+                gameObject.AddComponent<SinglePlayerBuilder>();
+                break;
+
+            case BuildMode.RemoteHost:
+
+                gameObject.AddComponent<HostBuilder>();
+                break;
+
+            case BuildMode.RemoteGuest:
+
+                gameObject.AddComponent<ClientBuilder>();
+                break;
+
+        }
 
         this.enabled = false;
 
     }
-
-    /// <summary>
-    /// Initializes a client
-    /// </summary>
-    public void InitializeClient()
-    {
-
-        gameObject.AddComponent<ClientBuilder>();
-
-        this.enabled = false;
-
-    }
-
+        
     void Awake()
     {
 		DontDestroyOnLoad(gameObject);

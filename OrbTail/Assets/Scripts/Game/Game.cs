@@ -149,8 +149,6 @@ public class Game : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        Debug.Log("Starting the game");
-
         //Create the proper game mode
         switch (GameMode)
         {
@@ -179,6 +177,12 @@ public class Game : MonoBehaviour {
         game_mode_.EventWin += GameMode_EventEnd;
 
         EnableControls(false);
+        
+        //Ok the game is ready
+
+        var master = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
+
+        master.NotifyGameBuilt();
 
         StartCoroutine("UpdateCountdown");
 
