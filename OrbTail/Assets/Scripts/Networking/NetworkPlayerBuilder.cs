@@ -194,7 +194,18 @@ public class NetworkPlayerBuilder : MonoBehaviour
         Destroy(identity);
 
         //Tells the server that the player is ready to go
-        networkView.RPC("RPCPlayerCreated", RPCMode.Server, Id);
+        if (!Network.isServer) {
+            
+            networkView.RPC("RPCPlayerCreated", RPCMode.Server, Id);
+
+        }
+        else
+        {
+
+            RPCPlayerCreated(Id);
+
+        }
+        
 
         //Find the camera
         GameObject.FindGameObjectWithTag(Tags.MainCamera).GetComponent<CameraMovement>().LookAt(player);

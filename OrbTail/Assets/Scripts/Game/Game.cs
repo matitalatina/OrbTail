@@ -149,8 +149,9 @@ public class Game : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
+        Debug.Log("Starting the game");
+
         //Create the proper game mode
-        //TODO: enhance this
         switch (GameMode)
         {
             case GameModes.Arcade:
@@ -307,6 +308,7 @@ public class Game : MonoBehaviour {
     private void RPCGameEnable(bool value)
     {
 
+        Debug.Log("Enabling the game");
         this.enabled = value;
 
     }

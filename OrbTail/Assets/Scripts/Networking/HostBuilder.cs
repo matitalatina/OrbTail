@@ -326,7 +326,7 @@ public class HostBuilder : NetworkPlayerBuilder
                 }
                 else
                 {
-
+                    
                     RPCCreatePlayer(spawn_points[player_id.Value].transform.position);
 
                 }
@@ -341,6 +341,8 @@ public class HostBuilder : NetworkPlayerBuilder
     {
 
         ready_players_.Add(id);
+
+        Debug.Log("Player " + id + " instantiated");
 
         if (ready_players_.Count == player_ids_.Count)
         {
