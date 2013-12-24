@@ -2,15 +2,49 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
-public class LongestTailGameMode: IGameMode
+/// <summary>
+/// The player with the longest tail at the end of the match wins
+/// </summary>
+public class LongestTailGameMode: BaseGameMode
 {
 
-
-
-    public IList<UnityEngine.GameObject> Rank
+    public LongestTailGameMode(Game game)
     {
-        get { throw new NotImplementedException(); }
+
+        game.EventTick += game_EventTick;
+
     }
+
+    public override IList<GameObject> Rank
+    {
+	 
+        get
+        { 
+            
+            var ships = from s in GameObject.FindGameObjectsWithTag(Tags.Ship)
+                        orderby s.GetComponent<Tail>().GetOrbCount() descending
+                        select s;
+
+            return new List<GameObject>( ships );
+
+        }
+
+    }
+    
+    private void game_EventTick(object sender, int time_left)
+    {
+
+        //The game ends when the time's left
+        if (time_left <= 0)
+        {
+
+            NotifyWin();
+
+        }
+
+    }
+
 }
 

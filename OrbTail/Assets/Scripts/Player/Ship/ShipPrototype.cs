@@ -68,6 +68,8 @@ public class ShipPrototype : MonoBehaviour {
 
             MovementController movement_controller = gameObject.AddComponent<MovementController>();
 
+            movement_controller.enabled = false;
+
             movement_controller.GetEngineDriverStack().Push(new DefaultEngineDriver(speed));
             movement_controller.GetWheelDriverStack().Push(new DefaultWheelDriver(steering));
 
