@@ -28,8 +28,6 @@ public class GameBuilder : MonoBehaviour {
     public void InitializeSinglePlayer()
     {
 
-        DontDestroyOnLoad(gameObject);
-
         gameObject.AddComponent<SinglePlayerBuilder>();
 
         this.enabled = false;
@@ -41,8 +39,6 @@ public class GameBuilder : MonoBehaviour {
     /// </summary>
     public void InitializeHost()
     {
-
-        DontDestroyOnLoad(gameObject);
 
         gameObject.AddComponent<HostBuilder>();
 
@@ -56,8 +52,6 @@ public class GameBuilder : MonoBehaviour {
     public void InitializeClient()
     {
 
-        DontDestroyOnLoad(gameObject);
-
         gameObject.AddComponent<ClientBuilder>();
 
         this.enabled = false;
@@ -66,7 +60,7 @@ public class GameBuilder : MonoBehaviour {
 
     void Awake()
     {
-
+		DontDestroyOnLoad(gameObject);
     }
 
     // Use this for initialization
