@@ -39,18 +39,38 @@ public class ArcadeGameMode: BaseGameMode
 
     }
 
-    public override IList<GameObject> Rank
+    public override GameObject Winner
     {
 	 
         get
-        { 
-            
+        {
+
             var ships = from s in GameObject.FindGameObjectsWithTag(Tags.Ship)
-                        orderby s.GetComponent<GameIdentity>().Score descending
+                        where s.activeSelf
                         select s;
+            
+            //Find the highest score
+            int highest_score = ships.Max( (GameObject go) => { return go.GetComponent<GameIdentity>().Score; } );
 
-            return new List<GameObject>( ships );
+            var winners = from s in ships
+                          where s.GetComponent<GameIdentity>().Score == highest_score
+                          select s;
 
+            Debug.Log("Winners " + winners.Count());
+
+            if (winners.Count() == 1)
+            {
+
+                return winners.First();
+
+            }
+            else
+            {
+
+                return null;
+
+            }
+            
         }
 
     }

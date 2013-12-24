@@ -15,21 +15,63 @@ public class EliminationGameMode: BaseGameMode
 
         game.EventTick += game_EventTick;
 
+        ships_ = new List<GameObject>(game.ShipsInGame);
+
+        Tail tail;
+        var tails = new List<Tail>();
+
         foreach (GameObject ship in game.ShipsInGame)
         {
 
-            
+            tail = ship.GetComponent<Tail>();
+
+            tail.OnEventOrbDetached += EliminationGameMode_OnEventOrbDetached;
+            tails.Add( tail ) ;
+
+        }
+
+        //Give some orbs to all ships
+        if (NetworkHelper.IsServerSide())
+        {
+
+            int i = 0;
+
+            foreach (GameObject orb in GameObject.FindGameObjectsWithTag(Tags.Orb))
+            {
+
+                if (orb != null)
+                {
+
+                    tails[i].AttachOrb(orb);
+
+                    i = ++i % ships_.Count;
+
+                }
+                
+            }
 
         }
 
     }
-    public override IList<GameObject> Rank
+
+    public override GameObject Winner
     {
 	 
         get
         {
 
-            return null;
+            if (ships_.Count == 1)
+            {
+
+                return ships_.First();
+
+            }
+            else
+            {
+
+                return null;
+
+            }
 
         }
 
@@ -38,15 +80,41 @@ public class EliminationGameMode: BaseGameMode
     private void game_EventTick(object sender, int time_left)
     {
 
-        //The game ends when the time's left, anyway
-        if (time_left <= 0)
+        if( !end_of_match &&
+            (time_left <= 0 ||
+             ships_.Count <= 1) ){
+
+            //The time's up or there are less than one ships in game
+            NotifyWin();
+
+            end_of_match = true;
+
+        }
+
+        //TODO: remove an orb from time to time
+
+    }
+
+    private void EliminationGameMode_OnEventOrbDetached(object sender, GameObject ship)
+    {
+
+        if (ship.GetComponent<Tail>().GetOrbCount() == 0)
         {
 
-            NotifyWin();
+            //The ship should be eliminated
+            ships_.Remove(ship);
+
+            //TODO: Create the spectator camera, tell the ship that it has been eliminated
+            //TODO: disable the ship properly!
+            ship.SetActive(false);
 
         }
 
     }
+
+    private IList<GameObject> ships_;
+
+    private bool end_of_match = false;
 
 }
 
