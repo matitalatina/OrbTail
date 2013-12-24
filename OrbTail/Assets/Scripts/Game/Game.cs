@@ -35,6 +35,17 @@ public class Game : MonoBehaviour {
     private void NotifyEnd()
     {
         
+        GameIdentity gi;
+
+        foreach (GameObject go in game_mode_.Rank)
+        {
+
+            gi = go.GetComponent<GameIdentity>();
+
+            Debug.Log("Player " + gi.Id + " with " + go.GetComponent<GameIdentity>().Score + " pts");
+
+        }
+
         if (EventEnd != null)
         {
 
@@ -139,7 +150,7 @@ public class Game : MonoBehaviour {
         {
             case GameModes.Arcade:
 
-                game_mode_ = new LongestTailGameMode(this);
+                game_mode_ = new ArcadeGameMode(this);
                 break;
 
             case GameModes.LongestTail:
@@ -149,12 +160,10 @@ public class Game : MonoBehaviour {
 
             case GameModes.Elimination:
 
-                game_mode_ = new LongestTailGameMode(this);
                 break;
 
             default:
 
-                game_mode_ = new LongestTailGameMode(this);
                 break;
 
         }

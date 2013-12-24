@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
+/// <summary>
+/// The player with the longest tail at the end of the match wins
+/// </summary>
 public class LongestTailGameMode: BaseGameMode
 {
 
