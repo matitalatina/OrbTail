@@ -34,7 +34,7 @@ public class Game : MonoBehaviour {
     [RPC]
     private void NotifyEnd()
     {
-
+        
         if (EventEnd != null)
         {
 
@@ -71,7 +71,7 @@ public class Game : MonoBehaviour {
     /// <summary>
     /// The current duration
     /// </summary>
-    public int Duration = 300;
+    public int Duration = 30;
 
     [RPC]
     public void RPCSetGame(int game_mode)
@@ -134,7 +134,34 @@ public class Game : MonoBehaviour {
 	void Start () {
 
         //Create the proper game mode
+        //TODO: enhance this
+        switch (GameMode)
+        {
+            case GameModes.Arcade:
 
+                game_mode_ = new LongestTailGameMode(this);
+                break;
+
+            case GameModes.LongestTail:
+
+                game_mode_ = new LongestTailGameMode(this);
+                break;
+
+            case GameModes.Elimination:
+
+                game_mode_ = new LongestTailGameMode(this);
+                break;
+
+            default:
+
+                game_mode_ = new LongestTailGameMode(this);
+                break;
+
+        }
+
+        game_mode_.EventWin += GameMode_EventEnd;
+
+        EnableControls(false);
 
         StartCoroutine("UpdateCountdown");
 
@@ -147,6 +174,51 @@ public class Game : MonoBehaviour {
      
 
 	}
+
+    /// <summary>
+    /// Enable or disable the controls for all players
+    /// </summary>
+    private void EnableControls(bool value)
+    {
+
+        MovementController movement;
+
+        foreach (GameObject ship in ShipsInGame)
+        {
+
+            movement = ship.GetComponent<MovementController>();
+
+            if (movement != null)
+            {
+
+                movement.enabled = value;
+
+            }
+
+        }
+
+    }
+
+    private void GameMode_EventEnd(BaseGameMode sender)
+    {
+
+        EnableControls(false);
+
+        //End of the game (only the server can declare the end of a match)
+        if (Network.isServer)
+        {
+
+            networkView.RPC("NotifyEnd", RPCMode.All);
+
+        }
+        else
+        {
+
+            NotifyEnd();
+
+        }
+
+    }
 
     /// <summary>
     /// Used to update the countdown timer
@@ -169,6 +241,8 @@ public class Game : MonoBehaviour {
 
         //End of the countdown
         NotifyStart(0);
+
+        EnableControls(true);
 
         StartCoroutine("UpdateGameTime");
         
@@ -193,20 +267,8 @@ public class Game : MonoBehaviour {
 
         } while (counter > 0);
 
-        //End of the game (only the server can declare the end of a match)
-        if (Network.isServer)
-        {
+        NotifyTick(counter);
 
-            networkView.RPC("NotifyEnd", RPCMode.All);
-
-        }
-        else
-        {
-
-            NotifyEnd();
-
-        }
-        
     }
 
     [RPC]
@@ -237,6 +299,6 @@ public class Game : MonoBehaviour {
 
     private GameObject active_player_ = null;
     
-    private IGameMode game_mode_;
+    private BaseGameMode game_mode_;
 
 }
