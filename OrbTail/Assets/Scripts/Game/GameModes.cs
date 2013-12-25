@@ -25,7 +25,7 @@ public class GameModes
 
             var rng = new System.Random();
 
-            return rng.Next(GameModes.Min, GameModes.Max);
+            return rng.Next(GameModes.Min, GameModes.Max + 1);
 
         }
         else
