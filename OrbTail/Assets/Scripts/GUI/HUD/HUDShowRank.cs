@@ -24,7 +24,8 @@ public class HUDShowRank : MonoBehaviour {
 	private void OnGameBuilt(object sender) {
 		game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
 		game.EventEnd += OnEventEnd;
-		iTween.FadeTo(gameObject, 0f, 0f);
+		textMesh.text = "Game mode: " + game.GameMode;
+		iTween.FadeTo(gameObject, 0f, fadeTime);
 	}
 
 	private void OnEventEnd(object sender, GameObject winner) {

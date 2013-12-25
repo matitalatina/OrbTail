@@ -73,8 +73,6 @@ public class ShipPrototype : MonoBehaviour {
             movement_controller.GetEngineDriverStack().Push(new DefaultEngineDriver(speed));
             movement_controller.GetWheelDriverStack().Push(new DefaultWheelDriver(steering));
 
-			gameObject.AddComponent<CollisionSoundHandler>();
-
         }
 
     }
