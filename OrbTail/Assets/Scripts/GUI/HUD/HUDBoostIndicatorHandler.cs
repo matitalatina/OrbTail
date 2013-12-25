@@ -7,6 +7,7 @@ public class HUDBoostIndicatorHandler : MonoBehaviour {
 	private PowerView boostView;
 	private TextMesh textMesh;
 	private float refreshTime = 0.2f;
+	private const float animationTime = 1f;
 
 	// Use this for initialization
 	void Start () {
@@ -23,6 +24,7 @@ public class HUDBoostIndicatorHandler : MonoBehaviour {
 		Game game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
 		game.EventEnd += OnEventEnd;
 		game.EventStart += OnEventStart;
+		game.EventEnd += OnEnd;
 
 		GameObject player = game.ActivePlayer;
 		boostView = player.GetComponent<PowerController>().GetPowerView(PowerGroups.Passive);
@@ -51,6 +53,11 @@ public class HUDBoostIndicatorHandler : MonoBehaviour {
 			textMesh.color = Color.Lerp(Color.red, Color.green, boostView.IsReady);
 			yield return new WaitForSeconds(refreshTime);
 		}
+
+	}
+
+	private void OnEnd(object sender, GameObject winner) {
+		iTween.FadeTo(gameObject, 0f, animationTime);
 	}
 
 

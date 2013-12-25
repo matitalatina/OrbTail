@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class Tail : MonoBehaviour {
 
     private Stack<GameObject> orbStack = new Stack<GameObject>();
-	private GameObject firstOrb;
     private OwnershipManager ownershipManager;
 	private AudioClip gatherOrbSound;
 
@@ -36,13 +35,6 @@ public class Tail : MonoBehaviour {
         ownershipManager = game.GetComponent<OwnershipManager>();
 
 		gatherOrbSound = Resources.Load<AudioClip>("Sounds/Ship/AttachOrb");
-
-	}
-
-	// TODO: to implement
-	public void AttachToPlayer(GameObject player) {
-
-
 
 	}
 
@@ -83,7 +75,6 @@ public class Tail : MonoBehaviour {
         if (orbStack.Count <= 0)
         {
             target = gameObject;
-            firstOrb = orb;
         }
         else
         {
@@ -143,9 +134,9 @@ public class Tail : MonoBehaviour {
 			i++;
 		}
 
-		if (orbStack.Count <= 0) {
+		/*if (orbStack.Count <= 0) {
 			firstOrb = null;
-		}
+		}*/
 
 
         if (OnEventOrbDetached != null)

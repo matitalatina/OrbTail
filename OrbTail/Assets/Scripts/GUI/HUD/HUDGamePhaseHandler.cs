@@ -6,7 +6,7 @@ public class HUDGamePhaseHandler : MonoBehaviour {
 
 	private TextMesh textMeshCountdown;
 	private Light mainLight;
-	private float initialLightPower = 0.1f;
+	private float initialLightPower = 0.01f;
 	private int fontBigSize = 150;
 	private float standardLightPower;
 	

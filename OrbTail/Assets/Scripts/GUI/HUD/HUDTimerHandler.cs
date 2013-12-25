@@ -3,6 +3,8 @@ using System.Collections;
 
 public class HUDTimerHandler : MonoBehaviour {
 	private TextMesh textMesh;
+	private const float animationTime = 1f;
+	private const float factorScale = 0.05f;
 
 	// Use this for initialization
 	void Start () {
@@ -21,6 +23,7 @@ public class HUDTimerHandler : MonoBehaviour {
 		Game game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
 		game.EventTick += OnChangeTime;
 		game.EventStart += OnStart;
+		game.EventEnd += OnEnd;
 	}
 
 	private void OnStart(object sender, int countdown) {
@@ -36,7 +39,12 @@ public class HUDTimerHandler : MonoBehaviour {
 		textMesh.text = string.Format("{0:00}:{1:00}", min, sec);
 
 		if (timeLeft <= 10 && timeLeft > 0) {
-			iTween.ColorFrom(gameObject, Color.red, 1f);
+			iTween.ScaleFrom(gameObject, Vector3.one * factorScale, animationTime);
+			iTween.ColorFrom(gameObject, Color.red, animationTime);
 		}
+	}
+
+	private void OnEnd(object sender, GameObject winner) {
+		iTween.FadeTo(gameObject, 0f, animationTime);
 	}
 }

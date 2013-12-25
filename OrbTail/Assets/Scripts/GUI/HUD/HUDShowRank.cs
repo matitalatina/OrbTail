@@ -29,7 +29,11 @@ public class HUDShowRank : MonoBehaviour {
 
 	private void OnEventEnd(object sender, GameObject winner) {
 
-		if (winner == game.ActivePlayer) {
+		if (winner == null) {
+			textMesh.text = "Tie...";
+			iTween.FadeTo(gameObject, 1f, fadeTime);
+		}
+		else if (winner == game.ActivePlayer) {
 			textMesh.text = "You won!";
 			iTween.ColorTo(gameObject, Color.green, fadeTime);
 		}
@@ -37,8 +41,6 @@ public class HUDShowRank : MonoBehaviour {
 			textMesh.text = "The winner is: " + winner.GetComponent<PlayerIdentity>().Name;
 			iTween.FadeTo(gameObject, 1f, fadeTime);
 		}
-
-
 
 	}
 }
