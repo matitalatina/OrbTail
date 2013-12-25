@@ -47,11 +47,10 @@ public class ShipSoundHandler : MonoBehaviour {
 
 		if (game.ActivePlayer == gameObject) {
 			GetComponent<Tail>().OnEventOrbAttached += OnOrbAttached;
-			game.EventEnd += OnEventEnd;
 		}
 
+		game.EventEnd += OnEventEnd;
 		engineDriverStack = GetComponent<MovementController>().GetEngineDriverStack();
-
 		actualPitchSound = audio.pitch;
 
 	}

@@ -6,7 +6,7 @@ public class Boost : Power
 {
     private const float reload_power_time = 5.0f;
     private float time_accumulator_to_reload = reload_power_time;
-	private float boost_force = 100.0f;
+	private float boost_force = 50.0f;
 
     private Deactivator deactivator;
 

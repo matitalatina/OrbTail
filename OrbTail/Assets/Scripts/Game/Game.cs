@@ -5,6 +5,8 @@ using System.Linq;
 
 public class Game : MonoBehaviour {
 
+	private float restartTime = 6f;
+
     #region Events
 
     public delegate void DelegateGameStart(object sender, int countdown);
@@ -239,7 +241,18 @@ public class Game : MonoBehaviour {
 
         }
 
+		StartCoroutine("RestartGame");
+
     }
+
+	/// <summary>
+	/// Restarts the game. Temporary method
+	/// </summary>
+	private IEnumerator RestartGame() {
+		yield return new WaitForSeconds(restartTime);
+		Destroy(GameObject.FindGameObjectWithTag(Tags.Master));
+		Application.LoadLevel("MenuMain");
+	}
 
     /// <summary>
     /// Used to update the countdown timer
