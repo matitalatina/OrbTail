@@ -10,19 +10,25 @@ public class HUDBoostIndicatorHandler : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Game game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
-		game.EventEnd += OnEventEnd;
-		game.EventStart += OnEventStart;
-		GameObject player = game.ActivePlayer;
-		boostView = player.GetComponent<PowerController>().GetPowerView(PowerGroups.Passive);
-		textMesh = GetComponent<TextMesh>();
-
+		GameBuilder builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
+		builder.EventGameBuilt += OnGameBuilt;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
 	}
+
+	private void OnGameBuilt(object sender) {
+		Game game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
+		game.EventEnd += OnEventEnd;
+		game.EventStart += OnEventStart;
+
+		GameObject player = game.ActivePlayer;
+		boostView = player.GetComponent<PowerController>().GetPowerView(PowerGroups.Passive);
+		textMesh = GetComponent<TextMesh>();
+	}
+
 
 	private void OnEventEnd(object sender, GameObject winner) {
 		StopCoroutine("RefreshIndicator");

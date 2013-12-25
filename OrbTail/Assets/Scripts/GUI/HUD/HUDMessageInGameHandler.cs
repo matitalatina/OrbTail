@@ -7,13 +7,18 @@ public class HUDMessageInGameHandler : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		GameBuilder builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
+		builder.EventGameBuilt += OnGameBuilt;
+
 		textMesh = GetComponent<TextMesh>();
+	}
+
+	private void OnGameBuilt(object sender) {
 		Game game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
 		GameObject activePlayer = game.ActivePlayer;
 		PowerController powerController = activePlayer.GetComponent<PowerController>();
 		powerController.EventPowerAttached += OnEventPowerAttached;
 		iTween.FadeTo(gameObject, 0f, 0f);
-
 	}
 	
 	// Update is called once per frame

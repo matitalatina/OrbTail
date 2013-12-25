@@ -12,20 +12,25 @@ public class HUDGamePhaseHandler : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		Game game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
-		game.EventStart += OnStart;
-		game.EventEnd += OnGameOver;
-		
-		textMeshCountdown = GetComponent<TextMesh>();
 		mainLight = GameObject.FindGameObjectWithTag(Tags.MainLight).GetComponent<Light>();
 		standardLightPower = mainLight.intensity;
 		mainLight.intensity = initialLightPower;
 
+		textMeshCountdown = GetComponent<TextMesh>();
+
+		GameBuilder builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
+		builder.EventGameBuilt += OnGameBuilt;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	private void OnGameBuilt(object sender) {
+		Game game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
+		game.EventStart += OnStart;
+		game.EventEnd += OnGameOver;
 	}
 	
 	private void OnStart(object sender, int countdown) {
@@ -50,7 +55,7 @@ public class HUDGamePhaseHandler : MonoBehaviour {
 		mainLight.intensity = intensity;
 	}
 
-		private void OnGameOver(object sender, GameObject winner) {
+	private void OnGameOver(object sender, GameObject winner) {
 		textMeshCountdown.text = "Game Over";
 		iTween.FadeTo(this.gameObject, 1f, 2f);
 		iTween.ValueTo(this.gameObject, iTween.Hash(

@@ -7,14 +7,20 @@ public class HUDTimerHandler : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		textMesh = GetComponent<TextMesh>();
-		Game game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
-		game.EventTick += OnChangeTime;
-		game.EventStart += OnStart;
+		GameBuilder builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
+		builder.EventGameBuilt += OnGameBuilt;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
+	}
+
+	private void OnGameBuilt(object sender) {
+
+		Game game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
+		game.EventTick += OnChangeTime;
+		game.EventStart += OnStart;
 	}
 
 	private void OnStart(object sender, int countdown) {
