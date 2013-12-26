@@ -3,7 +3,8 @@ using System.Collections;
 
 public class CameraMovement : MonoBehaviour {
 
-	public float smooth = 10f;         // The relative speed at which the camera will catch up.
+	public float smooth = 10f; 			// The relative speed at which the camera will catch up.
+	public float finalSmooth = 2f; 		// Speed of camera at the end of the game
 	public float relDistancePos = 7f;
 	public float relHighPos = 2.2f;
 	
@@ -25,8 +26,8 @@ public class CameraMovement : MonoBehaviour {
 
     void Start()
     {
-
-        
+		GameBuilder builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
+		builder.EventGameBuilt += OnGameBuilt;
     }
 
 	void Awake ()
@@ -84,5 +85,17 @@ public class CameraMovement : MonoBehaviour {
 		
 		// Lerp the camera's rotation between it's current rotation and the rotation that looks at the player.
 		transform.rotation = Quaternion.Lerp(transform.rotation, lookAtRotation, smooth * Time.deltaTime);
+	}
+
+	private void OnGameBuilt(object sender) {
+		Game game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
+		game.EventEnd += OnEventEnd;
+	}
+
+	private void OnEventEnd(object sender, GameObject winner) {
+		if (winner != null) {
+			smooth = finalSmooth;
+			LookAt(winner);
+		}
 	}
 }
