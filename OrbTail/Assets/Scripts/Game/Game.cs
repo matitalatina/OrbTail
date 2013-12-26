@@ -241,6 +241,9 @@ public class Game : MonoBehaviour {
 
         }
 
+        //Purges the instantiated objects
+        GameObjectFactory.Instance.Purge();
+
 		StartCoroutine("RestartGame");
 
     }

@@ -32,9 +32,9 @@ public class GameObjectFactory {
     }
 
     /// <summary>
-    /// Instantiate a new object
+    /// Instantiate a new object. It's lifecycle will be managed by this object
     /// </summary>
-    /// <param name="resource_path">The path of the game object to instiate</param>
+    /// <param name="resource_path">The path of the game object to instantiate</param>
     public GameObject Instantiate(string resource_path, Vector3 positon, Quaternion rotation)
     {
 
@@ -60,6 +60,17 @@ public class GameObjectFactory {
             return InstantiateLocal(resource_path, positon, rotation);
 
         }
+
+    }
+
+    /// <summary>
+    /// Removes all object instantiated
+    /// </summary>
+    public void Purge()
+    {
+
+        Debug.Log("Purging all cached objects");
+        resource_table_ = new Dictionary<string, Stack<GameObject>>();
 
     }
 
