@@ -18,6 +18,7 @@ public class HUDMessageInGameHandler : MonoBehaviour {
 		GameObject activePlayer = game.ActivePlayer;
 		PowerController powerController = activePlayer.GetComponent<PowerController>();
 		powerController.EventPowerAttached += OnEventPowerAttached;
+
 		iTween.FadeTo(gameObject, 0f, 0f);
 	}
 	
@@ -28,6 +29,7 @@ public class HUDMessageInGameHandler : MonoBehaviour {
 
 	private void OnEventPowerAttached(object sender, GameObject ship, Power power) {
 		textMesh.text = power.Name;
+		iTween.FadeUpdate(gameObject, 0f, 0f);
 		iTween.FadeFrom(gameObject, 1f, 4f);
 	}
 }

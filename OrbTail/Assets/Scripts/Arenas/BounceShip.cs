@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class BounceShip : MonoBehaviour {
-	private float bounceForce = 30f;
+	private float bounceForce = 20f;
 
 	// Use this for initialization
 	void Start () {
