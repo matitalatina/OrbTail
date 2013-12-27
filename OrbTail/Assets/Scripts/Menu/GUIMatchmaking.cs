@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class GUIMatchmaking : MonoBehaviour {
 
@@ -7,12 +9,11 @@ public class GUIMatchmaking : MonoBehaviour {
     private GameObject not_ready_button;
     private NetworkPlayerBuilder network_builder;
 
-    private GameObject[] player_icons;
+    private IList<GameObject> player_icons;
 
     private const float kReadyScale = 1.33f;
-
     private const float kScalingTime = 0.5f;
-
+    private Vector3 kLocalScale = 0.15f * Vector3.one;
     private static Color kDisabledColor = Color.grey;
 
 	// Use this for initialization
@@ -20,12 +21,14 @@ public class GUIMatchmaking : MonoBehaviour {
     {
 
         //The icons (disabled by default)
-        player_icons = GameObject.FindGameObjectsWithTag(Tags.ShipSelector);
-
+        player_icons = (from icon in GameObject.FindGameObjectsWithTag(Tags.ShipSelector)
+                        orderby icon.transform.position.x descending
+                        select icon).ToList();
+                               
         foreach (GameObject icon in player_icons)
         {
 
-            icon.SetActive(false);
+            icon.transform.localScale = Vector3.zero;
 
         }
 
@@ -93,7 +96,7 @@ public class GUIMatchmaking : MonoBehaviour {
         //Update the interface showing ready players
         var icon = player_icons[id];
 
-        Vector3 scale = icon.transform.localScale;
+        Vector3 scale = kLocalScale;
         Color color;
 
         if( value ){
@@ -119,7 +122,7 @@ public class GUIMatchmaking : MonoBehaviour {
 
         var icon = player_icons[id];
 
-        icon.SetActive(false);
+        iTween.ScaleTo(icon, Vector3.zero, kScalingTime);
 
     }
 
@@ -134,7 +137,9 @@ public class GUIMatchmaking : MonoBehaviour {
 
         icon.renderer.material.color = kDisabledColor;
 
-        icon.SetActive(true);
+        icon.transform.localScale = Vector3.zero;
+
+        iTween.ScaleTo(icon, kLocalScale / kReadyScale, kScalingTime);
 
     }
 
@@ -182,4 +187,6 @@ public class GUIMatchmaking : MonoBehaviour {
         }
 
 	}
+
+
 }

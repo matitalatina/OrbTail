@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Linq;
+using System.Collections.Generic;
 
 public class NetworkPlayerBuilder : MonoBehaviour
 {
@@ -265,14 +266,14 @@ public class NetworkPlayerBuilder : MonoBehaviour
 
         //Tells the server that the player is ready to go
         if (!Network.isServer) {
-            
-            networkView.RPC("RPCPlayerCreated", RPCMode.Server, Id);
+
+            networkView.RPC("RPCPlayerCreated", RPCMode.Server, Id, player.networkView.viewID);
 
         }
         else
         {
 
-            RPCPlayerCreated(Id);
+            RPCPlayerCreated(Id, player.networkView.viewID);
 
         }
         
@@ -283,10 +284,10 @@ public class NetworkPlayerBuilder : MonoBehaviour
     }
 
     [RPC]
-    protected void RPCPlayerCreated(int id)
+    protected void RPCPlayerCreated(int id, NetworkViewID view_id)
     {
 
-        PlayerCreated(id);
+        PlayerCreated(id, view_id);
 
     }
 
@@ -303,7 +304,7 @@ public class NetworkPlayerBuilder : MonoBehaviour
 
     }
 
-    protected virtual void PlayerCreated(int id)
+    protected virtual void PlayerCreated(int id, NetworkViewID view_id)
     {
 
         //Let the host builder implement this

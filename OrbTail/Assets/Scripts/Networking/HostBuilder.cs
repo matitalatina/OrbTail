@@ -141,8 +141,10 @@ public class HostBuilder : NetworkPlayerBuilder
             available_ids_.Push(id);
             ready_players_.Remove(id);
             player_ids_.Remove(player);
-        
-            networkView.RPC("RPCPlayerUnregistered", RPCMode.AllBuffered, id);
+
+            Network.RemoveRPCs(player);
+
+            networkView.RPC("RPCPlayerUnregistered", RPCMode.All, id);
         
         }
         else
@@ -299,7 +301,7 @@ public class HostBuilder : NetworkPlayerBuilder
      
     }
 
-    protected override void PlayerCreated(int id)
+    protected override void PlayerCreated(int id, NetworkViewID view_id)
     {
 
         ready_players_.Add(id);
