@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class Tags {
+
 	public const string Ship = "Ship";
 	public const string Orb = "Orb";
 	public const string Field = "Field";
@@ -13,4 +14,6 @@ public class Tags {
 	public const string HUD = "HUD";
 	public const string MainLight = "MainLight";
 	public const string Master = "Master";
+    public const string ShipSelector = "ShipSelector";
+
 }

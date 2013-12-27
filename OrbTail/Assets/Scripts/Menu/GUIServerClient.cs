@@ -7,7 +7,7 @@ public class GUIServerClient : MonoBehaviour {
 
     private GameObject server_button;
 	private GameObject client_button;
-	private GameObject start_button;
+	private GameObject ready_button;
 	private GameObject master;
 
 	// Use this for initialization
@@ -15,12 +15,12 @@ public class GUIServerClient : MonoBehaviour {
 
         server_button = GameObject.Find("ServerButton");
         client_button = GameObject.Find("ClientButton");
-        start_button = GameObject.Find("StartButton");
+        ready_button = GameObject.Find("ReadyButton");
 
 		master = GameObject.FindGameObjectWithTag(Tags.Master);
 
         //This should not be active at the beginning
-        start_button.SetActive(false);
+        ready_button.SetActive(false);
 
 	}
 	
@@ -70,7 +70,8 @@ public class GUIServerClient : MonoBehaviour {
 		var builder = master.GetComponent<GameBuilder>();
 
 		builder.Action = GameBuilder.BuildMode.RemoteHost;
-        builder.BuildGame();
+
+        Application.LoadLevel("MenuChooseShip");
 
     }
 
@@ -82,7 +83,8 @@ public class GUIServerClient : MonoBehaviour {
 		var builder = master.GetComponent<GameBuilder>();
 
 		builder.Action = GameBuilder.BuildMode.RemoteGuest;
-		builder.BuildGame();;
+
+        Application.LoadLevel("MenuChooseShip");
 
     }
 

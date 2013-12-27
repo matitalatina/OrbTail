@@ -225,6 +225,9 @@ public class Game : MonoBehaviour {
     private void GameMode_EventEnd(BaseGameMode sender)
     {
 
+        //Stops the coroutine
+        StopCoroutine("UpdateGameTime");
+
         EnableControls(false);
 
         //End of the game (only the server can declare the end of a match)
