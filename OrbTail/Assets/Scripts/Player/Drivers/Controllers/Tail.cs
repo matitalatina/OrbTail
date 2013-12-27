@@ -9,8 +9,9 @@ public class Tail : MonoBehaviour {
 
     private GameIdentity game_identity;
     private float kOrbColorThreshold = 10;  //Number of orbs to have in order to have a full intensity tail
-    private float kOrbColorizeTime = 0.25f;
-    private Color kOrbDeactiveColor = Color.white * 0.25f;
+    private Color kOrbDeactiveColor;
+	private Material defaultOrbMaterial;
+	private Material myOrbMaterial;
 
     private float detachForce = 0.06f;
     private float attachForce = 0.03f;
@@ -39,6 +40,10 @@ public class Tail : MonoBehaviour {
         ownershipManager = game.GetComponent<OwnershipManager>();
 
         game_identity = GetComponent<GameIdentity>();
+
+		defaultOrbMaterial = Resources.Load<Material>("Materials/OrbMat");
+		kOrbDeactiveColor = defaultOrbMaterial.color;
+		myOrbMaterial = new Material(defaultOrbMaterial);
 
 	}
 
@@ -95,7 +100,7 @@ public class Tail : MonoBehaviour {
 
         }
 
-        ColorizeOrbs();
+        ColorizeOrb(orb);
 
         //Acquire the ownership
         if (networkView.isMine)
@@ -108,17 +113,13 @@ public class Tail : MonoBehaviour {
                
 	}
 
-    private void ColorizeOrbs()
+    private void ColorizeOrb(GameObject orb)
     {
         
         var color = Color.Lerp( kOrbDeactiveColor, game_identity.Color, orbStack.Count / kOrbColorThreshold );
-        
-        foreach (GameObject orb in orbStack)
-        {
-
-            iTween.ColorTo(orb, color, kOrbColorizeTime);
-
-        }
+		myOrbMaterial.color = color;
+ 
+		orb.renderer.material = myOrbMaterial;
         
     }
 
@@ -128,7 +129,7 @@ public class Tail : MonoBehaviour {
         foreach (GameObject orb in orbs)
         {
 
-            iTween.ColorTo(orb, kOrbDeactiveColor, kOrbColorizeTime);
+			orb.renderer.material = defaultOrbMaterial;
 
         }
         
@@ -184,7 +185,6 @@ public class Tail : MonoBehaviour {
 
         }
 
-        ColorizeOrbs();
         DecolorizeOrbs(detachedOrbs);
 
 		return detachedOrbs;
