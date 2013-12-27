@@ -24,7 +24,7 @@ public class ShipSoundHandler : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if (!gameFinished) {
+		if (engineDriverStack != null && !gameFinished) {
 			float engineForce = engineDriverStack.GetHead().GetForce();
 			PlaySoundEngine(engineForce);
 		}
@@ -47,10 +47,10 @@ public class ShipSoundHandler : MonoBehaviour {
 
 		if (game.ActivePlayer == gameObject) {
 			GetComponent<Tail>().OnEventOrbAttached += OnOrbAttached;
+			engineDriverStack = GetComponent<MovementController>().GetEngineDriverStack();
 		}
 
 		game.EventEnd += OnEventEnd;
-		engineDriverStack = GetComponent<MovementController>().GetEngineDriverStack();
 		actualPitchSound = audio.pitch;
 
 	}
