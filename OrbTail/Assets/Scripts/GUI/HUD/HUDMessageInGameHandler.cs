@@ -10,7 +10,7 @@ public class HUDMessageInGameHandler : MonoBehaviour {
 		GameBuilder builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
 		builder.EventGameBuilt += OnGameBuilt;
 
-		textMesh = GetComponent<TextMesh>();
+		textMesh = gameObject.GetComponent<TextMesh>();
 	}
 
 	private void OnGameBuilt(object sender) {

@@ -16,7 +16,7 @@ public class HUDGamePhaseHandler : MonoBehaviour {
 		standardLightPower = mainLight.intensity;
 		mainLight.intensity = initialLightPower;
 
-		textMeshCountdown = GetComponent<TextMesh>();
+		textMeshCountdown = gameObject.GetComponent<TextMesh>();
 
 		GameBuilder builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
 		builder.EventGameBuilt += OnGameBuilt;

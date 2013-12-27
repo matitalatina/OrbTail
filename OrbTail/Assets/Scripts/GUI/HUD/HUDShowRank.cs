@@ -10,7 +10,7 @@ public class HUDShowRank : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		textMesh = GetComponent<TextMesh>();
+		textMesh = gameObject.GetComponent<TextMesh>();
 
 		GameBuilder builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
 		builder.EventGameBuilt += OnGameBuilt;
