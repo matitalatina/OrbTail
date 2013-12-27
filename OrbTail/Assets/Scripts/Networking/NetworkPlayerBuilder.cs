@@ -159,7 +159,7 @@ public class NetworkPlayerBuilder : MonoBehaviour
     public void SetReady(bool value)
     {
 
-        networkView.RPC("RPCPlayerReady", RPCMode.All, Id, value);
+        networkView.RPC("RPCPlayerReady", RPCMode.AllBuffered, Id, value);
 
     }
     
