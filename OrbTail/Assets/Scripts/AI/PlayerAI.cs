@@ -115,6 +115,12 @@ public class PlayerAI : MonoBehaviour {
 	
 	
 	void ChasingPlayer() {
+
+		if (target.activeSelf == false) {
+			ResetTarget();
+			return;
+		}
+
 		Vector3 relVector = target.transform.position - gameObject.transform.position;
 		
 		desideredDirection = relVector;

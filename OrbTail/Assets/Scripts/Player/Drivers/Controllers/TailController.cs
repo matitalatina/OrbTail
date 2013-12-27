@@ -21,7 +21,7 @@ public class TailController : MonoBehaviour {
 
 	public Tail Tail { get; set;}
 
-	private float dotProductAttackThreshold = 0.2f;
+	private float dotProductAttackThreshold = 0.4f;
 	// Range [-1, 1] 
 	private float velocityAttackThreshold = -0.8f;
 
