@@ -5,43 +5,7 @@ using System.Linq;
 
 public class HostBuilder : NetworkPlayerBuilder
 {
-
-    #region Events
-
-    public delegate void DelegateRegistrationSucceeded(object sender);
-
-    public delegate void DelegateErrorOccurred(object sender, string message);
-
-    public event DelegateRegistrationSucceeded EventRegistrationSucceeded;
-
-    public event DelegateErrorOccurred EventErrorOccurred;
-
-    private void NotifyRegistrationSucceeded()
-    {
-
-        if (EventRegistrationSucceeded != null)
-        {
-
-            EventRegistrationSucceeded(this);
-
-        }
-
-    }
-
-    private void NotifyErrorOccurred(string message)
-    {
-
-        if (EventErrorOccurred != null)
-        {
-
-            EventErrorOccurred(this, message);
-
-        }
-
-    }
-
-    #endregion
-
+    
     public const int kMatchStartDelay = 5;
 
 	// Use this for initialization
@@ -95,7 +59,6 @@ public class HostBuilder : NetworkPlayerBuilder
             //TODO: not yet implemented
 
         }
-
 
 	}
 
@@ -213,9 +176,9 @@ public class HostBuilder : NetworkPlayerBuilder
         PlayerIdentity identity = GetComponents<PlayerIdentity>().SkipWhile((PlayerIdentity p) => { return !p.IsHuman; }).First();
 
         //Register the server identity
-        player_ids_.Add(Network.player, available_ids_.Pop());
+        player_ids_.Add(Network.player, 0);
 
-        RPCRegisterPlayer(Network.player, identity.Name);
+        RPCRegisterPlayer(Network.player, identity.ShipName);
         
     }
 
@@ -226,18 +189,15 @@ public class HostBuilder : NetworkPlayerBuilder
         {
             
             ready_players_.Add(id);
-            Debug.Log("Player " + id + " is ready");
 
         }
         else
         {
 
             ready_players_.Remove(id);
-            Debug.Log("Player " + id + " is not ready anymore");
 
         }
         
-
         if (ready_players_.Count == player_ids_.Count &&
             ready_players_.Count > 1)
         {
@@ -258,7 +218,6 @@ public class HostBuilder : NetworkPlayerBuilder
     void HostBuilder_EventIdAcquired(object sender, int id)
     {
 
-        SetReady(true);
 
     }
 
@@ -269,8 +228,6 @@ public class HostBuilder : NetworkPlayerBuilder
         {
 
             var id = available_ids_.Pop();
-
-            Debug.Log("Player " + id + " is now online");
 
             player_ids_[player] = id;
 
@@ -288,7 +245,7 @@ public class HostBuilder : NetworkPlayerBuilder
                 networkView.RPC("RPCIdAcquired", player, id);
 
             }
-        
+
         }
         
     }
@@ -296,45 +253,50 @@ public class HostBuilder : NetworkPlayerBuilder
     protected override void ArenaLoaded(int id)
     {
 
-        ready_players_.Add(id);
-
-        if (ready_players_.Count == player_ids_.Count)
+        if (IsArenaLoading)
         {
 
-            //Everyone loaded the arena, start intializing
-            ready_players_.Clear();
+            ready_players_.Add(id);
 
-            //Create the game
-            var game_resource = Resources.Load("Prefabs/Game");
-
-            GameObject game = Network.Instantiate(game_resource, Vector3.zero, Quaternion.identity, 0) as GameObject;
-
-            //Set the game mode and the arena
-            game.networkView.RPC("RPCSetGame", RPCMode.All, GameModes.Resolve( GetComponent<GameBuilder>().GameMode ) );
-            
-            //Create the ships
-            GameObject[] spawn_points = GameObject.FindGameObjectsWithTag(Tags.SpawnPoint);
-
-            foreach (KeyValuePair<NetworkPlayer, int> player_id in player_ids_)
+            if (ready_players_.Count == player_ids_.Count)
             {
 
-                if (!player_id.Key.Equals(Network.player))
+                //Everyone loaded the arena, start intializing
+                ready_players_.Clear();
+
+                //Create the game
+                var game_resource = Resources.Load("Prefabs/Game");
+
+                GameObject game = Network.Instantiate(game_resource, Vector3.zero, Quaternion.identity, 0) as GameObject;
+
+                //Set the game mode and the arena
+                game.networkView.RPC("RPCSetGame", RPCMode.All, GameModes.Resolve(GetComponent<GameBuilder>().GameMode));
+
+                //Create the ships
+                GameObject[] spawn_points = GameObject.FindGameObjectsWithTag(Tags.SpawnPoint);
+
+                foreach (KeyValuePair<NetworkPlayer, int> player_id in player_ids_)
                 {
 
-                    networkView.RPC("RPCCreatePlayer", player_id.Key, spawn_points[player_id.Value].transform.position);
+                    if (!player_id.Key.Equals(Network.player))
+                    {
 
-                }
-                else
-                {
-                    
-                    RPCCreatePlayer(spawn_points[player_id.Value].transform.position);
+                        networkView.RPC("RPCCreatePlayer", player_id.Key, spawn_points[player_id.Value].transform.position);
+
+                    }
+                    else
+                    {
+
+                        RPCCreatePlayer(spawn_points[player_id.Value].transform.position);
+
+                    }
 
                 }
 
             }
 
         }
-
+     
     }
 
     protected override void PlayerCreated(int id)

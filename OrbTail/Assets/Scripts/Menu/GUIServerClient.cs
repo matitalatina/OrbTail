@@ -15,12 +15,8 @@ public class GUIServerClient : MonoBehaviour {
 
         server_button = GameObject.Find("ServerButton");
         client_button = GameObject.Find("ClientButton");
-        ready_button = GameObject.Find("ReadyButton");
-
+        
 		master = GameObject.FindGameObjectWithTag(Tags.Master);
-
-        //This should not be active at the beginning
-        ready_button.SetActive(false);
 
 	}
 	

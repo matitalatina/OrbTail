@@ -11,6 +11,11 @@ public class NetworkPlayerBuilder : MonoBehaviour
     public bool LocalMasterServer = false;
 
     /// <summary>
+    /// Is the game loading the proper arena yet?
+    /// </summary>
+    public bool IsArenaLoading = false;
+
+    /// <summary>
     /// The id of this device
     /// </summary>
     public int Id { get; private set; }
@@ -21,7 +26,7 @@ public class NetworkPlayerBuilder : MonoBehaviour
 
     public event DelegatePlayerRegistered EventPlayerRegistered;
 
-    private void NotifyPlayerRegistered(int id, string name)
+    protected void NotifyPlayerRegistered(int id, string name)
     {
 
         if (EventPlayerRegistered != null)
@@ -37,7 +42,7 @@ public class NetworkPlayerBuilder : MonoBehaviour
 
     public event DelegatePlayerUnregistered EventPlayerUnregistered;
 
-    private void NotifyPlayerUnregistered(int id)
+    protected void NotifyPlayerUnregistered(int id)
     {
 
         if (EventPlayerUnregistered != null)
@@ -53,7 +58,7 @@ public class NetworkPlayerBuilder : MonoBehaviour
 
     public event DelegatePlayerReady EventPlayerReady;
 
-    private void NotifyPlayerReady(int id, bool value)
+    protected void NotifyPlayerReady(int id, bool value)
     {
 
         if (EventPlayerReady != null)
@@ -69,7 +74,7 @@ public class NetworkPlayerBuilder : MonoBehaviour
 
     public event DelegateIdAcquired EventIdAcquired;
 
-    private void NotifyIdAcquired(int id)
+    protected void NotifyIdAcquired(int id)
     {
 
         if (EventIdAcquired != null)
@@ -81,6 +86,70 @@ public class NetworkPlayerBuilder : MonoBehaviour
 
     }
 
+    public delegate void DelegateRegistrationSucceeded(object sender);
+
+    public event DelegateRegistrationSucceeded EventRegistrationSucceeded;
+
+    protected void NotifyRegistrationSucceeded()
+    {
+
+        if (EventRegistrationSucceeded != null)
+        {
+
+            EventRegistrationSucceeded(this);
+
+        }
+
+    }
+
+    public delegate void DelegateErrorOccurred(object sender, string message);
+
+    public event DelegateErrorOccurred EventErrorOccurred;
+
+    protected void NotifyErrorOccurred(string message)
+    {
+
+        if (EventErrorOccurred != null)
+        {
+
+            EventErrorOccurred(this, message);
+
+        }
+
+    }
+
+    public delegate void DelegateDisconnected(object sender, string message);
+
+    public event DelegateDisconnected EventDisconnected;
+
+    protected void NotifyDisconnected(string message)
+    {
+
+        if (EventDisconnected != null)
+        {
+
+            EventDisconnected(this, message);
+
+        }
+
+    }
+
+    public delegate void DelegateNoGame(object sender);
+
+    public event DelegateNoGame EventNoGame;
+
+    protected void NotifyNoGame()
+    {
+
+        if (EventNoGame != null)
+        {
+
+            EventNoGame(this);
+
+        }
+
+    }
+    
     #endregion
 
     /// <summary>
@@ -159,6 +228,8 @@ public class NetworkPlayerBuilder : MonoBehaviour
     {
 
         DontDestroyOnLoad(gameObject);
+
+        IsArenaLoading = true;
 
         Application.LoadLevel(arena);
 

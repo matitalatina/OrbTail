@@ -5,42 +5,6 @@ using System.Linq;
 
 public class ClientBuilder : NetworkPlayerBuilder {
 
-    #region Events
-
-    public delegate void DelegateDisconnected(object sender, string message);
-
-    public event DelegateDisconnected EventDisconnected;
-
-    private void NotifyDisconnected(string message)
-    {
-
-        if (EventDisconnected != null)
-        {
-
-            EventDisconnected(this, message);
-
-        }
-
-    }
-
-    public delegate void DelegateNoGame(object sender);
-
-    public event DelegateNoGame EventNoGame;
-
-    private void NotifyNoGame()
-    {
-
-        if (EventNoGame != null)
-        {
-
-            EventNoGame(this);
-
-        }
-
-    }
-
-    #endregion
-
 	// Use this for initialization
 	void Start () {
 
@@ -74,7 +38,7 @@ public class ClientBuilder : NetworkPlayerBuilder {
         //Register the server identity
         Debug.Log("Registering to server...");
 
-        networkView.RPC("RPCRegisterPlayer", RPCMode.Server, Network.player, identity.Name);
+        networkView.RPC("RPCRegisterPlayer", RPCMode.Server, Network.player, identity.ShipName);
         
     }
 
@@ -141,9 +105,14 @@ public class ClientBuilder : NetworkPlayerBuilder {
     void OnLevelWasLoaded(int level)
     {
 
-        //Tells the server that the arena was loaded successfully
-        networkView.RPC("RPCArenaLoaded", RPCMode.Server, Id);
+        if (IsArenaLoading)
+        {
 
+            //Tells the server that the arena was loaded successfully
+            networkView.RPC("RPCArenaLoaded", RPCMode.Server, Id);
+
+        }
+        
     }
 
 
@@ -151,10 +120,7 @@ public class ClientBuilder : NetworkPlayerBuilder {
     {
 
         Debug.Log("Acquiring id " + id);
-
-        //TODO: remove this
-        SetReady(true);
-
+        
     }
 
     /// <summary>

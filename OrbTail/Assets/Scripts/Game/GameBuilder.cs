@@ -21,6 +21,11 @@ public class GameBuilder : MonoBehaviour {
     public const int kServerPort = 6059;
     public const string kGameTypeName = "OrbTail";
 
+    /// <summary>
+    /// The builder used for network matches
+    /// </summary>
+    public NetworkPlayerBuilder NetworkBuilder { get; private set; }
+
     public delegate void DelegateGameBuilt(object sender);
 
     /// <summary>
@@ -70,18 +75,24 @@ public class GameBuilder : MonoBehaviour {
 
             case BuildMode.RemoteHost:
 
-                gameObject.AddComponent<HostBuilder>();
+                NetworkBuilder = gameObject.AddComponent<HostBuilder>();
+                
+                Application.LoadLevel("MenuMatchmaking");
+
                 break;
 
             case BuildMode.RemoteGuest:
 
-                gameObject.AddComponent<ClientBuilder>();
+                NetworkBuilder = gameObject.AddComponent<ClientBuilder>();
+
+                Application.LoadLevel("MenuMatchmaking");
+
                 break;
 
         }
-
+        
         this.enabled = false;
-
+        
     }
         
     void Awake()
@@ -92,6 +103,8 @@ public class GameBuilder : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+
+        NetworkBuilder = null;
 
     }
 
