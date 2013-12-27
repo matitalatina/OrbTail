@@ -5,7 +5,7 @@ public class DefaultOffenceDriver : IOffenceDriver {
 
 	private int offenceShip;
 	private float adjustedOffence;
-	private float maxVelocity = 60f;
+	private float maxVelocity = 50f;
 	private float maxNumberBalls = 14f;
 
 	public DefaultOffenceDriver(int offence) {
@@ -20,6 +20,7 @@ public class DefaultOffenceDriver : IOffenceDriver {
 	// TODO: to check
 	public float GetDamage(GameObject defender, Collision col) {
 		float damage = (col.relativeVelocity.magnitude / maxVelocity) * maxNumberBalls * adjustedOffence;
+		Debug.Log("Damage: " + damage);
 		return damage;
 	}
 

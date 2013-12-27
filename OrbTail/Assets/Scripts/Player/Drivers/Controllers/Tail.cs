@@ -115,13 +115,16 @@ public class Tail : MonoBehaviour {
 
     private void ColorizeOrb(GameObject orb)
     {
-        
-        var color = Color.Lerp( kOrbDeactiveColor, game_identity.Color, orbStack.Count / kOrbColorThreshold );
-		myOrbMaterial.color = color;
- 
+       
+		UpdateTailColor();
 		orb.renderer.material = myOrbMaterial;
         
     }
+
+	private void UpdateTailColor() {
+		var color = Color.Lerp( kOrbDeactiveColor, game_identity.Color, orbStack.Count / kOrbColorThreshold );
+		myOrbMaterial.color = color;
+	}
 
     private void DecolorizeOrbs(List<GameObject> orbs)
     {
@@ -132,6 +135,8 @@ public class Tail : MonoBehaviour {
 			orb.renderer.material = defaultOrbMaterial;
 
         }
+
+		UpdateTailColor();
         
     }
 
