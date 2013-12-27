@@ -16,19 +16,22 @@ public class MobileInputBroker: IInputBroker
 
 	private const float kBoostThreshold = 4.0f;
 
+	private const float kMaxOffsetAcceleration = 0.6f;
+
     public MobileInputBroker()
     {
 
         //Standard position, with the phone in landscape position and the bottom on the right.
-        AccelerometerOffset = Vector3.zero;
+		zOffsetAcceleration = 0f;
 		Calibrate();
 
     }
+	
 
-    /// <summary>
-    /// Returns the accelerometers' offset
-    /// </summary>
-    public Vector3 AccelerometerOffset { get; private set; }
+	/// <summary>
+	/// Returns the accelerometers' offset on z Axis (Acceleration)
+	/// </summary>
+	public float zOffsetAcceleration { get; private set; }
 
     /// <summary>
     /// Returns the acceleration command's status. 0 no acceleration, 1 maximum acceleration.
@@ -54,22 +57,22 @@ public class MobileInputBroker: IInputBroker
     public void Calibrate()
     {
 
-        AccelerometerOffset = Input.acceleration.normalized;
+        //AccelerometerOffset = Input.acceleration.normalized;
+		zOffsetAcceleration = Mathf.Clamp(-Input.acceleration.z, -kMaxOffsetAcceleration, kMaxOffsetAcceleration);
 
     }
 
     public void Update()
     {
 
-        //var direction = Input.acceleration.normalized - AccelerometerOffset;
-		var delta = Vector3.Cross(AccelerometerOffset, Input.acceleration.normalized);
-        //From 0.0f to 1.0f. The power here is useful to avoid extreme angles
-		Acceleration = Mathf.Clamp(delta.x * kAccelerationExponent, -1f, 1f);
-		//Mathf.Pow( Mathf.Clamp01(-direction.z), kAccelerationExponent );
-
+		//var delta = Vector3.Cross(AccelerometerOffset, Input.acceleration.normalized);
+		//Acceleration = Mathf.Clamp(delta.x * kAccelerationExponent, -1f, 1f);
+		Acceleration = Mathf.Clamp((-Input.acceleration.z - zOffsetAcceleration) * kAccelerationExponent, -1f, 1f);
+		Steering = Mathf.Clamp(Input.acceleration.x * kSteeringExponent, -1f, 1f);
         //From -1.0f to 1.0f.
         //Steering = Mathf.Pow( Mathf.Clamp01( Mathf.Abs( direction.x ) ), 
         //                                      kSteeringExponent) * Mathf.Sign(direction.x);
+		//Steering = Mathf.Clamp(delta.z * kSteeringExponent, -1f, 1f);
 
 		if( fired_power_ups_.Count > 0){
 
@@ -90,7 +93,7 @@ public class MobileInputBroker: IInputBroker
 
 		}
 
-		Steering = Mathf.Clamp(delta.z * kSteeringExponent, -1f, 1f);
+
     }
 
     private IList<int> fired_power_ups_ = new List<int>();
