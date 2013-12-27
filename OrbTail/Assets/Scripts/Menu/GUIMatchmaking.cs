@@ -22,7 +22,7 @@ public class GUIMatchmaking : MonoBehaviour {
 
         //The icons (disabled by default)
         player_icons = (from icon in GameObject.FindGameObjectsWithTag(Tags.ShipSelector)
-                        orderby icon.transform.position.x descending
+                        orderby icon.transform.position.x
                         select icon).ToList();
                                
         foreach (GameObject icon in player_icons)

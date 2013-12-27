@@ -7,6 +7,11 @@ public class Tail : MonoBehaviour {
     private Stack<GameObject> orbStack = new Stack<GameObject>();
     private OwnershipManager ownershipManager;
 
+    private GameIdentity game_identity;
+    private float kOrbColorThreshold = 10;  //Number of orbs to have in order to have a full intensity tail
+    private float kOrbColorizeTime = 0.25f;
+    private Color kOrbDeactiveColor = Color.white * 0.25f;
+
     private float detachForce = 0.06f;
     private float attachForce = 0.03f;
 
@@ -33,6 +38,8 @@ public class Tail : MonoBehaviour {
 		
         ownershipManager = game.GetComponent<OwnershipManager>();
 
+        game_identity = GetComponent<GameIdentity>();
+
 	}
 
 
@@ -41,7 +48,7 @@ public class Tail : MonoBehaviour {
 	/// </summary>
 	/// <param name="orb">The orb to attach</param>
 	public void AttachOrb(GameObject orb) {
-
+        
         //First removes the randompowerattacher
         var power_attacher = orb.GetComponent<RandomPowerAttacher>();
 
@@ -88,6 +95,8 @@ public class Tail : MonoBehaviour {
 
         }
 
+        ColorizeOrbs();
+
         //Acquire the ownership
         if (networkView.isMine)
         {
@@ -95,8 +104,35 @@ public class Tail : MonoBehaviour {
             ownershipManager.AcquireOwnership(orb);
 
         }
-                
+
+               
 	}
+
+    private void ColorizeOrbs()
+    {
+        
+        var color = Color.Lerp( kOrbDeactiveColor, game_identity.Color, orbStack.Count / kOrbColorThreshold );
+        
+        foreach (GameObject orb in orbStack)
+        {
+
+            iTween.ColorTo(orb, color, kOrbColorizeTime);
+
+        }
+        
+    }
+
+    private void DecolorizeOrbs(List<GameObject> orbs)
+    {
+        
+        foreach (GameObject orb in orbs)
+        {
+
+            iTween.ColorTo(orb, kOrbDeactiveColor, kOrbColorizeTime);
+
+        }
+        
+    }
 
     [RPC]
     private void RPCAttachOrb(NetworkViewID orb_view_id)
@@ -147,6 +183,9 @@ public class Tail : MonoBehaviour {
             networkView.RPC("RPCDetachOrbs", RPCMode.Others, nOrbs);
 
         }
+
+        ColorizeOrbs();
+        DecolorizeOrbs(detachedOrbs);
 
 		return detachedOrbs;
 

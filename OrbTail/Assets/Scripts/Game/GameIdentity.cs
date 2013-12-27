@@ -12,6 +12,34 @@ public class GameIdentity : MonoBehaviour {
     /// </summary>
     public int Id;
 
+    public Color Color
+    {
+        get
+        {
+
+            switch (Id)
+            {
+                case 0:
+
+                    return Color.red;
+                    
+                case 1:
+
+                    return Color.blue;
+
+                case 2:
+
+                    return Color.green;
+
+                default:
+
+                    return Color.yellow;
+
+            }
+
+        }
+    }
+
     /// <summary>
     /// Is the player local?
     /// </summary>
@@ -54,5 +82,13 @@ public class GameIdentity : MonoBehaviour {
     /// The tail controller
     /// </summary>
     private Tail tail_;
+
+    [RPC]
+    public void RPCSetId(int id)
+    {
+
+        Id = id;
+
+    }
 
 }

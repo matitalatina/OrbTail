@@ -23,10 +23,10 @@ public class HostBuilder : NetworkPlayerBuilder
         EventIdAcquired += HostBuilder_EventIdAcquired;
 
         //Store the available ids
-        for (int i = 0; i < GameBuilder.kMaxPlayerCount; i++)
+        for (int i = GameBuilder.kMaxPlayerCount; i > 0 ; i--)
         {
 
-            available_ids_.Push(i);
+            available_ids_.Push(i - 1);
 
         }
 

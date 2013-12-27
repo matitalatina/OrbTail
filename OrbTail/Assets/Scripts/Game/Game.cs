@@ -257,6 +257,10 @@ public class Game : MonoBehaviour {
 	private IEnumerator RestartGame() {
 		yield return new WaitForSeconds(restartTime);
 		Destroy(GameObject.FindGameObjectWithTag(Tags.Master));
+
+        //Okay, good game, let's go home...
+        Network.Disconnect();
+
 		Application.LoadLevel("MenuMain");
 	}
 

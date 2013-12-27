@@ -260,6 +260,8 @@ public class NetworkPlayerBuilder : MonoBehaviour
 
         identity.CopyTo(player.GetComponent<PlayerIdentity>());
 
+        //TODO: fix this
+        player.networkView.RPC("RPCSetGameId", RPCMode.All, Id);
         player.GetComponent<GameIdentity>().Id = Id;
 
         Destroy(identity);
