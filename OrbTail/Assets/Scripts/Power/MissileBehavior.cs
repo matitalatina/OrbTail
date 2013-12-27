@@ -12,6 +12,7 @@ public class MissileBehavior : MonoBehaviour {
     private const float explosionForce = 100.0f;
     private const float timeToLive = 2.5f;
 	private const float smoothCurve = 10f;
+	private AudioClip explosionSound;
 
 
     public void SetTarget(GameObject target, GameObject owner)
@@ -45,6 +46,10 @@ public class MissileBehavior : MonoBehaviour {
 		{
 			StartCoroutine("DestroyMissileTTL");
 		}
+
+		explosionSound = Resources.Load<AudioClip>("Sounds/Powers/Explosion");
+
+
     }
 
     void Update()
@@ -137,6 +142,8 @@ public class MissileBehavior : MonoBehaviour {
     {
         var explosionRes = Resources.Load("Prefabs/Power/Explosion");
         GameObject explosion = GameObject.Instantiate(explosionRes, this.gameObject.transform.position, Quaternion.identity) as GameObject;
+
+		AudioSource.PlayClipAtPoint(explosionSound, transform.position);
 
         Target = null;
         collider.enabled = false;

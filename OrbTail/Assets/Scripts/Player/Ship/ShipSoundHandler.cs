@@ -34,8 +34,9 @@ public class ShipSoundHandler : MonoBehaviour {
 
 
 	void OnCollisionEnter(Collision collision) {
+		string colliderTag = collision.collider.gameObject.tag;
 
-		if (game != null && gameObject == game.ActivePlayer && collision.collider.gameObject.tag != Tags.Orb) {
+		if (game != null && gameObject == game.ActivePlayer && colliderTag != Tags.Orb) {
 			AudioSource.PlayClipAtPoint(heavyCrash, collision.transform.position, volumeStd);
 		}
 
