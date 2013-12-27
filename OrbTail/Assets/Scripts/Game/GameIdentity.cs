@@ -84,7 +84,7 @@ public class GameIdentity : MonoBehaviour {
     private Tail tail_;
 
     [RPC]
-    public void RPCSetId(int id)
+    public void RPCSetGameId(int id)
     {
 
         Id = id;

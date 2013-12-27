@@ -78,6 +78,8 @@ public class GUIChooseShip : MonoBehaviour {
 
                     chosen_identity.CopyTo(identity);
 
+                    identity.IsHuman = true;
+
                     BuildGame();
 
                 }

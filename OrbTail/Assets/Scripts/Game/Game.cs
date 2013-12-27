@@ -150,6 +150,12 @@ public class Game : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        
+        //Ok the game is ready
+
+        var master = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
+
+        master.NotifyGameBuilt();
 
         //Create the proper game mode
         switch (GameMode)
@@ -180,12 +186,6 @@ public class Game : MonoBehaviour {
 
         EnableControls(false);
         
-        //Ok the game is ready
-
-        var master = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
-
-        master.NotifyGameBuilt();
-
         StartCoroutine("UpdateCountdown");
 
 	}
