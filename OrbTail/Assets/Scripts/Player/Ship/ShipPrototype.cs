@@ -41,14 +41,6 @@ public class ShipPrototype : MonoBehaviour {
         gameObject.AddComponent<Tail>();
         PowerController powerController = gameObject.AddComponent<PowerController>();
 
-		if (NetworkHelper.IsServerSide())
-		{
-			
-			//Adds a boost to the ship, only it this is the server
-			powerController.AddPower(new Boost());
-			
-		}
-
         //Server side controls the collisions
         if (NetworkHelper.IsServerSide())
         {

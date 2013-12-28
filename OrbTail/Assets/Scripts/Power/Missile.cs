@@ -26,7 +26,11 @@ public class Missile : Power
             if (Network.peerType == NetworkPeerType.Disconnected)
             {
 
-                missile = GameObjectFactory.Instance.Instantiate(missile_prefab_path, Owner.transform.position + Owner.transform.forward * missileforwardOffset, Owner.transform.rotation);
+                //missile = GameObjectFactory.Instance.Instantiate(missile_prefab_path, Owner.transform.position + Owner.transform.forward * missileforwardOffset, Owner.transform.rotation);
+                
+                //TODO: fix this SH!T
+                var missileRes = Resources.Load(missile_prefab_path);
+                missile = GameObject.Instantiate(missileRes, Owner.transform.position + Owner.transform.forward * missileforwardOffset, Owner.transform.rotation) as GameObject;
 
             }
             else

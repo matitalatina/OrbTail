@@ -136,8 +136,7 @@ public class HostBuilder : NetworkPlayerBuilder
         {
 
             Debug.Log("Player " + id + " is now offline");
-
-
+            
             available_ids_.Push(id);
             ready_players_.Remove(id);
             player_ids_.Remove(player);
@@ -208,7 +207,7 @@ public class HostBuilder : NetworkPlayerBuilder
 
             ready_players_.Clear();
 
-            Debug.Log("All players are ready");
+            //TODO: Delay a little bit...
 
             //Every device should load the proper arena
             networkView.RPC("RPCLoadArena", RPCMode.All, GetComponent<GameBuilder>().ArenaName);

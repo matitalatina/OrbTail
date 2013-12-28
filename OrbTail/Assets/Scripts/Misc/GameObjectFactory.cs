@@ -40,8 +40,6 @@ public class GameObjectFactory {
 
         Stack<GameObject> object_stack = null;
 
-        Debug.Log("Instantiating " + resource_path);
-
         if (resource_table_.TryGetValue(resource_path, out object_stack) &&
             object_stack.Count > 0)
         {
@@ -71,7 +69,6 @@ public class GameObjectFactory {
     public void Purge()
     {
 
-        Debug.Log("Purging all cached objects");
         resource_table_ = new Dictionary<string, Stack<GameObject>>();
 
     }

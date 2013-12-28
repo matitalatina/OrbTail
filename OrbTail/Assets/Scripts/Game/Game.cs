@@ -150,8 +150,7 @@ public class Game : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        
-        //Ok the game is ready
+
 
         var master = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
 
@@ -181,20 +180,49 @@ public class Game : MonoBehaviour {
                 break;
 
         }
+        
+        //Ok the game is ready
 
         game_mode_.EventWin += GameMode_EventEnd;
+        EventStart += Game_EventStart;
 
         EnableControls(false);
         
         StartCoroutine("UpdateCountdown");
 
 	}
+
+    void Game_EventStart(object sender, int countdown)
+    {
+        
+        //Routines when the game starts
+
+        if (countdown == 0)
+        {
+
+            if (NetworkHelper.IsServerSide())
+            {
+
+                var power_controllers = from player in ShipsInGame
+                                        select player.GetComponent<PowerController>();
+
+                foreach (var power_controller in power_controllers)
+                {
+                        
+                    //Adds a boost to the ship, only it this is the server
+                    power_controller.AddPower(new Boost());
+
+                }
+
+            }
+
+        }
+        
+    }
 	
 	// Update is called once per frame
 	void Update () {
 
-
-     
 
 	}
 

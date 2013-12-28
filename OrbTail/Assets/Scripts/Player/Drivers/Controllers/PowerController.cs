@@ -172,7 +172,11 @@ public class PowerController : MonoBehaviour
     public PowerView GetPowerView(int group)
     {
 
-        return powers[group];
+        Power power = null;
+
+        powers.TryGetValue(group, out power);
+        
+        return power;
 
     }
 }

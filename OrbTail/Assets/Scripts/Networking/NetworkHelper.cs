@@ -33,5 +33,15 @@ public class NetworkHelper
 
     }
 
+    /// <summary>
+    /// Returns true if this device is either a server or a client
+    /// </summary>
+    public static bool IsConnected()
+    {
+
+        return Network.peerType != NetworkPeerType.Disconnected;
+
+    }
+
 }
 

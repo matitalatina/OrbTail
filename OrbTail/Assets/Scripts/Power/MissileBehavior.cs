@@ -13,7 +13,7 @@ public class MissileBehavior : MonoBehaviour {
     private const float timeToLive = 2.5f;
 	private const float smoothCurve = 10f;
 	private AudioClip explosionSound;
-
+    private bool destroying = false;
 
     public void SetTarget(GameObject target, GameObject owner)
     {
@@ -42,13 +42,13 @@ public class MissileBehavior : MonoBehaviour {
 
     void Start()
     {
+
 		if(NetworkHelper.IsOwnerSide(networkView))
 		{
 			StartCoroutine("DestroyMissileTTL");
 		}
 
 		explosionSound = Resources.Load<AudioClip>("Sounds/Powers/Explosion");
-
 
     }
 
@@ -81,11 +81,23 @@ public class MissileBehavior : MonoBehaviour {
 		if(NetworkHelper.IsServerSide())
         {
 
-            if ((collision.gameObject.tag == Tags.Ship))
+            if (collision.gameObject.tag == Tags.Ship)
             {
 
-                OnImpact(collision.gameObject);
+                if (NetworkHelper.IsOwnerSide(networkView))
+                {
 
+                    OnImpact(collision.gameObject);
+
+                }
+                else
+                {
+
+                    networkView.RPC("RPCOnImpact", networkView.owner, collision.gameObject.networkView.viewID);
+
+                }
+
+                Debug.Log("Removing all orbs");
                 collision.gameObject.GetComponent<TailController>().GetDetacherDriverStack().GetHead().DetachOrbs(int.MaxValue, collision.gameObject.GetComponent<Tail>());
 
             }
@@ -96,53 +108,76 @@ public class MissileBehavior : MonoBehaviour {
 
     private IEnumerator DestroyMissileTTL()
     {
+        
+        //Delayed destrution
         yield return new WaitForSeconds(timeToLive);
-        RPCDestroyMissile();
 
-        if (Network.isServer)
-        {
-            networkView.RPC("RPCDestroyMissile", RPCMode.Others);
-        }
+        RPCDestroyMissile();
 
     }
 
     private void OnImpact(GameObject target)
     {
 
-        
-		StartCoroutine("DestroyMissile");
-
         target.rigidbody.AddForce(transform.forward * explosionForce, ForceMode.Impulse);
 
-        if (Network.isServer)
+        if (NetworkHelper.IsOwnerSide(networkView))
         {
 
-            networkView.RPC("RPCOnImpact", RPCMode.Others, target.networkView.viewID);
+            RPCDestroyMissile();
 
         }
 
     }
 
-
     [RPC]
     private void RPCOnImpact(NetworkViewID target_id)
     {
 
+        //Apply the force
         OnImpact(NetworkView.Find(target_id).gameObject);
+
+        //The owner will propagate the impact and request the missile destruction
+
+        if (networkView.isMine &&
+            NetworkHelper.IsConnected())
+        {
+
+            networkView.RPC("RPCOnImpact", RPCMode.Others, target_id);
+
+        }
 
     }
 
     [RPC]
     private void RPCDestroyMissile()
     {
-        StartCoroutine("DestroyMissile");
+
+        if (!destroying)
+        {
+
+            destroying = true;
+
+            StartCoroutine("DestroyMissile");
+
+            //The owner will destroy all others copies
+            if (networkView.isMine &&
+                NetworkHelper.IsConnected())
+            {
+
+                networkView.RPC("RPCDestroyMissile", RPCMode.Others);
+
+            }
+
+        }
+       
     }
 
     private IEnumerator DestroyMissile()
     {
-        var explosionRes = Resources.Load("Prefabs/Power/Explosion");
-        GameObject explosion = GameObject.Instantiate(explosionRes, this.gameObject.transform.position, Quaternion.identity) as GameObject;
-
+        var explosion_resource = Resources.Load(explosion_prefab_path);
+        GameObject explosion = GameObject.Instantiate(explosion_resource, this.gameObject.transform.position, Quaternion.identity) as GameObject;
+        
 		AudioSource.PlayClipAtPoint(explosionSound, transform.position);
 
         Target = null;
@@ -153,8 +188,10 @@ public class MissileBehavior : MonoBehaviour {
         // Delayed for GFX
         yield return new WaitForSeconds(1.0f);
 
+        //TODO: Fix this SH!T
         Destroy(explosion);
         Destroy(this.gameObject);
+        
     }
 
 }

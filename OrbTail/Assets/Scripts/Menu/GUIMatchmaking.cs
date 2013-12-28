@@ -70,8 +70,6 @@ public class GUIMatchmaking : MonoBehaviour {
     void network_builder_EventPlayerReady(object sender, int id, bool value)
     {
 
-        Debug.Log("Player " + id + " is " + (value ? "" : "not ") + " ready");
-
         //Toggle the ready button
         if (id == network_builder.Id)
         {

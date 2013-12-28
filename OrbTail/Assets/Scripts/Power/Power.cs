@@ -163,6 +163,8 @@ public abstract class Power : PowerView
     private void RemoveFX()
     {
 
+        fx.transform.parent = null;
+
         GameObjectFactory.Instance.Destroy(power_prefab_path + Name, fx);
 
     }

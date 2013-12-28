@@ -8,7 +8,7 @@ public class HUDBoostIndicatorHandler : MonoBehaviour {
 	private TextMesh textMesh;
 	private float refreshTime = 0.2f;
 	private const float animationTime = 1f;
-
+    private Game game;
 	// Use this for initialization
 	void Start () {
 		GameBuilder builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
@@ -21,15 +21,28 @@ public class HUDBoostIndicatorHandler : MonoBehaviour {
 	}
 
 	private void OnGameBuilt(object sender) {
-		Game game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
+		game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
 		game.EventEnd += OnEventEnd;
 		game.EventStart += OnEventStart;
 		game.EventEnd += OnEnd;
 
-		GameObject player = game.ActivePlayer;
-		boostView = player.GetComponent<PowerController>().GetPowerView(PowerGroups.Passive);
+        GameObject player = game.ActivePlayer;
+        player.GetComponent<PowerController>().EventPowerAttached += HUDBoostIndicatorHandler_EventPowerAttached;
 		textMesh = GetComponent<TextMesh>();
 	}
+
+    void HUDBoostIndicatorHandler_EventPowerAttached(object sender, GameObject ship, Power power)
+    {
+
+        if (power.Group == PowerGroups.Passive)
+        {
+
+            boostView = power;
+            StartCoroutine("RefreshIndicator");
+
+        }
+
+    }
 
 
 	private void OnEventEnd(object sender, GameObject winner) {
@@ -39,9 +52,10 @@ public class HUDBoostIndicatorHandler : MonoBehaviour {
 	private void OnEventStart(object sender, int countdown) {
 
 		if (countdown <= 0) {
-			textMesh.color = Color.green;
-			StartCoroutine("RefreshIndicator");
-		}
+
+            textMesh.color = Color.green;
+					
+        }
 
 	}
 
