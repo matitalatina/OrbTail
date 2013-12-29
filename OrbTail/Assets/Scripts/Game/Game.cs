@@ -179,8 +179,6 @@ public class Game : MonoBehaviour {
 
         var master = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
 
-        master.NotifyGameBuilt();
-
         master.EventPlayerLeft += master_EventPlayerLeft;
         master.EventServerLeft += master_EventServerLeft;
 
@@ -215,6 +213,8 @@ public class Game : MonoBehaviour {
         EventStart += Game_EventStart;
 
         EnableControls(false);
+
+		master.NotifyGameBuilt();
         
         StartCoroutine("UpdateCountdown");
 

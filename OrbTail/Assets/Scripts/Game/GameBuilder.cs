@@ -116,6 +116,8 @@ public class GameBuilder : MonoBehaviour {
                 NetworkBuilder = gameObject.AddComponent<HostBuilder>();
                 
                 Application.LoadLevel("MenuMatchmaking");
+				
+				NetworkBuilder.EventDisconnected += NetworkBuilder_EventDisconnected;
 
                 break;
 
@@ -124,12 +126,14 @@ public class GameBuilder : MonoBehaviour {
                 NetworkBuilder = gameObject.AddComponent<ClientBuilder>();
 
                 Application.LoadLevel("MenuMatchmaking");
+				
+				NetworkBuilder.EventDisconnected += NetworkBuilder_EventDisconnected;
 
                 break;
 
         }
 
-        NetworkBuilder.EventDisconnected += NetworkBuilder_EventDisconnected;
+        
         
         this.enabled = false;
         
