@@ -68,6 +68,9 @@ public class Game : MonoBehaviour {
 
     }
 
+    /// <summary>
+    /// Nothing to signal so far
+    /// </summary>
     public const int kInfoNone = 0;
 
     /// <summary>
