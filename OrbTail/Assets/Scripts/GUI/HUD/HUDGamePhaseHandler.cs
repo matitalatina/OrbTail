@@ -55,7 +55,7 @@ public class HUDGamePhaseHandler : MonoBehaviour {
 		mainLight.intensity = intensity;
 	}
 
-	private void OnGameOver(object sender, GameObject winner) {
+	private void OnGameOver(object sender, GameObject winner, int info) {
 		textMeshCountdown.text = "Game Over";
 		iTween.FadeTo(this.gameObject, 1f, 2f);
 		iTween.ValueTo(this.gameObject, iTween.Hash(

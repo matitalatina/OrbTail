@@ -92,7 +92,7 @@ public class CameraMovement : MonoBehaviour {
 		game.EventEnd += OnEventEnd;
 	}
 
-	private void OnEventEnd(object sender, GameObject winner) {
+	private void OnEventEnd(object sender, GameObject winner, int info) {
 		if (winner != null) {
 			smooth = finalSmooth;
 			LookAt(winner);

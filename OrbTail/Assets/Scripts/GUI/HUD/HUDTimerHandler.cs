@@ -44,7 +44,7 @@ public class HUDTimerHandler : MonoBehaviour {
 		}
 	}
 
-	private void OnEnd(object sender, GameObject winner) {
+	private void OnEnd(object sender, GameObject winner, int info) {
 		iTween.FadeTo(gameObject, 0f, animationTime);
 	}
 }

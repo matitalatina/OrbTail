@@ -55,19 +55,7 @@ public class ClientBuilder : NetworkPlayerBuilder {
     void OnDisconnectedFromServer(NetworkDisconnection info)
     {
 
-        switch (info)
-        {
-            case NetworkDisconnection.Disconnected:
-
-                NotifyDisconnected("The server shutdown the connection");
-                break;
-
-            case NetworkDisconnection.LostConnection:
-                
-                NotifyDisconnected("Connection lost");
-                break;
-        
-        }
+        NotifyDisconnected("Disconnected from server");
 
     }
 

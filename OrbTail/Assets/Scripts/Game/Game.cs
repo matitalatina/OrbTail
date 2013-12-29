@@ -11,7 +11,7 @@ public class Game : MonoBehaviour {
 
     public delegate void DelegateGameStart(object sender, int countdown);
 
-    public delegate void DelegateGameEnd(object sender, GameObject winner);
+    public delegate void DelegateGameEnd(object sender, GameObject winner, int info);
 
     public delegate void DelegateGameTick(object sender, int time_left);
 
@@ -34,29 +34,23 @@ public class Game : MonoBehaviour {
     }
 
     [RPC]
-    private void NotifyEnd()
+    private void NotifyEnd(int info)
     {
-
-        //TODO: Remove this
-        GameObject winner = game_mode_.Winner;
-
-        if( winner == null ){
-
-            Debug.Log("Tie");
-
-        }else{
-
-            GameIdentity gi = winner.GetComponent<GameIdentity>();
-
-            Debug.Log("Player " + gi.Id + " wins");
-    
-        }
-        //
 
         if (EventEnd != null)
         {
 
-            EventEnd(this, game_mode_.Winner);
+            if ((info & kInfoNoWinner) != 0)
+            {
+
+                EventEnd(this, null, info);
+
+            }
+            else {
+
+                EventEnd(this, game_mode_.Winner, info);
+
+            }
 
         }
         
@@ -73,6 +67,18 @@ public class Game : MonoBehaviour {
         }
 
     }
+
+    public const int kInfoNone = 0;
+
+    /// <summary>
+    /// The game ended because the server left the match!
+    /// </summary>
+    public const int kInfoServerLeft = 1 | kInfoNoWinner;
+
+    /// <summary>
+    /// The game ended with no winner
+    /// </summary>
+    public const int kInfoNoWinner = 2;
 
     #endregion
 
@@ -159,6 +165,7 @@ public class Game : MonoBehaviour {
         master.NotifyGameBuilt();
 
         master.EventPlayerLeft += master_EventPlayerLeft;
+        master.EventServerLeft += master_EventServerLeft;
 
         //Create the proper game mode
         switch (GameMode)
@@ -195,6 +202,23 @@ public class Game : MonoBehaviour {
         StartCoroutine("UpdateCountdown");
 
 	}
+
+    void master_EventServerLeft(object sender)
+    {
+
+        //This is called only on client-side
+
+        //Stops the coroutine
+        StopCoroutine("UpdateGameTime");
+
+        NotifyEnd(kInfoServerLeft);
+
+        //Purges the instantiated objects
+        GameObjectFactory.Instance.Purge();
+
+        StartCoroutine("RestartGame");      
+
+    }
 
     void master_EventPlayerLeft(object sender, int id)
     {
@@ -305,13 +329,13 @@ public class Game : MonoBehaviour {
         if (Network.isServer)
         {
 
-            networkView.RPC("NotifyEnd", RPCMode.All);
+            networkView.RPC("NotifyEnd", RPCMode.All, kInfoNone);
 
         }
         else
         {
 
-            NotifyEnd();
+            NotifyEnd(kInfoNone);
 
         }
 

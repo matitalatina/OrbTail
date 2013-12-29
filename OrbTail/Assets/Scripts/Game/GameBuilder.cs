@@ -48,7 +48,7 @@ public class GameBuilder : MonoBehaviour {
     public delegate void DelegatePlayerLeft(object sender, int id);
 
     /// <summary>
-    /// Fired when the game has been properly built
+    /// Fired when a client has left the match
     /// </summary>
     public event DelegatePlayerLeft EventPlayerLeft;
 
@@ -59,6 +59,25 @@ public class GameBuilder : MonoBehaviour {
         {
 
             EventPlayerLeft(this, id);
+
+        }
+
+    }
+
+    public delegate void DelegateServerLeft(object sender);
+
+    /// <summary>
+    /// Fired when the server has gone offline
+    /// </summary>
+    public event DelegateServerLeft EventServerLeft;
+
+    public void NotifyServerLeft()
+    {
+
+        if (EventServerLeft != null)
+        {
+
+            EventServerLeft(this);
 
         }
 
@@ -109,9 +128,18 @@ public class GameBuilder : MonoBehaviour {
                 break;
 
         }
+
+        NetworkBuilder.EventDisconnected += NetworkBuilder_EventDisconnected;
         
         this.enabled = false;
         
+    }
+
+    void NetworkBuilder_EventDisconnected(object sender, string message)
+    {
+
+        NotifyServerLeft();
+
     }
         
     void Awake()

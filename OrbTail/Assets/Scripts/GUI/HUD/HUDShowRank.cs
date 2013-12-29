@@ -28,7 +28,7 @@ public class HUDShowRank : MonoBehaviour {
 		iTween.FadeTo(gameObject, 0f, fadeTime);
 	}
 
-	private void OnEventEnd(object sender, GameObject winner) {
+	private void OnEventEnd(object sender, GameObject winner, int info) {
 
 		if (winner == null) {
 			textMesh.text = "Tie...";

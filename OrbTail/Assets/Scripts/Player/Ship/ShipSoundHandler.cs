@@ -64,7 +64,7 @@ public class ShipSoundHandler : MonoBehaviour {
 		audio.pitch = Mathf.Abs(engineForce) + pitchGap;
 	}
 	
-	private void OnEventEnd(object sender, GameObject winner) {
+	private void OnEventEnd(object sender, GameObject winner, int info) {
 		gameFinished = true;
 		iTween.AudioTo(gameObject, 0f, 0f, 2f);
 	}

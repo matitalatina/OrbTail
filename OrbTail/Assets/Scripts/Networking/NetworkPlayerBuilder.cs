@@ -128,7 +128,7 @@ public class NetworkPlayerBuilder : MonoBehaviour
 
     public event DelegateDisconnected EventDisconnected;
 
-    protected void NotifyDisconnected(string message)
+    public void NotifyDisconnected(string message)
     {
 
         if (EventDisconnected != null)
