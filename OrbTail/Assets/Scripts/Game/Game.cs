@@ -94,7 +94,21 @@ public class Game : MonoBehaviour {
     /// The current game mode
     /// </summary>
     public int GameMode = -1;
-    
+
+    /// <summary>
+    /// Return the name of the game mode
+    /// </summary>
+    public string GameModeName
+    {
+        get
+        {
+
+            return game_mode_.Name;
+
+        }
+
+    }
+
     [RPC]
     public void RPCSetGame(int game_mode)
     {

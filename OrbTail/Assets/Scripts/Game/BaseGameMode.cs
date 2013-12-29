@@ -47,6 +47,11 @@ public abstract class BaseGameMode
     public abstract int Duration { get;  }
 
     /// <summary>
+    /// The game mode name
+    /// </summary>
+    public abstract string Name { get; }
+
+    /// <summary>
     /// The game instance
     /// </summary>
     protected Game Game { get; private set; }

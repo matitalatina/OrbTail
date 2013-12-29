@@ -10,6 +10,19 @@ using UnityEngine;
 public class LongestTailGameMode: BaseGameMode
 {
 
+
+    public override string Name
+    {
+
+        get
+        {
+
+            return "Longest tail";
+
+        }
+
+    }
+
     public LongestTailGameMode(Game game): base(game)
     {
 

@@ -27,6 +27,19 @@ public class ArcadeGameMode: BaseGameMode
 
     }
 
+
+    public override string Name
+    {
+
+        get
+        {
+
+            return "Arcade";
+
+        }
+
+    }
+
     public ArcadeGameMode(Game game): base(game)
     {
 

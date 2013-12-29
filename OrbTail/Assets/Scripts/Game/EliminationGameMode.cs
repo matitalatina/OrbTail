@@ -10,6 +10,19 @@ using UnityEngine;
 public class EliminationGameMode: BaseGameMode
 {
 
+
+    public override string Name
+    {
+
+        get
+        {
+
+            return "Elimination";
+
+        }
+
+    }
+
     public EliminationGameMode(Game game): base(game)
     {
 
