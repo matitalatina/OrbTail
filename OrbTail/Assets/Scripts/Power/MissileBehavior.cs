@@ -9,7 +9,7 @@ public class MissileBehavior : MonoBehaviour {
     public const string explosion_prefab_path = "Prefabs/Power/Explosion";
     private const float maxMissileSteering = 6.0f;
     private const float maxMissileSpeed = 8.0f;
-    private const float explosionForce = 100.0f;
+    private const float explosionForce = 60.0f;
     private const float timeToLive = 2.5f;
 	private const float smoothCurve = 10f;
 	private AudioClip explosionSound;
