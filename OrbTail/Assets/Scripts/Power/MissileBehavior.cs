@@ -97,7 +97,6 @@ public class MissileBehavior : MonoBehaviour {
 
                 }
 
-                Debug.Log("Removing all orbs");
                 collision.gameObject.GetComponent<TailController>().GetDetacherDriverStack().GetHead().DetachOrbs(int.MaxValue, collision.gameObject.GetComponent<Tail>());
 
             }
