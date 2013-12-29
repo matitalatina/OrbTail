@@ -5,9 +5,7 @@ using System.Linq;
 
 public class HostBuilder : NetworkPlayerBuilder
 {
-    
-    public const int kMatchStartDelay = 5;
-
+  
 	// Use this for initialization
 	void Start () {
 
@@ -207,13 +205,20 @@ public class HostBuilder : NetworkPlayerBuilder
 
             ready_players_.Clear();
 
-            //TODO: Delay a little bit...
-
-            //Every device should load the proper arena
-            networkView.RPC("RPCLoadArena", RPCMode.All, GetComponent<GameBuilder>().ArenaName);
+            StartCoroutine("LoadArenaDelayed", GetComponent<GameBuilder>().ArenaName);
 
         }
 
+    }
+
+    IEnumerator LoadArenaDelayed(string arena_name)
+    {
+
+        yield return new WaitForSeconds(MatchStartDelay);
+
+        //Every device should load the proper arena
+        networkView.RPC("RPCLoadArena", RPCMode.All, arena_name );
+        
     }
 
     void HostBuilder_EventIdAcquired(object sender, int id)

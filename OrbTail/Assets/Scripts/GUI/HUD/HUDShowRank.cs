@@ -39,7 +39,7 @@ public class HUDShowRank : MonoBehaviour {
 			iTween.ColorTo(gameObject, Color.green, fadeTime);
 		}
 		else {
-			textMesh.text = "The winner is: " + winner.GetComponent<PlayerIdentity>().Name;
+			textMesh.text = winner.GetComponent<PlayerIdentity>().ShipName + " wins";
 			iTween.FadeTo(gameObject, 1f, fadeTime);
 		}
 

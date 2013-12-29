@@ -50,6 +50,10 @@ public class GUIMatchmaking : MonoBehaviour {
         network_builder.EventErrorOccurred += network_builder_EventErrorOccurred;
         network_builder.EventDisconnected += network_builder_EventDisconnected;
 
+        //Useful for the host only
+
+        network_builder.MatchStartDelay = kScalingTime * 2.0f;
+
 	}
 
     void network_builder_EventDisconnected(object sender, string message)
