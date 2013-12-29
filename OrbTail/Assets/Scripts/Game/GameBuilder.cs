@@ -139,6 +139,18 @@ public class GameBuilder : MonoBehaviour {
         
     }
 
+    void OnDestroy()
+    {
+
+        if (Action != BuildMode.SinglePlayer)
+        {
+
+            NetworkBuilder.EventDisconnected -= NetworkBuilder_EventDisconnected;
+
+        }
+        
+    }
+
     void NetworkBuilder_EventDisconnected(object sender, string message)
     {
 

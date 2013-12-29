@@ -55,6 +55,20 @@ public class ArcadeGameMode: BaseGameMode
 
     }
 
+    ~ArcadeGameMode()
+    {
+
+        Game.EventTick -= game_EventTick;
+
+        foreach (GameObject ship in Game.ShipsInGame)
+        {
+
+            ship.GetComponent<Tail>().OnEventOrbAttached -= ArcadeGameMode_OnEventOrbAttached;
+
+        }
+
+    }
+
     void ArcadeGameMode_OnEventOrbAttached(object sender, GameObject orb, GameObject ship)
     {
 

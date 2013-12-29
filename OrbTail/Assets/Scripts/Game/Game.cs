@@ -48,8 +48,21 @@ public class Game : MonoBehaviour {
             }
             else {
 
-                EventEnd(this, game_mode_.Winner, info);
+                var winner = game_mode_.Winner;
 
+                if (winner == null)
+                {
+
+                    EventEnd(this, null, info | kInfoNoWinner);
+
+                }
+                else
+                {
+
+                    EventEnd(this, winner, info);
+
+                }
+                
             }
 
         }
@@ -219,6 +232,14 @@ public class Game : MonoBehaviour {
         StartCoroutine("UpdateCountdown");
 
 	}
+
+    void OnDestroy()
+    {
+
+        game_mode_.EventWin -= GameMode_EventEnd;
+        EventStart -= Game_EventStart;
+
+    }
 
     void master_EventServerLeft(object sender)
     {

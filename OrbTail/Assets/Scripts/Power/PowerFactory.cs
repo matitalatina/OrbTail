@@ -13,10 +13,9 @@ public class PowerFactory
 
         RegisterPower(new Boost(), 0);              //The boost is not a generated power
         RegisterPower(new Missile(), 1);
-        RegisterPower(new Invincibility(), 0);
-        RegisterPower(new OrbSteal(), 0);
-        RegisterPower(new Magnet(), 0);
-        //RegisterPower(new TailSwap(), 1);   
+        RegisterPower(new Invincibility(), 1);
+        RegisterPower(new OrbSteal(), 1);
+        RegisterPower(new Magnet(), 1);
 
         PreloadPowers();
 

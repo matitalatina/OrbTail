@@ -65,6 +65,20 @@ public class EliminationGameMode: BaseGameMode
 
     }
 
+    ~EliminationGameMode()
+    {
+
+        Game.EventTick -= game_EventTick;
+
+        foreach (GameObject ship in Game.ShipsInGame)
+        {
+
+            ship.GetComponent<Tail>().OnEventOrbDetached -= EliminationGameMode_OnEventOrbDetached;
+
+        }
+
+    }
+
     public override GameObject Winner
     {
 	 

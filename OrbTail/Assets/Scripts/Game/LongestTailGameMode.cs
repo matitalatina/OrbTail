@@ -30,6 +30,13 @@ public class LongestTailGameMode: BaseGameMode
 
     }
 
+    ~LongestTailGameMode()
+    {
+
+        Game.EventTick -= game_EventTick;
+
+    }
+
     public override GameObject Winner
     {
 	 
