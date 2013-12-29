@@ -10,7 +10,7 @@ using UnityEngine;
 public class LongestTailGameMode: BaseGameMode
 {
 
-    public LongestTailGameMode(Game game)
+    public LongestTailGameMode(Game game): base(game)
     {
 
         game.EventTick += game_EventTick;
@@ -23,9 +23,7 @@ public class LongestTailGameMode: BaseGameMode
         get
         {
 
-            var ships = from s in GameObject.FindGameObjectsWithTag(Tags.Ship)
-                        where s.activeSelf
-                        select s;
+            var ships = Game.ShipsInGame;
 
             //Find the longest tail
             int longest_tail = ships.Max((GameObject go) => { return go.GetComponent<Tail>().GetOrbCount(); });
@@ -47,6 +45,18 @@ public class LongestTailGameMode: BaseGameMode
 
             }
             
+
+        }
+
+    }
+
+    public override int Duration
+    {
+
+        get
+        {
+
+            return 180;
 
         }
 

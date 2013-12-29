@@ -17,7 +17,7 @@ public abstract class BaseGameMode
     /// </summary>
     public DelegateEnd EventWin;
 
-    protected void NotifyWin()
+    public void NotifyWin()
     {
 
         if (EventWin != null)
@@ -29,10 +29,27 @@ public abstract class BaseGameMode
 
     }
 
+    public BaseGameMode(Game game)
+    {
+
+        Game = game;
+
+    }
+
     /// <summary>
     /// Return the winner
     /// </summary>
     public abstract GameObject Winner { get; }
+
+    /// <summary>
+    /// The match duration
+    /// </summary>
+    public abstract int Duration { get;  }
+
+    /// <summary>
+    /// The game instance
+    /// </summary>
+    protected Game Game { get; private set; }
 
 }
 

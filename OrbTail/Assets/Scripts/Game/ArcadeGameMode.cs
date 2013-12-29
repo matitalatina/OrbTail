@@ -15,7 +15,19 @@ public class ArcadeGameMode: BaseGameMode
 
     #endregion
 
-    public ArcadeGameMode(Game game)
+    public override int Duration
+    {
+
+        get
+        {
+
+            return 180;
+
+        }
+
+    }
+
+    public ArcadeGameMode(Game game): base(game)
     {
 
         game.EventTick += game_EventTick;
@@ -45,10 +57,10 @@ public class ArcadeGameMode: BaseGameMode
         get
         {
 
-            var ships = from s in GameObject.FindGameObjectsWithTag(Tags.Ship)
-                        where s.activeSelf
-                        select s;
-            
+            var ships = Game.ShipsInGame;
+
+            Debug.Log("Found " + ships.Count() + " ships");
+
             //Find the highest score
             int highest_score = ships.Max( (GameObject go) => { return go.GetComponent<GameIdentity>().Score; } );
 

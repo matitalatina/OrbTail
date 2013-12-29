@@ -41,6 +41,19 @@ public class OwnershipManager : MonoBehaviour {
 
     }
 
+    /// <summary>
+    /// Changes the ownership of an object giving it to the server instead.
+    /// Use this routine only if the previous owner is offline!
+    /// </summary>
+    public void RestoreOwnership(GameObject game_object)
+    {
+
+        var view_id = AllocateNetworkViewID();
+
+        RPCChangeOwnership(game_object.networkView.viewID, view_id, true);
+
+    }
+
     [RPC]
     private void RPCRedirectToOwner(NetworkViewID target_view_id, NetworkViewID view_id)
     {

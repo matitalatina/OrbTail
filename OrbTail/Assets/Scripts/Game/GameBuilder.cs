@@ -45,6 +45,25 @@ public class GameBuilder : MonoBehaviour {
 
     }
 
+    public delegate void DelegatePlayerLeft(object sender, int id);
+
+    /// <summary>
+    /// Fired when the game has been properly built
+    /// </summary>
+    public event DelegatePlayerLeft EventPlayerLeft;
+
+    public void NotifyPlayerLeft(int id)
+    {
+
+        if (EventPlayerLeft != null)
+        {
+
+            EventPlayerLeft(this, id);
+
+        }
+
+    }
+
     /// <summary>
     /// The current arena name
     /// </summary>

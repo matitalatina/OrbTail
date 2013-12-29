@@ -85,12 +85,7 @@ public class Game : MonoBehaviour {
     /// The current game mode
     /// </summary>
     public int GameMode = -1;
-
-    /// <summary>
-    /// The current duration
-    /// </summary>
-    public int Duration = 30;
-
+    
     [RPC]
     public void RPCSetGame(int game_mode)
     {
@@ -138,13 +133,20 @@ public class Game : MonoBehaviour {
             if (ships_ == null)
             {
 
-                ships_ = GameObject.FindGameObjectsWithTag(Tags.Ship);
+                ships_ = new List<GameObject>(GameObject.FindGameObjectsWithTag(Tags.Ship));
 
             }
 
             return ships_;
 
         }
+
+    }
+
+    public void RemoveShip(GameObject ship)
+    {
+
+        ships_.Remove(ship);
 
     }
 
@@ -155,6 +157,8 @@ public class Game : MonoBehaviour {
         var master = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
 
         master.NotifyGameBuilt();
+
+        master.EventPlayerLeft += master_EventPlayerLeft;
 
         //Create the proper game mode
         switch (GameMode)
@@ -191,6 +195,45 @@ public class Game : MonoBehaviour {
         StartCoroutine("UpdateCountdown");
 
 	}
+
+    void master_EventPlayerLeft(object sender, int id)
+    {
+
+        //Restores the orbs
+        var disconnected_player = (from player in ShipsInGame
+                                   where player.GetComponent<GameIdentity>().Id == id
+                                   select player).First();
+
+        //Detaches all orbs from the player's tail
+        var orbs = (from orb in disconnected_player.GetComponent<Tail>().DetachOrbs(int.MaxValue)
+                    select orb);
+
+        //Restores the orbs ownership
+        var ownership_mgr = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<OwnershipManager>();
+
+        foreach (GameObject orb in orbs)
+        {
+
+            ownership_mgr.RestoreOwnership(orb);
+
+        }
+
+        //Destroy everything else
+        Network.RemoveRPCs(disconnected_player.networkView.owner);
+        Network.DestroyPlayerObjects(disconnected_player.networkView.owner);
+        
+        //Removes the disconnected player
+        ships_.Remove(disconnected_player);
+
+        //There's only one player, he must have won
+        if (ShipsInGame.Count() <= 1)
+        {
+
+            game_mode_.NotifyWin();
+
+        }
+
+    }
 
     void Game_EventStart(object sender, int countdown)
     {
@@ -326,7 +369,7 @@ public class Game : MonoBehaviour {
     private IEnumerator UpdateGameTime()
     {
 
-        int counter = Duration;
+        int counter = game_mode_.Duration;
 
         do
         {
@@ -351,14 +394,6 @@ public class Game : MonoBehaviour {
 
     }
     
-    [RPC]
-    private void RPCSetDuration(int duration)
-    {
-
-        Duration = duration;
-
-    }
-
     [RPC]
     private void RPCGameEnable(bool value)
     {

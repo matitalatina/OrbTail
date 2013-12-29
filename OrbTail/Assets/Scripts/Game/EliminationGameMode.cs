@@ -10,12 +10,10 @@ using UnityEngine;
 public class EliminationGameMode: BaseGameMode
 {
 
-    public EliminationGameMode(Game game)
+    public EliminationGameMode(Game game): base(game)
     {
 
         game.EventTick += game_EventTick;
-
-        ships_ = new List<GameObject>(game.ShipsInGame);
 
         Tail tail;
         var tails = new List<Tail>();
@@ -44,7 +42,7 @@ public class EliminationGameMode: BaseGameMode
 
                     tails[i].AttachOrb(orb);
 
-                    i = ++i % ships_.Count;
+                    i = ++i % game.ShipsInGame.Count();
 
                 }
                 
@@ -60,10 +58,10 @@ public class EliminationGameMode: BaseGameMode
         get
         {
 
-            if (ships_.Count == 1)
+            if (Game.ShipsInGame.Count() == 1)
             {
 
-                return ships_.First();
+                return Game.ShipsInGame.First();
 
             }
             else
@@ -76,13 +74,26 @@ public class EliminationGameMode: BaseGameMode
         }
 
     }
+
+    public override int Duration
+    {
+
+        get
+        {
+
+            return 180;
+
+        }
+
+    }
     
     private void game_EventTick(object sender, int time_left)
     {
 
         if( !end_of_match &&
             (time_left <= 0 ||
-             ships_.Count <= 1) ){
+             Game.ShipsInGame.Count() <= 1))
+        {
 
             //The time's up or there are less than one ships in game
             NotifyWin();
@@ -102,7 +113,7 @@ public class EliminationGameMode: BaseGameMode
         {
 
             //The ship should be eliminated
-            ships_.Remove(ship);
+            Game.RemoveShip(ship);
 
             //TODO: Create the spectator camera, tell the ship that it has been eliminated
             //TODO: disable the ship properly!
@@ -111,8 +122,6 @@ public class EliminationGameMode: BaseGameMode
         }
 
     }
-
-    private IList<GameObject> ships_;
 
     private bool end_of_match = false;
 

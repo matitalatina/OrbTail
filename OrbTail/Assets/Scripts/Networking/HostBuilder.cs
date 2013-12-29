@@ -19,6 +19,7 @@ public class HostBuilder : NetworkPlayerBuilder
         EventErrorOccurred += HostBuilder_EventErrorOccurred;
         EventPlayerReady += HostBuilder_EventPlayerReady;
         EventIdAcquired += HostBuilder_EventIdAcquired;
+        EventPlayerUnregistered += HostBuilder_EventPlayerUnregistered;
 
         //Store the available ids
         for (int i = GameBuilder.kMaxPlayerCount; i > 0 ; i--)
@@ -59,6 +60,13 @@ public class HostBuilder : NetworkPlayerBuilder
         }
 
 	}
+
+    void HostBuilder_EventPlayerUnregistered(object sender, int id)
+    {
+
+        GetComponent<GameBuilder>().NotifyPlayerLeft(id);
+        
+    }
 
 	// Update is called once per frame
 	void Update () {
