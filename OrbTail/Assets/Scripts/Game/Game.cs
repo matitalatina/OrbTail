@@ -37,8 +37,11 @@ public class Game : MonoBehaviour {
     private void NotifyEnd(int info)
     {
 
-        if (EventEnd != null)
+        if (EventEnd != null &&
+            !event_end_fired_)
         {
+
+            event_end_fired_ = true;
 
             if ((info & kInfoNoWinner) != 0)
             {
@@ -68,6 +71,11 @@ public class Game : MonoBehaviour {
         }
         
     }
+
+    /// <summary>
+    /// This flags avoid multiple ends...
+    /// </summary>
+    private bool event_end_fired_ = false;
 
     private void NotifyTick(int time_left)
     {
