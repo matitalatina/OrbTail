@@ -27,6 +27,7 @@ public class HUDBoostIndicatorHandler : MonoBehaviour {
 		game.EventEnd += OnEventEnd;
 		game.EventStart += OnEventStart;
 		game.EventEnd += OnEnd;
+		game.EventShipEliminated += OnShipEliminated;
 
         GameObject player = game.ActivePlayer;
         player.GetComponent<PowerController>().EventPowerAttached += HUDBoostIndicatorHandler_EventPowerAttached;
@@ -61,6 +62,12 @@ public class HUDBoostIndicatorHandler : MonoBehaviour {
 					
         }
 
+	}
+
+	private void OnShipEliminated(object sender, GameObject ship) {
+		if (ship == game.ActivePlayer) {
+			prepareToDisable();
+		}
 	}
 
 	private IEnumerator RefreshIndicator() {

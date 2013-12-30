@@ -5,6 +5,7 @@ public class HUDMessageInGameHandler : MonoBehaviour {
 	private TextMesh textMesh;
 	private GameBuilder builder;
 	private PowerController powerController;
+	private Game game;
 
 	// Use this for initialization
 	void Start () {
@@ -15,30 +16,46 @@ public class HUDMessageInGameHandler : MonoBehaviour {
 	}
 
 	private void OnGameBuilt(object sender) {
-		Game game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
+		game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
 		GameObject activePlayer = game.ActivePlayer;
 		powerController = activePlayer.GetComponent<PowerController>();
 		powerController.EventPowerAttached += OnEventPowerAttached;
 
 		iTween.FadeTo(gameObject, 0f, 0f);
+		builder.EventGameBuilt -= OnGameBuilt;
+
+		game.EventEnd += OnEventEnd;
+		game.EventShipEliminated += OnShipEliminated;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
 	}
-	
 
-	private void OnEventPowerAttached(object sender, GameObject ship, Power power) {
-		textMesh.text = power.Name;
+	private void ShowText(string text) {
+		textMesh.text = text;
 		iTween.FadeUpdate(gameObject, 0f, 0f);
 		iTween.FadeFrom(gameObject, 1f, 4f);
 	}
 
+	private void OnEventPowerAttached(object sender, GameObject ship, Power power) {
+		ShowText(power.Name);
+	}
 
-	// TODO: not called
+	private void OnEventEnd(object sender, GameObject winner, int info) {
+		CleanScript();
+	}
+
+	private void OnShipEliminated(object sender, GameObject ship) {
+		if (ship == game.ActivePlayer) {
+			ShowText("You are eliminated!");
+		}
+	}
+
+
 	private void CleanScript() {
-		builder.EventGameBuilt -= OnGameBuilt;
 		powerController.EventPowerAttached -= OnEventPowerAttached;
+		game.EventEnd -= OnEventEnd;
 	}
 }

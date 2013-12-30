@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class MovementController : MonoBehaviour {
 
-	public float maxTorqueForce = 17f;
+	public float maxTorqueForce = 15f;
 	public float maxSpeedForce = 70.0f;
 	public float maxRoll = 80f;
 	public float rotationSmooth = 10f;
