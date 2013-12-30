@@ -25,7 +25,7 @@ public class RandomPowerAttacher : MonoBehaviour
 
     public void RemoveFX()
     {
-
+        
         GameObjectFactory.Instance.Destroy(glow_prefab_path, particle_dummy);
 
         this.enabled = false;

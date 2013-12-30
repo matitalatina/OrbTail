@@ -15,11 +15,15 @@ public class Game : MonoBehaviour {
 
     public delegate void DelegateGameTick(object sender, int time_left);
 
+    public delegate void DelegateShipEliminated(object sender, GameObject ship);
+
     public event DelegateGameStart EventStart;
 
     public event DelegateGameEnd EventEnd;
 
     public event DelegateGameTick EventTick;
+
+    public event DelegateShipEliminated EventShipEliminated;
     
     private void NotifyStart(int countdown)
     {
@@ -72,11 +76,6 @@ public class Game : MonoBehaviour {
         
     }
 
-    /// <summary>
-    /// This flags avoid multiple ends...
-    /// </summary>
-    private bool event_end_fired_ = false;
-
     private void NotifyTick(int time_left)
     {
 
@@ -88,6 +87,23 @@ public class Game : MonoBehaviour {
         }
 
     }
+
+    private void NotifyShipEliminated(GameObject ship)
+    {
+        
+        if (EventShipEliminated != null)
+        {
+
+            EventShipEliminated(this, ship);
+            
+        }
+
+    }
+
+    /// <summary>
+    /// This flags avoid multiple ends...
+    /// </summary>
+    private bool event_end_fired_ = false;
 
     /// <summary>
     /// Nothing to signal so far
@@ -192,6 +208,8 @@ public class Game : MonoBehaviour {
 
         ships_.Remove(ship);
 
+        NotifyShipEliminated(ship);
+
     }
 
 	// Use this for initialization
@@ -243,10 +261,10 @@ public class Game : MonoBehaviour {
 
     void OnDestroy()
     {
-
+        /*
         game_mode_.EventWin -= GameMode_EventEnd;
         EventStart -= Game_EventStart;
-
+        */
     }
 
     void master_EventServerLeft(object sender)
@@ -288,13 +306,13 @@ public class Game : MonoBehaviour {
 
         }
 
-        //Destroy everything else
+        //Removes the disconnected player
+        RemoveShip(disconnected_player);
+
+        //Destroy the player who left
         Network.RemoveRPCs(disconnected_player.networkView.owner);
         Network.DestroyPlayerObjects(disconnected_player.networkView.owner);
         
-        //Removes the disconnected player
-        ships_.Remove(disconnected_player);
-
         //There's only one player, he must have won
         if (ShipsInGame.Count() <= 1)
         {
