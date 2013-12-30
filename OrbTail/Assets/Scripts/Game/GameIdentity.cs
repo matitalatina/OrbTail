@@ -23,6 +23,22 @@ public class GameIdentity : MonoBehaviour {
 
     }
 
+    public delegate void DelegateIdSet(object sender, int id);
+
+    public DelegateIdSet EventIdSet;
+
+    private void NotifyIdSet(int id)
+    {
+
+        if (EventIdSet != null)
+        {
+
+            EventIdSet(this, id);
+
+        }
+
+    }
+
     /// <summary>
     /// The ordinal number of the player
     /// </summary>
@@ -129,6 +145,8 @@ public class GameIdentity : MonoBehaviour {
     {
 
         Id = id;
+
+        NotifyIdSet(id);
 
     }
 

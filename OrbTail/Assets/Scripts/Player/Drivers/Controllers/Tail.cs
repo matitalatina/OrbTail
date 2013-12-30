@@ -7,7 +7,7 @@ public class Tail : MonoBehaviour {
     private Stack<GameObject> orbStack = new Stack<GameObject>();
     private OwnershipManager ownershipManager;
 
-    private GameIdentity game_identity;
+    private GameIdentity game_identity = null;
     private float kOrbColorThreshold = 10;  //Number of orbs to have in order to have a full intensity tail
     private Color kOrbDeactiveColor;
 	private Material defaultOrbMaterial;
@@ -32,21 +32,36 @@ public class Tail : MonoBehaviour {
     /// </summary>
     public event DelegateOnOrbDetached OnEventOrbDetached;
 
+    void Awake()
+    {
+
+        defaultOrbMaterial = Resources.Load<Material>("Materials/OrbMat");
+        kOrbDeactiveColor = defaultOrbMaterial.color;
+        myOrbMaterial = new Material(defaultOrbMaterial);
+        
+    }
+
 	// Use this for initialization
 	void Start () {
-        
+
         var game = GameObject.FindGameObjectWithTag(Tags.Game);
 		
         ownershipManager = game.GetComponent<OwnershipManager>();
-
+       
         game_identity = GetComponent<GameIdentity>();
 
-		defaultOrbMaterial = Resources.Load<Material>("Materials/OrbMat");
-		kOrbDeactiveColor = defaultOrbMaterial.color;
-		myOrbMaterial = new Material(defaultOrbMaterial);
+        UpdateTailColor();
+
+        game_identity.EventIdSet += game_identity_EventIdSet;
 
 	}
 
+    void game_identity_EventIdSet(object sender, int id)
+    {
+
+        UpdateTailColor();
+
+    }
 
 	/// <summary>
 	/// Attachs the orb to the tail.
@@ -122,8 +137,11 @@ public class Tail : MonoBehaviour {
     }
 
 	private void UpdateTailColor() {
-		var color = Color.Lerp( kOrbDeactiveColor, game_identity.Color, orbStack.Count / kOrbColorThreshold );
-		myOrbMaterial.color = color;
+
+        var color = Color.Lerp(kOrbDeactiveColor, game_identity.Color, orbStack.Count / kOrbColorThreshold);
+        myOrbMaterial.color = color;
+
+		
 	}
 
     private void DecolorizeOrbs(List<GameObject> orbs)
