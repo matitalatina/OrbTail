@@ -9,6 +9,8 @@ public class HUDGamePhaseHandler : MonoBehaviour {
 	private float initialLightPower = 0.01f;
 	private int fontBigSize = 150;
 	private float standardLightPower;
+	private GameBuilder builder;
+	private Game game;
 	
 	// Use this for initialization
 	void Start () {
@@ -18,7 +20,7 @@ public class HUDGamePhaseHandler : MonoBehaviour {
 
 		textMeshCountdown = gameObject.GetComponent<TextMesh>();
 
-		GameBuilder builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
+		builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
 		builder.EventGameBuilt += OnGameBuilt;
 	}
 	
@@ -28,9 +30,11 @@ public class HUDGamePhaseHandler : MonoBehaviour {
 	}
 
 	private void OnGameBuilt(object sender) {
-		Game game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
+		game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
 		game.EventStart += OnStart;
 		game.EventEnd += OnGameOver;
+
+		builder.EventGameBuilt -= OnGameBuilt;
 	}
 	
 	private void OnStart(object sender, int countdown) {
@@ -63,5 +67,12 @@ public class HUDGamePhaseHandler : MonoBehaviour {
 			"to", initialLightPower,
 			"onUpdate","ChangeLightIntensity"));
 
+		CleanScript();
+
+	}
+
+	private void CleanScript() {
+		game.EventStart -= OnStart;
+		game.EventEnd -= OnGameOver;
 	}
 }

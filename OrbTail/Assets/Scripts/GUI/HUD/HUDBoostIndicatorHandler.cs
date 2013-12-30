@@ -9,10 +9,12 @@ public class HUDBoostIndicatorHandler : MonoBehaviour {
 	private float refreshTime = 0.2f;
 	private const float animationTime = 1f;
     private Game game;
+	private GameBuilder gameBuilder;
+
 	// Use this for initialization
 	void Start () {
-		GameBuilder builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
-		builder.EventGameBuilt += OnGameBuilt;
+		gameBuilder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
+		gameBuilder.EventGameBuilt += OnGameBuilt;
 	}
 	
 	// Update is called once per frame
@@ -29,9 +31,11 @@ public class HUDBoostIndicatorHandler : MonoBehaviour {
         GameObject player = game.ActivePlayer;
         player.GetComponent<PowerController>().EventPowerAttached += HUDBoostIndicatorHandler_EventPowerAttached;
 		textMesh = GetComponent<TextMesh>();
+
+		gameBuilder.EventGameBuilt -= OnGameBuilt;
 	}
 
-    void HUDBoostIndicatorHandler_EventPowerAttached(object sender, GameObject ship, Power power)
+    private void HUDBoostIndicatorHandler_EventPowerAttached(object sender, GameObject ship, Power power)
     {
 
         if (power.Group == PowerGroups.Passive)
@@ -46,7 +50,7 @@ public class HUDBoostIndicatorHandler : MonoBehaviour {
 
 
 	private void OnEventEnd(object sender, GameObject winner, int info) {
-		StopCoroutine("RefreshIndicator");
+		prepareToDisable();
 	}
 
 	private void OnEventStart(object sender, int countdown) {
@@ -72,6 +76,14 @@ public class HUDBoostIndicatorHandler : MonoBehaviour {
 
 	private void OnEnd(object sender, GameObject winner, int info) {
 		iTween.FadeTo(gameObject, 0f, animationTime);
+	}
+
+	private void prepareToDisable() {
+		StopCoroutine("RefreshIndicator");
+		
+		game.EventEnd -= OnEventEnd;
+		game.EventStart -= OnEventStart;
+		game.EventEnd -= OnEnd;
 	}
 
 

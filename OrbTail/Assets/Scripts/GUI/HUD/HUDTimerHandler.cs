@@ -5,11 +5,13 @@ public class HUDTimerHandler : MonoBehaviour {
 	private TextMesh textMesh;
 	private const float animationTime = 1f;
 	private const float factorScale = 0.05f;
+	private GameBuilder builder;
+	private Game game;
 
 	// Use this for initialization
 	void Start () {
 		textMesh = gameObject.GetComponent<TextMesh>();
-		GameBuilder builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
+		builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
 		builder.EventGameBuilt += OnGameBuilt;
 	}
 	
@@ -20,10 +22,12 @@ public class HUDTimerHandler : MonoBehaviour {
 
 	private void OnGameBuilt(object sender) {
 
-		Game game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
+		game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
 		game.EventTick += OnChangeTime;
 		game.EventStart += OnStart;
 		game.EventEnd += OnEnd;
+
+		builder.EventGameBuilt -= OnGameBuilt;
 	}
 
 	private void OnStart(object sender, int countdown) {
@@ -46,5 +50,8 @@ public class HUDTimerHandler : MonoBehaviour {
 
 	private void OnEnd(object sender, GameObject winner, int info) {
 		iTween.FadeTo(gameObject, 0f, animationTime);
+		game.EventTick -= OnChangeTime;
+		game.EventStart -= OnStart;
+		game.EventEnd -= OnEnd;
 	}
 }

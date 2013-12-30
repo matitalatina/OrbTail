@@ -8,9 +8,7 @@ public class ShipSoundHandler : MonoBehaviour {
 	private Game game;
 
 	private float volumeStd = 1f;
-	private float smoothSound = 1f;
 	private float pitchGap = 2f;
-	private float actualPitchSound;
 	private bool gameFinished = false;
 
 	// Use this for initialization
@@ -52,7 +50,6 @@ public class ShipSoundHandler : MonoBehaviour {
 		}
 
 		game.EventEnd += OnEventEnd;
-		actualPitchSound = audio.pitch;
 
 	}
 
@@ -67,6 +64,10 @@ public class ShipSoundHandler : MonoBehaviour {
 	private void OnEventEnd(object sender, GameObject winner, int info) {
 		gameFinished = true;
 		iTween.AudioTo(gameObject, 0f, 0f, 2f);
+	}
+
+	void OnDestroy() {
+		game.EventEnd -= OnEventEnd;
 	}
 
 }

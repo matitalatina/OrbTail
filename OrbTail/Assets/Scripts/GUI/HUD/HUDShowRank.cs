@@ -5,6 +5,7 @@ public class HUDShowRank : MonoBehaviour {
 
 	private TextMesh textMesh;
 	private Game game;
+	private GameBuilder builder;
 
 	private float fadeTime = 2f;
 
@@ -12,7 +13,7 @@ public class HUDShowRank : MonoBehaviour {
 	void Start () {
 		textMesh = gameObject.GetComponent<TextMesh>();
 
-		GameBuilder builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
+		builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
 		builder.EventGameBuilt += OnGameBuilt;
 	}
 	
@@ -26,6 +27,8 @@ public class HUDShowRank : MonoBehaviour {
 		game.EventEnd += OnEventEnd;
 		textMesh.text = "Game mode: " + game.GameModeName;
 		iTween.FadeTo(gameObject, 0f, fadeTime);
+
+		builder.EventGameBuilt -= OnGameBuilt;
 	}
 
 	private void OnEventEnd(object sender, GameObject winner, int info) {
@@ -42,6 +45,8 @@ public class HUDShowRank : MonoBehaviour {
 			textMesh.text = winner.GetComponent<PlayerIdentity>().ShipName + " wins";
 			iTween.FadeTo(gameObject, 1f, fadeTime);
 		}
+
+		game.EventEnd -= OnEventEnd;
 
 	}
 }
