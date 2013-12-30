@@ -40,6 +40,7 @@ public class HUDOpponentsPosition : MonoBehaviour {
 		Game game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
 		game.EventEnd += OnEventEnd;
 		game.EventStart += OnEventStart;
+		game.EventShipEliminated += OnShipEliminated;
 		GameObject myShip = game.ActivePlayer;
 		myShipPosition = myShip.transform;
 
@@ -63,6 +64,26 @@ public class HUDOpponentsPosition : MonoBehaviour {
 	private void OnEventStart(object sender, int countdown) {
 		if (countdown <= 0) {
 			gameStarted = true;
+		}
+	}
+
+	private void OnShipEliminated(object sender, GameObject ship) {
+		Debug.Log(ship.transform);
+		if (ship == gameObject) {
+
+			foreach (KeyValuePair<Transform, GameObject> pair in positionShipAndIndicators) {
+				Destroy(pair.Value);
+			}
+
+			positionShipAndIndicators = new Dictionary<Transform, GameObject>();
+			textMeshes = new Dictionary<GameObject, TextMesh>();
+		}
+		else {
+			Transform transformShip = ship.transform;
+			GameObject indicator = positionShipAndIndicators[transformShip];
+			positionShipAndIndicators.Remove(transformShip);
+			textMeshes.Remove(indicator);
+			Destroy(indicator);
 		}
 	}
 

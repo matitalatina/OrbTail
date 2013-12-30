@@ -192,9 +192,7 @@ public class GUIMatchmaking : MonoBehaviour {
 
     void OnDestroy()
     {
-
-        network_builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>().NetworkBuilder;
-
+        
         network_builder.EventIdAcquired -= network_builder_EventIdAcquired;
         network_builder.EventPlayerRegistered -= network_builder_EventPlayerRegistered;
         network_builder.EventPlayerUnregistered -= network_builder_EventPlayerUnregistered;
@@ -202,7 +200,7 @@ public class GUIMatchmaking : MonoBehaviour {
         network_builder.EventNoGame -= network_builder_EventNoGame;
         network_builder.EventErrorOccurred -= network_builder_EventErrorOccurred;
         network_builder.EventDisconnected -= network_builder_EventDisconnected;
-
+        
     }
 
 
