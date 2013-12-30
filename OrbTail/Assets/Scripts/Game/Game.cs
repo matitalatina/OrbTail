@@ -180,6 +180,28 @@ public class Game : MonoBehaviour {
         }
 
     }
+
+    /// <summary>
+    /// Returns the active camera
+    /// </summary>
+    public GameObject Camera
+    {
+        
+        get
+        {
+
+            if (active_camera_ == null)
+            {
+
+                active_camera_ = GameObject.FindGameObjectWithTag(Tags.MainCamera);
+
+            }
+
+            return active_camera_;
+
+        }
+
+    }
     
     /// <summary>
     /// List of all ships in game
@@ -494,6 +516,8 @@ public class Game : MonoBehaviour {
     private IList<GameObject> ships_ = null;
 
     private GameObject active_player_ = null;
+
+    private GameObject active_camera_ = null;
     
     private BaseGameMode game_mode_;
 

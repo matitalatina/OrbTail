@@ -12,13 +12,13 @@ class DesktopInputBroker: IInputBroker
 
     #region "Axis names"
     
-    public string acceleration_axis_name = "Vertical";
+    public const string acceleration_axis_name = "Vertical";
 
-    public string steering_axis_name = "Horizontal";
+    public const string steering_axis_name = "Horizontal";
 
-    public string fire_special_axis_name = "FireSpecial";
+    public const string fire_special_axis_name = "FireSpecial";
 
-    public string fire_main_axis_name = "FireMain";
+    public const string fire_main_axis_name = "FireMain";
     
     #endregion
 

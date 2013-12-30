@@ -128,9 +128,7 @@ public class EliminationGameMode: BaseGameMode
             end_of_match = true;
 
         }
-
-        //TODO: remove an orb from time to time
-
+        
     }
 
     private void EliminationGameMode_OnEventOrbDetached(object sender, GameObject ship)
@@ -142,9 +140,18 @@ public class EliminationGameMode: BaseGameMode
             //The ship should be eliminated
             Game.RemoveShip(ship);
 
-            //TODO: Create the spectator camera, tell the ship that it has been eliminated
-            //TODO: disable the ship properly!
+            //Enables the spectator mode
+            if (ship == Game.ActivePlayer)
+            {
+
+                Game.Camera.GetComponent<SpectatorMode>().enabled = true;
+
+            }
+            
             ship.SetActive(false);
+
+            //TODO: Add an explosion??
+
 
         }
 

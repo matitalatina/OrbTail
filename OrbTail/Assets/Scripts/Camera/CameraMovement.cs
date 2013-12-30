@@ -11,11 +11,17 @@ public class CameraMovement : MonoBehaviour {
 	private Transform player;           // Reference to the player's transform.
 	private Vector3 newPos;             // The position the camera is trying to reach.
 
+    /// <summary>
+    /// The camera target
+    /// </summary>
+    public GameObject Target { get; private set; }
 
 	private FloatingObject FloatingComponent{ get;set; }
 
     public void LookAt(GameObject target)
     {
+
+        Target = target;
 
         // Setting up the reference.
         player = target.transform;
