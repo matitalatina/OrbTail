@@ -49,7 +49,8 @@ public class ArcadeGameMode: BaseGameMode
         {
 
             ship.GetComponent<Tail>().OnEventOrbAttached += ArcadeGameMode_OnEventOrbAttached;
-            ship.GetComponent<GameIdentity>().Score = 0;
+
+            ship.GetComponent<GameIdentity>().ResetScore();
 
         }
 
@@ -58,6 +59,7 @@ public class ArcadeGameMode: BaseGameMode
     ~ArcadeGameMode()
     {
 
+        /*
         Game.EventTick -= game_EventTick;
 
         foreach (GameObject ship in Game.ShipsInGame)
@@ -66,7 +68,7 @@ public class ArcadeGameMode: BaseGameMode
             ship.GetComponent<Tail>().OnEventOrbAttached -= ArcadeGameMode_OnEventOrbAttached;
 
         }
-
+        */
     }
 
     void ArcadeGameMode_OnEventOrbAttached(object sender, GameObject orb, GameObject ship)
@@ -74,7 +76,7 @@ public class ArcadeGameMode: BaseGameMode
 
         var identity = ship.GetComponent<GameIdentity>();
 
-        identity.Score += kOrbAttachedScore;
+        identity.AddScore(kOrbAttachedScore);
 
     }
 

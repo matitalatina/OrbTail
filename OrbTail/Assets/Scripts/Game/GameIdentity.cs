@@ -6,7 +6,23 @@ using System.Diagnostics;
 /// Represents a game identity, this script shold be attached to every ship
 /// </summary>
 public class GameIdentity : MonoBehaviour {
-    
+
+    public delegate void DelegateScore(object sender, int delta_score, int total_score);
+
+    public DelegateScore EventScore;
+
+    private void NotifyScore(int delta_score)
+    {
+
+        if (EventScore != null)
+        {
+
+            EventScore(this, delta_score, Score);
+
+        }
+
+    }
+
     /// <summary>
     /// The ordinal number of the player
     /// </summary>
@@ -54,7 +70,7 @@ public class GameIdentity : MonoBehaviour {
     /// <summary>
     /// The score of the player
     /// </summary>
-    public int Score;
+    public int Score { get; private set; }
 
     /// <summary>
     /// Returns the tail length
@@ -82,6 +98,31 @@ public class GameIdentity : MonoBehaviour {
     /// The tail controller
     /// </summary>
     private Tail tail_;
+
+    /// <summary>
+    /// Add some points to the score
+    /// </summary>
+    /// <param name="score"></param>
+    public void AddScore(int score)
+    {
+
+        Score += score;
+
+        NotifyScore(score);
+
+
+    }
+
+    public void ResetScore()
+    {
+
+        var delta = Score;
+
+        Score = 0;
+
+        NotifyScore(-delta);
+
+    }
 
     [RPC]
     public void RPCSetGameId(int id)

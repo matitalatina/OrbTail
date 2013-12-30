@@ -33,7 +33,7 @@ public class LongestTailGameMode: BaseGameMode
     ~LongestTailGameMode()
     {
 
-        Game.EventTick -= game_EventTick;
+       // Game.EventTick -= game_EventTick;
 
     }
 
