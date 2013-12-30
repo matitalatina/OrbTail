@@ -15,6 +15,7 @@ public class PlayerAI : MonoBehaviour {
 	
 	private OrbController orbController;
 	private FloatingObject floatingObject;
+	private Game game;
 	
 	private float maxTimeToGoAway = 4f;
 	private float maxTimeToFirePowerUp = 5f;
@@ -58,8 +59,8 @@ public class PlayerAI : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		
-		GameBuilder game = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
-		game.EventGameBuilt += OnGameBuilt;
+		GameBuilder gameBuilder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
+		gameBuilder.EventGameBuilt += OnGameBuilt;
 		
 	}
 	
@@ -126,10 +127,11 @@ public class PlayerAI : MonoBehaviour {
 	
 	void ChasingPlayer() {
 
+		/* Now there's OnShipEliminated
 		if (target.activeSelf == false) {
 			ResetTarget();
 			return;
-		}
+		} */
 
 		Vector3 relVector = target.transform.position - gameObject.transform.position;
 		
@@ -171,9 +173,13 @@ public class PlayerAI : MonoBehaviour {
 		
 		powerController = GetComponent<PowerController>();
 		powerController.EventPowerAttached += OnEventPowerAttached;
+
+		game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
+		game.EventShipEliminated += OnShipEliminated;
+		game.EventEnd += OnEventEnd;
 		
 		// Listen all event fights
-		foreach (GameObject ship in GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>().ShipsInGame) {
+		foreach (GameObject ship in game.ShipsInGame) {
 			TailController tailController = ship.GetComponent<TailController>();
 			tailController.OnEventFight += OnEventFight;
 		}
@@ -182,9 +188,25 @@ public class PlayerAI : MonoBehaviour {
 		// Attaching field of view notification
 		GetComponentInChildren<AIFieldOfView>().EventOnFieldOfViewEnter += OnFieldOfViewEnter;
 		checkpoints = new HashSet<GameObject>(GameObject.FindGameObjectsWithTag(Tags.AICheckpoint));
+
 		
 		gameBuilt = true;
 		
+	}
+
+	private void OnEventEnd(object sender, GameObject winner, int info) {
+		CleanAI();
+	}
+
+	private void OnShipEliminated(object sender, GameObject ship) {
+		ship.GetComponent<TailController>().OnEventFight -= OnEventFight;
+
+		if (ship == target) {
+			ResetTarget();
+		}
+		else if (ship == gameObject) {
+			CleanAI();
+		}
 	}
 	
 	private void CheckVisibility() {
@@ -256,6 +278,21 @@ public class PlayerAI : MonoBehaviour {
 	private void ResetTarget() {
 		target = null;
 		orbController = null;
+	}
+
+	private void CleanAI() {
+		game.EventShipEliminated -= OnShipEliminated;
+		game.EventEnd -= OnEventEnd;
+
+		// Remove all event fights
+		foreach (GameObject ship in game.ShipsInGame) {
+			TailController tailController = ship.GetComponent<TailController>();
+			tailController.OnEventFight -= OnEventFight;
+		}
+		
+		gameObject.GetComponent<Tail>().OnEventOrbAttached -= OnEventOrbAttached;
+		// Attaching field of view notification
+		GetComponentInChildren<AIFieldOfView>().EventOnFieldOfViewEnter -= OnFieldOfViewEnter;
 	}
 	
 	
