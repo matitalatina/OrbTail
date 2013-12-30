@@ -10,6 +10,7 @@ public class HUDOpponentsPosition : MonoBehaviour {
 	private bool gameStarted = false;
 	private Dictionary<Transform, GameObject> positionShipAndIndicators;
 	private Dictionary<GameObject, TextMesh> textMeshes;
+	private Game game;
 
 	// Use this for initialization
 	void Start () {
@@ -37,7 +38,7 @@ public class HUDOpponentsPosition : MonoBehaviour {
 	}
 
 	private void OnGameBuilt(object sender) {
-		Game game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
+		game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
 		game.EventEnd += OnEventEnd;
 		game.EventStart += OnEventStart;
 		game.EventShipEliminated += OnShipEliminated;
@@ -69,7 +70,7 @@ public class HUDOpponentsPosition : MonoBehaviour {
 
 	private void OnShipEliminated(object sender, GameObject ship) {
 		Debug.Log(ship.transform);
-		if (ship == gameObject) {
+		if (ship == myShipPosition.gameObject) {
 
 			foreach (KeyValuePair<Transform, GameObject> pair in positionShipAndIndicators) {
 				Destroy(pair.Value);
@@ -77,6 +78,7 @@ public class HUDOpponentsPosition : MonoBehaviour {
 
 			positionShipAndIndicators = new Dictionary<Transform, GameObject>();
 			textMeshes = new Dictionary<GameObject, TextMesh>();
+			game.EventShipEliminated -= OnShipEliminated;
 		}
 		else {
 			Transform transformShip = ship.transform;
