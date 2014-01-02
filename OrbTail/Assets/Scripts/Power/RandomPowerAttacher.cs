@@ -7,7 +7,7 @@ public class RandomPowerAttacher : MonoBehaviour
     public const string glow_prefab_path = "Prefabs/Power/PowerGlow";
     private GameObject particle_dummy;
 
-    void Start()
+    void OnEnable()
     {
 
         AddFX();
