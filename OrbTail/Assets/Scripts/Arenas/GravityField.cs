@@ -10,7 +10,8 @@ public class GravityField : MonoBehaviour {
     {
 
         Flat,
-        Spherical
+        Spherical,
+        InverseSpherical
 
     }
 
@@ -38,6 +39,11 @@ public class GravityField : MonoBehaviour {
             case GravityShape.Spherical:
 
                 Field = new SphericalGravityField(Vector3.zero);
+                break;
+
+            case GravityShape.InverseSpherical:
+
+                Field = new InverseSphericalGravityField(Vector3.zero);
                 break;
 
             default:

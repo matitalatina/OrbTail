@@ -5,11 +5,11 @@ using System.Text;
 using UnityEngine;
 
 /// <summary>
-/// The gravity is always pointing at 0;0;0
+/// Gravity field which pushes from the inside of a sphere to its surface
 /// </summary>
-public class SphericalGravityField: IGravityField
+public class InverseSphericalGravityField: IGravityField
 {
-
+       
     public const float hoverForce = 100.0f;
     public const float hoverDampen = 5.0f;
 
@@ -18,7 +18,7 @@ public class SphericalGravityField: IGravityField
     /// </summary>
     public Vector3 Center { get; private set; }
 
-    public SphericalGravityField(Vector3 center)
+    public InverseSphericalGravityField(Vector3 center)
     {
 
         Center = center;
@@ -31,10 +31,8 @@ public class SphericalGravityField: IGravityField
         floatie.hoverForce = hoverForce;
         floatie.hoverDampen = hoverDampen;
 
-        floatie.ArenaDown = Center - floatie.transform.position.normalized;
-
+        floatie.ArenaDown = -Center + floatie.transform.position.normalized;
 
     }
 
 }
-
