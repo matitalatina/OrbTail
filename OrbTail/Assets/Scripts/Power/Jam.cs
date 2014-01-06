@@ -13,7 +13,6 @@ public class Jam : Power
     protected override void ActivateClient()
     {
 
-        Debug.Log("Ship: " + Owner + " Jammed!");
 
         var wheel_stack = Owner.GetComponent<MovementController>().GetWheelDriverStack();
 
@@ -23,7 +22,6 @@ public class Jam : Power
 
     public override void Deactivate()
     {
-        Debug.Log("Ship no more Jammed!");
 
         base.Deactivate();
 
