@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GUIChooseArena : MonoBehaviour {
+public class GUIChooseGameMode : MonoBehaviour {
 	private GameBuilder builder;
-
+	
 	// Use this for initialization
 	void Start () {
 		builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
@@ -26,12 +26,12 @@ public class GUIChooseArena : MonoBehaviour {
 			{
 				
 				//The touch or the mouse collided with something
-				if (raycast_hit.collider.tag.Equals(Tags.ArenaSelector))
+				if (raycast_hit.collider.tag.Equals(Tags.GameModeSelector))
 				{
-
-					builder.ArenaName = raycast_hit.collider.name;
-
-					Application.LoadLevel("MenuChooseShip");
+					
+					builder.GameMode = int.Parse(raycast_hit.collider.name);
+					
+					Application.LoadLevel("MenuChooseArena");
 					
 				}
 				

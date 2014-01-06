@@ -16,5 +16,6 @@ public class Tags {
 	public const string Master = "Master";
     public const string ShipSelector = "ShipSelector";
 	public const string ArenaSelector = "ArenaSelector";
+	public const string GameModeSelector = "GameModeSelector";
 
 }
