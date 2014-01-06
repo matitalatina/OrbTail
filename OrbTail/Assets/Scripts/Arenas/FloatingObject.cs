@@ -47,12 +47,18 @@ public class FloatingObject : MonoBehaviour {
 
 			}
 
+
+            Debug.DrawRay(transform.position, ArenaDown * 25.0f, Color.green);
+
 		}
 		else {
 
 			rigidbody.AddForce(ArenaDown * hoverForce, ForceMode.Acceleration);
-
+            
 		}
+
+
+
 	}
 
 
