@@ -25,16 +25,16 @@ public class TripleSphericalGravityField : IGravityField
     public const int kCyanElbow = 1;
     public const int kMagentaElbow = 2;
 
-    public const int kSourceGroupOffset = 0x4f;
+    public const int kSourceGroupOffset = 0x4;
     public const int kSourceGroupMask = 0xF << kSourceGroupOffset; 
 
-    public const int kSourceIndexOffset = 0x0f;
+    public const int kSourceIndexOffset = 0x0;
     public const int kSourceIndexMask = 0xF << kSourceIndexOffset;
 
     /// <summary>
     /// The radius of the sphere
     /// </summary>
-    public const float kSphereRadius = 260.0f;
+    public const float kSphereRadius = 120.0f;
 
     /// <summary>
     /// The elbow of the sphere
@@ -57,25 +57,26 @@ public class TripleSphericalGravityField : IGravityField
         sphere_centers_[kBlueSphere] = new Vector3(-73.0f, -128.0f, 0.0f);
 
         //Elbows
-        elbow_center_[kYellowElbow] = new Vector3(80.0f, 140.0f, 0.0f);
-        elbow_center_[kCyanElbow] = new Vector3(-163.0f, 0.0f, 0.0f);
-        elbow_center_[kMagentaElbow] = new Vector3(80.0f, -140.0f, 0.0f);
+        elbow_center_[kYellowElbow] = new Vector3(85.0f, 145.0f, 0.0f);
+        elbow_center_[kCyanElbow] = new Vector3(-165.0f, 0.0f, 0.0f);
+        elbow_center_[kMagentaElbow] = new Vector3(85.0f, -145.0f, 0.0f);
 
+        
         //Elbow planes
-        elbow_planes[kYellowElbow, 0] = new Plane(new Vector3(40.0f, 190.0f, 0.0f),
-                                                  new Vector3(0.86f, 0.5f, 0.0f));
-        elbow_planes[kYellowElbow, 1] = new Plane(new Vector3(145.0f, 125.0f, 0.0f),
+        elbow_planes[kYellowElbow, 0] = new Plane(new Vector3(50.0f, 200.0f, 0.0f),
+                                                  new Vector3(0.87f, 0.5f, 0.0f));
+        elbow_planes[kYellowElbow, 1] = new Plane(new Vector3(145.0f, 142.5f, 0.0f),
                                                   new Vector3(0.0f, 1.0f, 0.0f));
 
-        elbow_planes[kCyanElbow, 0] = new Plane(new Vector3(-185.0f, -60.0f, 0.0f),
-                                                   new Vector3(-0.86f, -0.5f, 0.0f));
-        elbow_planes[kCyanElbow, 1] = new Plane(new Vector3(-185.0f, 60.0f, 0.0f),
-                                                   new Vector3(0.86f, -0.5f, 0.0f));
+        elbow_planes[kCyanElbow, 0] = new Plane(new Vector3(-195.0f, -55.0f, 0.0f) ,
+                                                new Vector3(-0.87f, 0.5f, 0.0f));
+        elbow_planes[kCyanElbow, 1] = new Plane(new Vector3(-195.0f, 55.0f, 0.0f),
+                                                new Vector3(-0.87f, -0.5f, 0.0f));
         
-        elbow_planes[kMagentaElbow, 0] = new Plane(new Vector3(145.0f, -125.0f, 0.0f),
-                                                new Vector3(0.0f, -1.0f, 0.0f));
-        elbow_planes[kMagentaElbow, 1] = new Plane(new Vector3(40.0f, -190.0f, 0.0f),
-                                                new Vector3(0.86f, -0.5f, 0.0f));
+        elbow_planes[kMagentaElbow, 0] = new Plane(new Vector3(145.0f, -142.5f, 0.0f),
+                                                   new Vector3(0.0f, -1.0f, 0.0f));
+        elbow_planes[kMagentaElbow, 1] = new Plane(new Vector3(50.0f, -200.0f, 0.0f),
+                                                   new Vector3(0.87f, -0.5f, 0.0f));
 
     }
 
@@ -90,6 +91,9 @@ public class TripleSphericalGravityField : IGravityField
 
         //Set the proper gravity source
         SetGravitySource(floatie, out group, out index);
+
+        floatie.GravitySourceIndex = ((group << kSourceGroupOffset) & kSourceGroupMask) |
+                                     ((index << kSourceIndexOffset) & kSourceIndexMask);
 
         //Depending on the source applies the proper force
         if (group == kSphereGroup)
@@ -134,6 +138,7 @@ public class TripleSphericalGravityField : IGravityField
         else if (group == kElbowGroup)
         {
 
+            
             return InsideElbow(position, index);
 
         }
@@ -161,12 +166,15 @@ public class TripleSphericalGravityField : IGravityField
     private bool InsideElbow(Vector3 position, int elbow_index)
     {
 
+        Plane plane;
+
         //The position must be in front of each elbow plane
         for(int p = 0; p < kElbowPlanes; p++){
 
-            if (elbow_planes[elbow_index, p].GetDistanceToPoint(position) < 0)
-            {
+            plane = elbow_planes[elbow_index, p];
 
+            if (plane.GetDistanceToPoint(position) < 0)
+            {
                 //If one plane fails, the check fails
                 return false;
 
@@ -192,6 +200,9 @@ public class TripleSphericalGravityField : IGravityField
         if (!StillInside(position, group, index))
         {
 
+
+            Debug.Log("Not inside!");
+            
             //If the ship was in a sphere, now it will be in an elbow
             if( group == kSphereGroup ||
                 group == kNoGroup)
@@ -203,6 +214,7 @@ public class TripleSphericalGravityField : IGravityField
                 {
 
                     index = kYellowElbow;
+                    Debug.Log("Yellow!");
                     return;
 
                 }
@@ -210,6 +222,7 @@ public class TripleSphericalGravityField : IGravityField
                 {
 
                     index = kCyanElbow;
+                    Debug.Log("Cyan!");
                     return;
 
                 }
@@ -217,16 +230,17 @@ public class TripleSphericalGravityField : IGravityField
                 {
 
                     index = kMagentaElbow;
+                    Debug.Log("Magenta!");
                     return;
 
                 }
-
+                
             }
-
+            
             //If the ship was in an elbow, now it will be in a sphere
-            if( group == kElbowGroup ||
+            if (group == kElbowGroup ||
                 group == kNoGroup)
-            {
+                {
 
                 group = kSphereGroup;
 
@@ -234,6 +248,7 @@ public class TripleSphericalGravityField : IGravityField
                 {
 
                     index = kRedSphere;
+                    Debug.Log("Red!");
                     return;
 
                 }
@@ -241,6 +256,7 @@ public class TripleSphericalGravityField : IGravityField
                 {
 
                     index = kGreenSphere;
+                    Debug.Log("Green!");
                     return;
 
                 }
@@ -248,6 +264,7 @@ public class TripleSphericalGravityField : IGravityField
                 {
 
                     index = kBlueSphere;
+                    Debug.Log("Blue!");
                     return;
 
                 }
@@ -262,7 +279,7 @@ public class TripleSphericalGravityField : IGravityField
         {
 
             //No need to change the source, yay!
-
+                
         }
 
     }

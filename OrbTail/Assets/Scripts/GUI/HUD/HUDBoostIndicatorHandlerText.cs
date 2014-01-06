@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HUDBoostIndicatorHandler : MonoBehaviour {
+public class HUDBoostIndicatorHandlerText : MonoBehaviour {
 
 
 	private PowerView boostView;

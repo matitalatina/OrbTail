@@ -126,7 +126,7 @@ public class TailController : MonoBehaviour {
 	private bool IsAttack(GameObject attacker) {
 		Vector3 relVector = this.transform.position - attacker.transform.position;
 		float dotProduct = Vector3.Dot(attacker.transform.forward, relVector.normalized);
-		Debug.Log(dotProduct);
+		//Debug.Log(dotProduct);
 
 		float attackVelocity = Vector3.Dot (attacker.rigidbody.velocity.normalized, attacker.transform.forward);
 		return dotProduct >= dotProductAttackThreshold && attackVelocity > velocityAttackThreshold;
