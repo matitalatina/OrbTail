@@ -15,5 +15,6 @@ public class Tags {
 	public const string MainLight = "MainLight";
 	public const string Master = "Master";
     public const string ShipSelector = "ShipSelector";
+	public const string ArenaSelector = "ArenaSelector";
 
 }

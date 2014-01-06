@@ -59,7 +59,7 @@ public class GUIMainMenu : MonoBehaviour {
 		var builder = master.GetComponent<GameBuilder>();
 		builder.Action = GameBuilder.BuildMode.SinglePlayer;
 		
-        Application.LoadLevel("MenuChooseShip");
+        Application.LoadLevel("MenuChooseArena");
 		
 	}
 	

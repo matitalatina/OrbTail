@@ -67,7 +67,7 @@ public class GUIServerClient : MonoBehaviour {
 
 		builder.Action = GameBuilder.BuildMode.RemoteHost;
 
-        Application.LoadLevel("MenuChooseShip");
+        Application.LoadLevel("MenuChooseArena");
 
     }
 

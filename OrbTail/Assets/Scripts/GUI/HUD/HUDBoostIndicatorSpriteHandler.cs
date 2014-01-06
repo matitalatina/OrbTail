@@ -4,7 +4,6 @@ using System.Collections;
 public class HUDBoostIndicatorSpriteHandler : MonoBehaviour {
 
 	private PowerView boostView;
-	private TextMesh textMesh;
 	private float refreshTime = 0.2f;
 	private const float animationTime = 0.2f;
 	private const float scaleBig = 0.2f;
@@ -32,7 +31,6 @@ public class HUDBoostIndicatorSpriteHandler : MonoBehaviour {
 		
 		GameObject player = game.ActivePlayer;
 		player.GetComponent<PowerController>().EventPowerAttached += HUDBoostIndicatorHandler_EventPowerAttached;
-		textMesh = GetComponent<TextMesh>();
 		
 		gameBuilder.EventGameBuilt -= OnGameBuilt;
 	}
