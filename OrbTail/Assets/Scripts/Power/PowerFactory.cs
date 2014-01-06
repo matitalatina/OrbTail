@@ -16,6 +16,7 @@ public class PowerFactory
         RegisterPower(new Invincibility(), 1);
         RegisterPower(new OrbSteal(), 1);
         RegisterPower(new Magnet(), 1);
+		RegisterPower(new Jam(), 1);
 
         PreloadPowers();
 

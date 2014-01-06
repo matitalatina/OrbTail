@@ -7,6 +7,7 @@ public class HUDBoostIndicatorSpriteHandler : MonoBehaviour {
 	private TextMesh textMesh;
 	private float refreshTime = 0.2f;
 	private const float animationTime = 0.2f;
+	private const float scaleBig = 0.2f;
 	private bool charged;
 	private Game game;
 	private GameBuilder gameBuilder;
@@ -74,10 +75,13 @@ public class HUDBoostIndicatorSpriteHandler : MonoBehaviour {
 	private IEnumerator RefreshIndicator() {
 		
 		while (true) {
+			// Ready
 			if (boostView.IsReady >= 1 && charged == false) {
 				iTween.FadeTo(gameObject, 1f, animationTime);
+				iTween.ScaleFrom(gameObject, Vector3.one * scaleBig, animationTime);
 				charged = true;
 			}
+			// Not ready
 			else if (boostView.IsReady < 1 && charged == true) {
 				iTween.FadeTo(gameObject, 0.1f, animationTime);
 				charged = false;
