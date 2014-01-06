@@ -9,7 +9,12 @@ public class FloatingObject : MonoBehaviour {
 
     private GravityField gravity_field;
 
-	public Vector3 ArenaDown { get; set; } 
+	public Vector3 ArenaDown { get; set; }
+
+    /// <summary>
+    /// Used internally by each gravity field
+    /// </summary>
+    public int GravitySourceIndex { get; set; }
 
 	private Rigidbody FloatingBody{ get; set; }
 
