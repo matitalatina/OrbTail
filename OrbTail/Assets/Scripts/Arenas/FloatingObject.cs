@@ -6,6 +6,7 @@ public class FloatingObject : MonoBehaviour {
     public float hoverForce = 20.0f;//9.8f;
 	public float hoverDistance = 5f;
 	public float hoverDampen = 0f;
+
     private GravityField gravity_field;
 
 	public Vector3 ArenaDown { get; set; } 

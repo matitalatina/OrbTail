@@ -10,8 +10,8 @@ using UnityEngine;
 public class InverseSphericalGravityField: IGravityField
 {
        
-    public const float hoverForce = 100.0f;
-    public const float hoverDampen = 5.0f;
+    public const float hoverForce = 9.8f;
+    public const float hoverDampen = 5f;
 
     /// <summary>
     /// The center of gravity

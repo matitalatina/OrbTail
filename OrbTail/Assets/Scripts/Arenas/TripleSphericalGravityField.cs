@@ -11,7 +11,7 @@ public class TripleSphericalGravityField : IGravityField
 {
 
     public const float kHoverForce = 9.8f;
-    public const float kHoverDampen = 0.5f;
+    public const float kHoverDampen = 5f;
 
     /// <summary>
     /// The radius of the sphere
@@ -34,8 +34,8 @@ public class TripleSphericalGravityField : IGravityField
         Center = center;
 
         sphere_centers_[0] = new Vector3(147.0f, 0.0f, 0.0f);
-        sphere_centers_[1] = new Vector3(-70.0f, -128.0f, 0.0f);
-        sphere_centers_[2] = new Vector3(-70.0f, 128.0f, 0.0f);
+        sphere_centers_[1] = new Vector3(-73.0f, -128.0f, 0.0f);
+        sphere_centers_[2] = new Vector3(-73.0f, 128.0f, 0.0f);
 
         elbow_center_[0] = new Vector3(80.0f, 140.0f, 0.0f);
         elbow_center_[1] = new Vector3(80.0f, -140.0f, 0.0f);
