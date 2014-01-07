@@ -1,41 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GUIChooseGameMode : MonoBehaviour {
+public class GUIChooseGameMode : GUIMenuChoose {
 	private GameBuilder builder;
 	
 	// Use this for initialization
-	void Start () {
+	public override void Start () {
+		base.Start();
 		builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-		if (Input.GetMouseButtonUp(0) ||
-		    Input.touchCount > 0)
+
+
+	protected override void OnSelect (GameObject target)
+	{
+		if (target.tag == Tags.GameModeSelector)
 		{
 			
-			Ray mouse_ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			builder.GameMode = int.Parse(target.name);
 			
-			RaycastHit raycast_hit;
-			
-			if (Physics.Raycast(mouse_ray, out raycast_hit) ||
-			    Input.touchCount > 0 &&
-			    Physics.Raycast(Camera.main.ScreenPointToRay(Input.touches[0].position), out raycast_hit))
-			{
-				
-				//The touch or the mouse collided with something
-				if (raycast_hit.collider.tag.Equals(Tags.GameModeSelector))
-				{
-					
-					builder.GameMode = int.Parse(raycast_hit.collider.name);
-					
-					Application.LoadLevel("MenuChooseArena");
-					
-				}
-				
-			}
+			Application.LoadLevel("MenuChooseArena");
 			
 		}
 	}

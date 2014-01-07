@@ -8,4 +8,6 @@ public class Layers {
 
 	public const int FieldAndObstacles = Field | Obstacles;
 
+	public const int MenuButton = 1 << 10;
+
 }

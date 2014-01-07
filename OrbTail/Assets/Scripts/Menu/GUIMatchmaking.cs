@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class GUIMatchmaking : MonoBehaviour {
+public class GUIMatchmaking : GUIMenuChoose {
 
     private GameObject ready_button;
     private GameObject not_ready_button;
@@ -17,8 +17,9 @@ public class GUIMatchmaking : MonoBehaviour {
     private static Color kDisabledColor = Color.grey;
 
 	// Use this for initialization
-	void Start ()
+	public override void Start ()
     {
+		base.Start();
 
         //The icons (disabled by default)
         player_icons = (from icon in GameObject.FindGameObjectsWithTag(Tags.ShipSelector)
@@ -151,44 +152,7 @@ public class GUIMatchmaking : MonoBehaviour {
         ready_button.SetActive(true);
 
     }
-	
-	// Update is called once per frame
-	void Update () {
 
-        if (Input.GetMouseButtonUp(0) ||
-           Input.touchCount > 0)
-        {
-
-            Ray mouse_ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-            RaycastHit raycast_hit;
-
-            if (Physics.Raycast(mouse_ray, out raycast_hit) ||
-                Input.touchCount > 0 &&
-                Physics.Raycast(Camera.main.ScreenPointToRay(Input.touches[0].position), out raycast_hit))
-            {
-
-                //The touch or the mouse collided with something
-
-                if (raycast_hit.collider.gameObject == ready_button)
-                {
-
-                    network_builder.SetReady(true);
-
-                }
-
-                if (raycast_hit.collider.gameObject == not_ready_button)
-                {
-
-                    network_builder.SetReady(false);
-
-                }
-
-            }
-
-        }
-
-	}
 
     void OnDestroy()
     {
@@ -202,6 +166,27 @@ public class GUIMatchmaking : MonoBehaviour {
         network_builder.EventDisconnected -= network_builder_EventDisconnected;
         
     }
+
+
+	protected override void OnSelect (GameObject target)
+	{
+		base.OnSelect(target);
+
+		if (target == ready_button)
+		{
+			
+			network_builder.SetReady(true);
+			
+		}
+		
+		if (target == not_ready_button)
+		{
+			
+			network_builder.SetReady(false);
+			
+		}
+	}
+			
 
 
 
