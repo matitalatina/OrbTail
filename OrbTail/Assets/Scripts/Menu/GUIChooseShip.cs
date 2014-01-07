@@ -71,6 +71,9 @@ public class GUIChooseShip : GUIMenuChoose {
 			BuildGame();
 			
 		}
+		else if (target.tag == Tags.BackButton) {
+			Application.LoadLevel("MenuChooseArena");
+		}
 	}
 	
 }

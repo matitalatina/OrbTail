@@ -23,5 +23,8 @@ public class GUIChooseArena : GUIMenuChoose {
 			Application.LoadLevel("MenuChooseShip");
 			
 		}
+		else if (target.tag == Tags.BackButton) {
+			Application.LoadLevel("MenuChooseGameMode");
+		}
 	}
 }
