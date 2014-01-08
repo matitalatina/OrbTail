@@ -69,7 +69,6 @@ public class HUDOpponentsPosition : MonoBehaviour {
 	}
 
 	private void OnShipEliminated(object sender, GameObject ship) {
-		Debug.Log(ship.transform);
 		if (ship == myShipPosition.gameObject) {
 
 			foreach (KeyValuePair<Transform, GameObject> pair in positionShipAndIndicators) {

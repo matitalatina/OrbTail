@@ -26,7 +26,12 @@ public class HUDShowRank : MonoBehaviour {
 		game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
 		game.EventEnd += OnEventEnd;
 		textMesh.text = "Game mode: " + game.GameModeName;
-		iTween.FadeTo(gameObject, 0f, fadeTime);
+		iTween.ValueTo(this.gameObject, iTween.Hash(
+			"from", 1f,
+			"to", 0f,
+			"time", fadeTime,
+			"onUpdate","ChangeAlphaColor"));
+		//iTween.FadeTo(gameObject, 0f, fadeTime);
 
 		builder.EventGameBuilt -= OnGameBuilt;
 	}
@@ -35,18 +40,28 @@ public class HUDShowRank : MonoBehaviour {
 
 		if (winner == null) {
 			textMesh.text = "Tie...";
-			iTween.FadeTo(gameObject, 1f, fadeTime);
 		}
 		else if (winner == game.ActivePlayer) {
 			textMesh.text = "You won!";
-			iTween.ColorTo(gameObject, Color.green, fadeTime);
+			textMesh.color = new Color(0, 255, 0, 0);
 		}
 		else {
 			textMesh.text = winner.GetComponent<PlayerIdentity>().ShipName + " wins";
-			iTween.FadeTo(gameObject, 1f, fadeTime);
 		}
+
+		iTween.ValueTo(this.gameObject, iTween.Hash(
+			"from", 0f,
+			"to", 1f,
+			"time", fadeTime,
+			"onUpdate","ChangeAlphaColor"));
 
 		game.EventEnd -= OnEventEnd;
 
+	}
+
+	private void ChangeAlphaColor(float alpha) {
+		Color color = textMesh.color;
+		color.a = alpha;
+		textMesh.color = color;
 	}
 }

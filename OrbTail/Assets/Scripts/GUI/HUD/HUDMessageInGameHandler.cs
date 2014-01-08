@@ -5,6 +5,7 @@ public class HUDMessageInGameHandler : MonoBehaviour {
 	private TextMesh textMesh;
 	private GameBuilder builder;
 	private PowerController powerController;
+	private const float fadeTime = 4f;
 	private Game game;
 
 	// Use this for initialization
@@ -21,7 +22,7 @@ public class HUDMessageInGameHandler : MonoBehaviour {
 		powerController = activePlayer.GetComponent<PowerController>();
 		powerController.EventPowerAttached += OnEventPowerAttached;
 
-		iTween.FadeTo(gameObject, 0f, 0f);
+		ChangeAlphaColor(0f);
 		builder.EventGameBuilt -= OnGameBuilt;
 
 		game.EventEnd += OnEventEnd;
@@ -35,8 +36,11 @@ public class HUDMessageInGameHandler : MonoBehaviour {
 
 	private void ShowText(string text) {
 		textMesh.text = text;
-		iTween.FadeUpdate(gameObject, 0f, 0f);
-		iTween.FadeFrom(gameObject, 1f, 4f);
+		iTween.ValueTo(this.gameObject, iTween.Hash(
+			"from", 1f,
+			"to", 0f,
+			"time", fadeTime,
+			"onUpdate","ChangeAlphaColor"));
 	}
 
 	private void OnEventPowerAttached(object sender, GameObject ship, Power power) {
@@ -53,6 +57,11 @@ public class HUDMessageInGameHandler : MonoBehaviour {
 		}
 	}
 
+	private void ChangeAlphaColor(float alpha) {
+		Color color = textMesh.color;
+		color.a = alpha;
+		textMesh.color = color;
+	}
 
 	private void CleanScript() {
 		powerController.EventPowerAttached -= OnEventPowerAttached;

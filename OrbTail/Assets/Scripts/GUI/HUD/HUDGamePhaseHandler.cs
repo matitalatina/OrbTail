@@ -50,7 +50,11 @@ public class HUDGamePhaseHandler : MonoBehaviour {
 			textMeshCountdown.color = Color.red;
 			textMeshCountdown.fontSize = fontBigSize;
 			textMeshCountdown.text = "GO!";
-			iTween.FadeTo(this.gameObject, 0f, 2f);
+			iTween.ValueTo(this.gameObject, iTween.Hash(
+				"from", 1f,
+				"to", 0f,
+				"time", 2f,
+				"onUpdate","ChangeAlphaColor"));
 		}
 
 	}
@@ -59,9 +63,19 @@ public class HUDGamePhaseHandler : MonoBehaviour {
 		mainLight.intensity = intensity;
 	}
 
+	private void ChangeAlphaColor(float alpha) {
+		Color color = textMeshCountdown.color;
+		color.a = alpha;
+		textMeshCountdown.color = color;
+	}
+
 	private void OnGameOver(object sender, GameObject winner, int info) {
 		textMeshCountdown.text = "Game Over";
-		iTween.FadeTo(this.gameObject, 1f, 2f);
+		iTween.ValueTo(this.gameObject, iTween.Hash(
+			"from", 0f,
+			"to", 1f,
+			"time", 2f,
+			"onUpdate","ChangeAlphaColor"));
 		iTween.ValueTo(this.gameObject, iTween.Hash(
 			"from", standardLightPower,
 			"to", initialLightPower,
