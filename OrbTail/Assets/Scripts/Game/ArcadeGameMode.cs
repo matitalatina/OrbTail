@@ -13,6 +13,12 @@ public class ArcadeGameMode: BaseGameMode
 
     public const int kOrbAttachedScore = 10;
 
+    public const int kMinimumTailLength = 3;
+
+    public const int kAboveMinimumOrbScore = 5;
+
+    public const int kInterval = 5;
+
     #endregion
 
     public override int Duration
@@ -124,6 +130,23 @@ public class ArcadeGameMode: BaseGameMode
         {
 
             NotifyWin();
+
+        }
+
+        //Every couple of seconds increase the score of the player based on their score
+        if (time_left % kInterval == 0)
+        {
+
+            var identities = from ship in Game.ShipsInGame
+                             where ship.GetComponent<GameIdentity>().TailLength > kMinimumTailLength
+                             select ship.GetComponent<GameIdentity>();
+
+            foreach (var identity in identities)
+            {
+
+                identity.AddScore((identity.TailLength - kMinimumTailLength) * kAboveMinimumOrbScore);
+
+            }
 
         }
 
