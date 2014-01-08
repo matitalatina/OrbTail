@@ -37,7 +37,10 @@ public class EliminationGameMode: BaseGameMode
             tail = ship.GetComponent<Tail>();
 
             tail.OnEventOrbDetached += EliminationGameMode_OnEventOrbDetached;
+            tail.OnEventOrbAttached += tail_OnEventOrbAttached;
             tails.Add( tail ) ;
+
+            ship.GetComponent<GameIdentity>().ResetScore();
 
         }
 
@@ -64,6 +67,7 @@ public class EliminationGameMode: BaseGameMode
         }
 
     }
+
 
     ~EliminationGameMode()
     {
@@ -134,6 +138,8 @@ public class EliminationGameMode: BaseGameMode
     private void EliminationGameMode_OnEventOrbDetached(object sender, GameObject ship)
     {
 
+        ship.GetComponent<GameIdentity>().AddScore(-1);
+
         if (ship.GetComponent<Tail>().GetOrbCount() == 0)
         {
 
@@ -154,6 +160,16 @@ public class EliminationGameMode: BaseGameMode
 
 
         }
+
+
+
+    }
+
+
+    void tail_OnEventOrbAttached(object sender, GameObject orb, GameObject ship)
+    {
+
+        ship.GetComponent<GameIdentity>().AddScore(1);
 
     }
 
