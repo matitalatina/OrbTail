@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GUIChooseShip : MonoBehaviour {
+public class GUIChooseShip : GUIMenuChoose {
 
     private GameObject master;
     private GameObject[] selectors;
 
 	// Use this for initialization
-	void Start () {
+	public override void Start () {
 	
+		base.Start();
         master = GameObject.FindGameObjectWithTag(Tags.Master);
         selectors = GameObject.FindGameObjectsWithTag(Tags.ShipSelector);
 
@@ -50,44 +51,29 @@ public class GUIChooseShip : MonoBehaviour {
         master.GetComponent<GameBuilder>().BuildGame();
 
     }
+	
 
-	// Update is called once per frame
-	void Update () {
+	protected override void OnSelect (GameObject target)
+	{
 
-        if (Input.GetMouseButtonUp(0) ||
-            Input.touchCount > 0)
-        {
-
-            Ray mouse_ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-            RaycastHit raycast_hit;
-
-            if (Physics.Raycast(mouse_ray, out raycast_hit) ||
-                Input.touchCount > 0 &&
-                Physics.Raycast(Camera.main.ScreenPointToRay(Input.touches[0].position), out raycast_hit))
-            {
-
-                //The touch or the mouse collided with something
-                if (raycast_hit.collider.tag.Equals(Tags.ShipSelector))
-                {
-
-                    var chosen_identity = raycast_hit.collider.GetComponent<PlayerIdentity>();
-
-                    //A ship has been chosen
-                    var identity = master.AddComponent<PlayerIdentity>();
-
-                    chosen_identity.CopyTo(identity);
-
-                    identity.IsHuman = true;
-
-                    BuildGame();
-
-                }
-
-            }
-
-        }
-		
+		if (target.tag == Tags.ShipSelector)
+		{
+			
+			var chosen_identity = target.GetComponent<PlayerIdentity>();
+			
+			//A ship has been chosen
+			var identity = master.AddComponent<PlayerIdentity>();
+			
+			chosen_identity.CopyTo(identity);
+			
+			identity.IsHuman = true;
+			
+			BuildGame();
+			
+		}
+		else if (target.tag == Tags.BackButton) {
+			Application.LoadLevel("MenuChooseArena");
+		}
 	}
-
+	
 }

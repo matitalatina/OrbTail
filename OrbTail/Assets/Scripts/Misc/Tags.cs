@@ -14,7 +14,11 @@ public class Tags {
 	public const string HUD = "HUD";
 	public const string MainLight = "MainLight";
 	public const string Master = "Master";
+
+	/* Menu */
     public const string ShipSelector = "ShipSelector";
 	public const string ArenaSelector = "ArenaSelector";
-
+	public const string GameModeSelector = "GameModeSelector";
+	public const string BackButton = "BackButton";
+	
 }

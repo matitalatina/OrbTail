@@ -17,7 +17,7 @@ public class GameBuilder : MonoBehaviour {
 
     }
 
-    public const int kMaxPlayerCount = 1;
+    public const int kMaxPlayerCount = 4;
     public const int kServerPort = 6059;
     public const string kGameTypeName = "OrbTail";
 

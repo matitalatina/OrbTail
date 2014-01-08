@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class GUIServerClient : MonoBehaviour {
+public class GUIServerClient : GUIMenuChoose {
 
     private GameObject server_button;
 	private GameObject client_button;
@@ -11,7 +11,8 @@ public class GUIServerClient : MonoBehaviour {
 	private GameObject master;
 
 	// Use this for initialization
-	void Start () {
+	public override void Start () {
+		base.Start();
 
         server_button = GameObject.Find("ServerButton");
         client_button = GameObject.Find("ClientButton");
@@ -19,55 +20,38 @@ public class GUIServerClient : MonoBehaviour {
 		master = GameObject.FindGameObjectWithTag(Tags.Master);
 
 	}
-	
-	// Update is called once per frame
-	void Update () {
 
-        if(Input.GetMouseButtonUp(0) ||
-           Input.touchCount > 0)
-        {
-
-            Ray mouse_ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-            RaycastHit raycast_hit;
-
-            if (Physics.Raycast(mouse_ray, out raycast_hit) ||
-                Input.touchCount > 0 &&
-                Physics.Raycast(Camera.main.ScreenPointToRay(Input.touches[0].position), out raycast_hit))
-            {
-
-                //The touch or the mouse collided with something
-
-                if (raycast_hit.collider.gameObject == server_button)
-                {
-
-                    StartHost();
-					
-                }
-                else if (raycast_hit.collider.gameObject == client_button)
-                {
-
-                    StartClient();
-
-                }
-
-            }
-
-        }
-
+	protected override void OnSelect (GameObject target)
+	{
+		if (target == server_button)
+		{
+			
+			StartHost();
+			
+		}
+		else if (target == client_button)
+		{
+			
+			StartClient();
+			
+		}
+		else if (target.tag == Tags.BackButton) {
+			Destroy(GameObject.FindGameObjectWithTag(Tags.Master));
+			Application.LoadLevel("MenuMain");
+		}
 	}
 	
-
-    private void StartHost()
-    {
-
-        this.enabled = false;
-
+	
+	private void StartHost()
+	{
+		
+		this.enabled = false;
+		
 		var builder = master.GetComponent<GameBuilder>();
 
 		builder.Action = GameBuilder.BuildMode.RemoteHost;
 
-        Application.LoadLevel("MenuChooseArena");
+		Application.LoadLevel("MenuChooseGameMode");
 
     }
 

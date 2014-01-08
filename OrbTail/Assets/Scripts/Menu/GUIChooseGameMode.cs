@@ -1,30 +1,29 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GUIChooseArena : GUIMenuChoose {
+public class GUIChooseGameMode : GUIMenuChoose {
 	private GameBuilder builder;
-
+	
 	// Use this for initialization
 	public override void Start () {
 		base.Start();
-
 		builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
 	}
 
 
 	protected override void OnSelect (GameObject target)
 	{
-		//The touch or the mouse collided with something
-		if (target.tag == Tags.ArenaSelector)
+		if (target.tag == Tags.GameModeSelector)
 		{
 			
-			builder.ArenaName = target.name;
+			builder.GameMode = int.Parse(target.name);
 			
-			Application.LoadLevel("MenuChooseShip");
+			Application.LoadLevel("MenuChooseArena");
 			
 		}
 		else if (target.tag == Tags.BackButton) {
-			Application.LoadLevel("MenuChooseGameMode");
+			Destroy(GameObject.FindGameObjectWithTag(Tags.Master));
+			Application.LoadLevel("MenuMain");
 		}
 	}
 }
