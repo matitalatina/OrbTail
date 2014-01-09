@@ -7,6 +7,7 @@ public class CameraMovement : MonoBehaviour {
 	public float finalSmooth = 2f; 		// Speed of camera at the end of the game
 	public float relDistancePos = 7f;
 	public float relHighPos = 2.2f;
+	public float targetUpOffset = 0f;
 	
 	private Transform player;           // Reference to the player's transform.
 	private Vector3 newPos;             // The position the camera is trying to reach.
@@ -83,7 +84,7 @@ public class CameraMovement : MonoBehaviour {
 	void SmoothLookAt (Vector3 arenaDown)
 	{
 		// Create a vector from the camera towards the player.
-		Vector3 relPlayerPosition = player.position - transform.position;
+		Vector3 relPlayerPosition = player.position + player.transform.up * targetUpOffset - transform.position;
 
 		// Create a rotation based on the relative position of the player being the forward vector.
 
