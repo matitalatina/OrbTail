@@ -50,6 +50,9 @@ public class HUDArcadePointHandler : MonoBehaviour {
 		GameIdentity gameIdentity = ship.GetComponent<GameIdentity>();
 		textMesh.color = gameIdentity.Color;
 
+		// Retrieve points
+		textMesh.text = string.Format("{0:0000}", gameIdentity.Score);
+
 		// Attach event
 		gameIdentity.EventScore += OnEventScore; 
 		gameIdentityTextMeshes.Add(gameIdentity, textMesh);
