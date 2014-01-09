@@ -185,6 +185,11 @@ public class GUIMatchmaking : GUIMenuChoose {
 			network_builder.SetReady(false);
 			
 		}
+
+		// TODO: to fix... It doesn't work
+		if (target.tag == Tags.BackButton) {
+			//Application.LoadLevel("MenuChooseShip");
+		}
 	}
 			
 
