@@ -135,10 +135,10 @@ public class EliminationGameMode: BaseGameMode
         
     }
 
-    private void EliminationGameMode_OnEventOrbDetached(object sender, GameObject ship)
+    private void EliminationGameMode_OnEventOrbDetached(object sender, GameObject ship, int count)
     {
 
-        ship.GetComponent<GameIdentity>().AddScore(-1);
+        ship.GetComponent<GameIdentity>().AddScore(-count);
 
         if (ship.GetComponent<Tail>().GetOrbCount() == 0)
         {

@@ -18,7 +18,7 @@ public class Tail : MonoBehaviour {
 
 	public delegate void DelegateOnOrbAttached(object sender, GameObject orb, GameObject ship);
 
-    public delegate void DelegateOnOrbDetached(object sender, GameObject ship);
+    public delegate void DelegateOnOrbDetached(object sender, GameObject ship, int count);
 
 	/// <summary>
 	/// Notifies than an orb has been attached
@@ -196,7 +196,7 @@ public class Tail : MonoBehaviour {
 
         if (OnEventOrbDetached != null)
         {
-            OnEventOrbDetached(this, gameObject);
+            OnEventOrbDetached(this, gameObject, nOrbs);
         }
 
         //Warns other players

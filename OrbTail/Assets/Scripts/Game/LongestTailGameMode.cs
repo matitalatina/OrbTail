@@ -40,13 +40,13 @@ public class LongestTailGameMode: BaseGameMode
 
     }
 
-    void LongestTailGameMode_OnEventOrbDetached(object sender, GameObject ship)
+    void LongestTailGameMode_OnEventOrbDetached(object sender, GameObject ship, int count)
     {
 
         var identity = ship.GetComponent<GameIdentity>();
 
         //One orb detached
-        identity.AddScore(-1);
+        identity.AddScore(-count);
 
     }
 
