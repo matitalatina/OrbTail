@@ -75,8 +75,23 @@ public class LongestTailGameMode: BaseGameMode
 
             var ships = Game.ShipsInGame;
 
-            //Find the longest tail
-            int longest_tail = ships.Max((GameObject go) => { return go.GetComponent<Tail>().GetOrbCount(); });
+            //Find the longest tail (Can't use linq.max because iOS sucks)
+            int longest_tail = 0;
+            int current_tail = 0;
+
+            foreach (GameObject go in ships)
+            {
+
+                current_tail = go.GetComponent<Tail>().GetOrbCount();
+
+                if (longest_tail < current_tail)
+                {
+
+                    longest_tail = current_tail;
+
+                }
+
+            }
 
             var winners = from s in ships
                           where s.GetComponent<Tail>().GetOrbCount() == longest_tail

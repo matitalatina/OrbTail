@@ -87,8 +87,23 @@ public class ArcadeGameMode: BaseGameMode
 
             Debug.Log("Found " + ships.Count() + " ships");
 
-            //Find the highest score
-            int highest_score = ships.Max( (GameObject go) => { return go.GetComponent<GameIdentity>().Score; } );
+            //Find the highest score (Can't use linq.max because iOS sucks)
+            int highest_score = 0;
+            int current_score = 0;
+
+            foreach (GameObject go in ships)
+            {
+
+                current_score = go.GetComponent<GameIdentity>().Score;
+
+                if (highest_score < current_score)
+                {
+
+                    highest_score = current_score;
+
+                }
+
+            }
 
             var winners = from s in ships
                           where s.GetComponent<GameIdentity>().Score == highest_score
