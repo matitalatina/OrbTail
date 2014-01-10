@@ -28,7 +28,7 @@ public class ArcadeGameMode: BaseGameMode
         get
         {
 
-            return 1120;
+            return 120;
 
         }
 
