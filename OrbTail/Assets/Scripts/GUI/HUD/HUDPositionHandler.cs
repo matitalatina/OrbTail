@@ -4,8 +4,8 @@ using System.Collections;
 public class HUDPositionHandler : MonoBehaviour {
 
 	private Transform cameraPos;
-	private const float smoothMovement = 1000000f;
-	private const float smoothRotation = 1000000f;
+	private const float smoothMovement = 30f;
+	private const float smoothRotation = 30f;
 	private const float distanceFromCamera = 10f;
 
 	// Use this for initialization
