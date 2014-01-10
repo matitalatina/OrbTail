@@ -225,6 +225,14 @@ public class NetworkPlayerBuilder : MonoBehaviour
 
     }
 
+    [RPC]
+    protected void RPCTutorialDismissed(NetworkPlayer player)
+    {
+
+        TutorialDismissed(player);
+
+    }
+
     /// <summary>
     /// Loads an arena
     /// </summary>
@@ -317,5 +325,14 @@ public class NetworkPlayerBuilder : MonoBehaviour
         //Let the host builder implement this
 
     }
+
+    protected virtual void TutorialDismissed(NetworkPlayer player)
+    {
+
+        //Let the host builder implement this
+
+    }
+
+    
 
 }

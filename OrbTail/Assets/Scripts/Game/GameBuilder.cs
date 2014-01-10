@@ -90,7 +90,8 @@ public class GameBuilder : MonoBehaviour {
     /// </summary>
     public event DelegateGameReady EventGameReady;
 
-    private void NotifyGameReady()
+    [RPC]
+    public void RPCNotifyGameReady()
     {
 
         if (EventGameReady != null)
@@ -109,15 +110,15 @@ public class GameBuilder : MonoBehaviour {
         {
 
             //The game is ready when the (only) player is ready
-            NotifyGameReady();
+            RPCNotifyGameReady();
 
         }
         else
         {
 
-            //The game is ready only when all players are ready!
-            //NetworkBuilder.DoSomethingCool
-
+            //The game is ready only when all players have dismissed the tutorial
+            networkView.RPC("RPCTutorialDismissed", RPCMode.All, Network.player);
+            
         }
 
     }

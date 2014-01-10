@@ -323,13 +323,31 @@ public class HostBuilder : NetworkPlayerBuilder
         if (ready_players_.Count == player_ids_.Count)
         {
 
-            //Everyone created its own ship, start the match!
+            //Everyone created its own ship, wait until each player has dismissed the tutorial
             ready_players_.Clear();
 
             var game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
 
             game.networkView.RPC("RPCGameEnable", RPCMode.All, true);
 
+        }
+
+    }
+
+    protected override void TutorialDismissed(NetworkPlayer player)
+    {
+
+        dismissed_tutorials_.Add(player);
+
+        Debug.Log("Tutorial dismissed");
+
+        if (dismissed_tutorials_.Count == player_ids_.Count)
+        {
+
+            Debug.Log("All tutorial were dismissed");
+
+            networkView.RPC("RPCNotifyGameReady", RPCMode.All);
+            
         }
 
     }
@@ -348,6 +366,8 @@ public class HostBuilder : NetworkPlayerBuilder
     /// The set of all ready players
     /// </summary>
     private HashSet<int> ready_players_;
+
+    private HashSet<NetworkPlayer> dismissed_tutorials_ = new HashSet<NetworkPlayer>();
 
     /// <summary>
     /// Is the host registered?
