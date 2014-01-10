@@ -64,7 +64,7 @@ public class GUIServerClient : GUIMenuChoose {
 
 		builder.Action = GameBuilder.BuildMode.RemoteGuest;
 
-        Application.LoadLevel("MenuChooseShip");
+		Application.LoadLevel("MenuChooseGameMode");
 
     }
 

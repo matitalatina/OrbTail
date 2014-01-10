@@ -5,7 +5,7 @@ using System.Linq;
 
 public class PowerGenerator : MonoBehaviour {
 
-    public float delta_generation = 1.0f;
+    public float delta_generation = 20.0f;
 
     private IList<GameObject> orbs = null;
 
