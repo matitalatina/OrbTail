@@ -12,10 +12,10 @@ public class PowerFactory
     {
 
         RegisterPower(new Boost(), 0);              //The boost is not a generated power
-        RegisterPower(new Missile(), 1);
-        RegisterPower(new Invincibility(), 1);
-        RegisterPower(new OrbSteal(), 1);
-        RegisterPower(new Magnet(), 1);
+        RegisterPower(new Missile(), 2);
+        RegisterPower(new Invincibility(), 2);
+        RegisterPower(new OrbSteal(), 2);
+        RegisterPower(new Magnet(), 2);
 		RegisterPower(new Jam(), 1);
 
         PreloadPowers();

@@ -30,7 +30,6 @@ public class CameraMovement : MonoBehaviour {
         // Setting up the reference.
         player = target.transform;
         FloatingComponent = target.GetComponent<FloatingObject>();
-
 	
     }
 

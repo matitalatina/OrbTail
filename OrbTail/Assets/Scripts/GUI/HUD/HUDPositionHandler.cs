@@ -6,7 +6,7 @@ public class HUDPositionHandler : MonoBehaviour {
 	private Transform cameraPos;
 	private const float smoothMovement = 30f;
 	private const float smoothRotation = 30f;
-	private const float distanceFromCamera = 11f;
+	private float distanceFromCamera = 10.7f;
 
 	// Use this for initialization
 	void Start () {
