@@ -65,7 +65,7 @@ public class CameraMovement : MonoBehaviour {
 				newDistanceSmooth *= 10;
 			}
 
-			currentDistanceSmooth = Mathf.Lerp(currentDistanceSmooth, newDistanceSmooth, 1f * Time.deltaTime);
+			currentDistanceSmooth = Mathf.Lerp(currentDistanceSmooth, newDistanceSmooth, 0.3f * Time.deltaTime);
 
 			transform.position = Vector3.Lerp(transform.position, newPos, currentDistanceSmooth * Time.deltaTime);
 

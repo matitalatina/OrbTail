@@ -13,7 +13,6 @@ public class HUDCommandsTutorial : MonoBehaviour {
 			prefabPath = mobileTutorialPrefab;
 		}
 		else {
-			Debug.Log("PCCCCC");
 			prefabPath = pcTutorialPrefab;
 		}
 
