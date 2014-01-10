@@ -83,6 +83,45 @@ public class GameBuilder : MonoBehaviour {
 
     }
 
+    public delegate void DelegateGameReady(object sender);
+
+    /// <summary>
+    /// Fired when the game is ready
+    /// </summary>
+    public event DelegateGameReady EventGameReady;
+
+    private void NotifyGameReady()
+    {
+
+        if (EventGameReady != null)
+        {
+
+            EventGameReady(this);
+
+        }
+
+    }
+
+    private void PlayerReady()
+    {
+
+        if (Action == BuildMode.SinglePlayer)
+        {
+
+            //The game is ready when the (only) player is ready
+            NotifyGameReady();
+
+        }
+        else
+        {
+
+            //The game is ready only when all players are ready!
+            //NetworkBuilder.DoSomethingCool
+
+        }
+
+    }
+
     /// <summary>
     /// The current arena name
     /// </summary>

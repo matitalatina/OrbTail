@@ -242,6 +242,7 @@ public class Game : MonoBehaviour {
 
         master.EventPlayerLeft += master_EventPlayerLeft;
         master.EventServerLeft += master_EventServerLeft;
+        master.EventGameReady += master_EventGameReady;
 
         //Create the proper game mode
         switch (GameMode)
@@ -268,7 +269,7 @@ public class Game : MonoBehaviour {
 
         }
         
-        //Ok the game is ready
+        //Ok the game has been built
 
         game_mode_.EventWin += GameMode_EventEnd;
         EventStart += Game_EventStart;
@@ -277,16 +278,13 @@ public class Game : MonoBehaviour {
 
 		master.NotifyGameBuilt();
         
-        StartCoroutine("UpdateCountdown");
-
 	}
 
-    void OnDestroy()
+    void master_EventGameReady(object sender)
     {
-        /*
-        game_mode_.EventWin -= GameMode_EventEnd;
-        EventStart -= Game_EventStart;
-        */
+
+        StartCoroutine("UpdateCountdown");
+
     }
 
     void master_EventServerLeft(object sender)
