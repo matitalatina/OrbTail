@@ -20,5 +20,7 @@ public class Tags {
 	public const string ArenaSelector = "ArenaSelector";
 	public const string GameModeSelector = "GameModeSelector";
 	public const string BackButton = "BackButton";
+	public const string MenuSelector = "MenuSelector";
+	public const string PageTutorial = "PageTutorial";
 	
 }

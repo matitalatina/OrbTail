@@ -102,7 +102,7 @@ public class GameBuilder : MonoBehaviour {
 
     }
 
-    private void PlayerReady()
+    public void PlayerReady()
     {
 
         if (Action == BuildMode.SinglePlayer)
