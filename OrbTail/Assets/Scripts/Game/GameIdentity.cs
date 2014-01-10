@@ -86,7 +86,7 @@ public class GameIdentity : MonoBehaviour {
     /// <summary>
     /// The score of the player
     /// </summary>
-    public int Score { get; private set; }
+    public int Score;
 
     /// <summary>
     /// Returns the tail length

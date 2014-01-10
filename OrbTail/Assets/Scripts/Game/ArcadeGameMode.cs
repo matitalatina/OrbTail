@@ -52,6 +52,8 @@ public class ArcadeGameMode: BaseGameMode
 
         game.EventTick += game_EventTick;
 
+        Debug.Log("Ships in da game: " + game.ShipsInGame.Count());
+
         foreach (GameObject ship in game.ShipsInGame)
         {
 
@@ -85,8 +87,6 @@ public class ArcadeGameMode: BaseGameMode
 
             var ships = Game.ShipsInGame;
 
-            Debug.Log("Found " + ships.Count() + " ships");
-
             //Find the highest score (Can't use linq.max because iOS sucks)
             int highest_score = 0;
             int current_score = 0;
@@ -108,8 +108,6 @@ public class ArcadeGameMode: BaseGameMode
             var winners = from s in ships
                           where s.GetComponent<GameIdentity>().Score == highest_score
                           select s;
-
-            Debug.Log("Winners " + winners.Count());
 
             if (winners.Count() == 1)
             {

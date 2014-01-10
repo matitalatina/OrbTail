@@ -79,14 +79,18 @@ public class Tail : MonoBehaviour {
 
         }
 
+
+        if (OnEventOrbAttached != null)
+        {
+
+            OnEventOrbAttached(this, orb, gameObject);
+
+        }
+
         if (networkView.isMine ||
             Network.peerType == NetworkPeerType.Disconnected)
         {
-            
-			if (OnEventOrbAttached != null) {
-				OnEventOrbAttached(this, orb, gameObject);
-			}
-
+         
             orb.rigidbody.AddForce(-orb.GetComponent<FloatingObject>().ArenaDown * attachForce, ForceMode.Impulse);
         
         }
