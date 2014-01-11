@@ -11,7 +11,7 @@ public class SphericalGravityField: IGravityField
 {
 
     public const float hoverForce = 100.0f;
-    public const float hoverDampen = 5.0f;
+    public const float hoverDampen = 50.0f;
 
     /// <summary>
     /// The center of gravity
