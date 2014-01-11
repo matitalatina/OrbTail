@@ -12,7 +12,8 @@ public class GravityField : MonoBehaviour {
         Flat,
         Spherical,
         InverseSpherical,
-        TripleSpherical
+        TripleSpherical,
+        ZXTorus
 
     }
 
@@ -50,6 +51,11 @@ public class GravityField : MonoBehaviour {
             case GravityShape.TripleSpherical:
 
                 Field = new TripleSphericalGravityField(Vector3.zero);
+                break;
+
+            case GravityShape.ZXTorus:
+
+                Field = new ZXTorusGravityField(Vector3.zero, 70.0f);
                 break;
 
             default:
