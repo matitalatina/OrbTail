@@ -43,15 +43,12 @@ public class FloatingObject : MonoBehaviour {
 
         }
 
-		if(Physics.Raycast(transform.position, ArenaDown, out hit, Layers.Field)) {
+		if(Physics.Raycast(transform.position, ArenaDown, out hit, Mathf.Infinity, Layers.Field)) {
 
-			if (hit.collider.gameObject.tag == Tags.Field) {
 
 				rigidbody.AddForce(-ArenaDown * (hoverForce * (hoverDistance - hit.distance) - 
 				                                 hoverDampen * (Vector3.Dot(FloatingBody.velocity, -ArenaDown))), 
 				                   ForceMode.Acceleration);
-
-			}
 
 
             Debug.DrawRay(transform.position, ArenaDown * 25.0f, Color.green);
