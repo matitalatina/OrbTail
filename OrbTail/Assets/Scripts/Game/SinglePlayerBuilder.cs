@@ -62,7 +62,7 @@ public class SinglePlayerBuilder : MonoBehaviour {
 
             ++player_id;
 
-            Destroy(identity);
+            //Destroy(identity);
 
         }
 
