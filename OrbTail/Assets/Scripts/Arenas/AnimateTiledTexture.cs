@@ -52,14 +52,33 @@ class AnimateTiledTexture : MonoBehaviour
     void AnimateTiledTexture_EventStart(object sender, int countdown)
     {
 
+        //CHECKTHIS
         var player = game.ActivePlayer;
 
-        player.GetComponent<TailController>().OnEventFight += AnimateTiledTexture_OnEventFight;
-        player.GetComponent<Tail>().OnEventOrbAttached += AnimateTiledTexture_OnEventOrbAttached;
+        player.GetComponentInChildren<ProximityHandler>().EventOnProximityEnter += AnimateTiledTexture_EventOnProximityEnter;
+        //
 
         game.EventTick += game_EventTick;
 
         StartCoroutine(Colorize());
+
+    }
+
+    void AnimateTiledTexture_EventOnProximityEnter(object sender, Collider other)
+    {
+
+        //CHECKTHIS
+
+        Debug.Log(collider.gameObject.name);
+
+        /*
+        if (collider.gameObject.tag.Equals(Tags.Ship) ||
+            collider.gameObject.tag.Equals(Tags.Orb))
+        {
+        */
+            Flash(flash_color);
+        
+        //}
 
     }
 
@@ -88,19 +107,6 @@ class AnimateTiledTexture : MonoBehaviour
 
     }
 
-    void AnimateTiledTexture_OnEventOrbAttached(object sender, GameObject orb, GameObject ship)
-    {
-
-        Flash(flash_color);
-
-    }
-
-    void AnimateTiledTexture_OnEventFight(object sender, System.Collections.Generic.IList<GameObject> orbs, GameObject attacker, GameObject defender)
-    {
-
-        Flash(flash_color);
-
-    }
 
     private void Flash(Color flash)
     {

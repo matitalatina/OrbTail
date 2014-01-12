@@ -57,6 +57,8 @@ public class ArcadeGameMode: BaseGameMode
         foreach (GameObject ship in game.ShipsInGame)
         {
 
+            Debug.Log(ship.name);
+
             ship.GetComponent<Tail>().OnEventOrbAttached += ArcadeGameMode_OnEventOrbAttached;
 
             ship.GetComponent<GameIdentity>().ResetScore();
