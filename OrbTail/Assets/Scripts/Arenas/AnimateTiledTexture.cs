@@ -1,34 +1,52 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 class AnimateTiledTexture : MonoBehaviour
 {
 
-    public Color FlashColor = Color.white;
+    public int ColorizeInterval = 10;
+
+    public float ColorizeDecay = 1.0f;
 
     public Color CriticalColor = Color.red;
 
-    public float FlashDecay = 1.0f;
-
-    public Color RestColor = Color.black;
-
     public Color CriticalRestColor = Color.grey;
 
-    private Color material_color;
+    public Queue<Color> Colors = new Queue<Color>();
+
+    private Color flash_color;
+
+    private Color rest_color;
 
     private Game game;
-
+        
     void Start()
     {
 
+        var builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
+
+        builder.EventGameBuilt += builder_EventGameBuilt;
+        
+    }
+
+    void builder_EventGameBuilt(object sender)
+    {
+
+        //Fills the color stack
+        Colors.Enqueue(Color.red);
+        Colors.Enqueue(Color.yellow);
+        Colors.Enqueue(Color.green);
+        Colors.Enqueue(Color.cyan);
+        Colors.Enqueue(Color.blue);
+        Colors.Enqueue(Color.magenta);
+
+        renderer.material.color = Colors.Peek();
+
         game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
-            
+
         game.EventStart += AnimateTiledTexture_EventStart;
         
-        material_color = RestColor;
-
-        renderer.material.color = material_color;
-
     }
 
     void AnimateTiledTexture_EventStart(object sender, int countdown)
@@ -40,6 +58,9 @@ class AnimateTiledTexture : MonoBehaviour
         player.GetComponent<Tail>().OnEventOrbAttached += AnimateTiledTexture_OnEventOrbAttached;
 
         game.EventTick += game_EventTick;
+
+        StartCoroutine(Colorize());
+
     }
 
     void game_EventTick(object sender, int time_left)
@@ -48,12 +69,20 @@ class AnimateTiledTexture : MonoBehaviour
         if (time_left <= 10)
         {
 
-            FlashColor = CriticalColor;
-            RestColor = CriticalRestColor;
+            flash_color = CriticalColor;
+            rest_color = CriticalRestColor;
 
-            StopAllCoroutines();
+            Flash(CriticalColor);
 
-            StartCoroutine(Flash(FlashColor, RestColor, FlashDecay));
+        }
+        else if (time_left % ColorizeInterval == 0)
+        {
+
+            flash_color = Colors.Peek();
+            rest_color = Colors.Peek() * 0.2f;
+            rest_color.a = 1.0f;
+
+            Colors.Enqueue(Colors.Dequeue());
 
         }
 
@@ -62,35 +91,34 @@ class AnimateTiledTexture : MonoBehaviour
     void AnimateTiledTexture_OnEventOrbAttached(object sender, GameObject orb, GameObject ship)
     {
 
-        StopAllCoroutines();
-
-        StartCoroutine(Flash(FlashColor, RestColor, FlashDecay));
+        Flash(flash_color);
 
     }
 
     void AnimateTiledTexture_OnEventFight(object sender, System.Collections.Generic.IList<GameObject> orbs, GameObject attacker, GameObject defender)
     {
-        
-        StopAllCoroutines();
 
-        StartCoroutine(Flash(FlashColor, RestColor, FlashDecay));
+        Flash(flash_color);
 
     }
 
-    private IEnumerator Flash(Color flash, Color rest, float decay)
+    private void Flash(Color flash)
+    {
+
+        renderer.material.color = flash;
+
+    }
+
+    private IEnumerator Colorize()
     {
 
         var mat = renderer.material;
 
-        material_color = flash;
-
-        while (material_color != rest)
+        while (true)
         {
 
-            material_color = Color.Lerp(material_color, rest, Time.deltaTime * decay);
+            mat.color = Color.Lerp(mat.color, rest_color, Time.deltaTime * ColorizeDecay);
             
-            renderer.material.color = material_color;
-
             yield return new WaitForEndOfFrame();
 
         }
