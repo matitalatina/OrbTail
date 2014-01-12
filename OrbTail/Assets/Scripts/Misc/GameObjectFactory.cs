@@ -45,13 +45,25 @@ public class GameObjectFactory {
         {
 
             //Activate an idle object
-            var game_object = object_stack.Pop();
+            try
+            {
 
-            game_object.transform.position = positon;
-            game_object.transform.rotation = rotation;
-            game_object.SetActive(true);
+                var game_object = object_stack.Pop();
 
-            return game_object;
+                game_object.transform.position = positon;
+                game_object.transform.rotation = rotation;
+                game_object.SetActive(true);
+
+                return game_object;
+
+            }
+            catch
+            {
+
+                //This should fix random-ass exceptions
+                return InstantiateLocal(resource_path, positon, rotation);
+
+            }
 
         }
         else
