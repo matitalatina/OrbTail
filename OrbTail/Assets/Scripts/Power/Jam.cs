@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Jam : Power
 {
-    private const float power_time = 10.0f;
+    private const float power_time = 7.0f;
 
     public Jam() : base(PowerGroups.Jam, power_time, "Jam") { }
 

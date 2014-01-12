@@ -19,8 +19,10 @@ public class HUDCommandsTutorial : MonoBehaviour {
 		GameObject commandTab = (GameObject) GameObject.Instantiate(Resources.Load(prefabPath));
 
 		Vector3 prevPosition = commandTab.transform.position;
+		Quaternion prevQuaternion = commandTab.transform.rotation;
 		commandTab.transform.parent = gameObject.transform;
 		commandTab.transform.localPosition = prevPosition;
+		commandTab.transform.localRotation = prevQuaternion;
 	
 	}
 }
