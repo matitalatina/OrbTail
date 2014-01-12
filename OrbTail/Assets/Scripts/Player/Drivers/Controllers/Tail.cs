@@ -79,14 +79,6 @@ public class Tail : MonoBehaviour {
 
         }
 
-
-        if (OnEventOrbAttached != null)
-        {
-
-            OnEventOrbAttached(this, orb, gameObject);
-
-        }
-
         if (networkView.isMine ||
             Network.peerType == NetworkPeerType.Disconnected)
         {
@@ -110,6 +102,14 @@ public class Tail : MonoBehaviour {
         orbStack.Push(orb);
 
         orb.GetComponent<OrbController>().LinkTo(target);
+
+
+        if (OnEventOrbAttached != null)
+        {
+
+            OnEventOrbAttached(this, orb, gameObject);
+
+        }
 
         //Warns other players if this is the server
         if (Network.isServer)

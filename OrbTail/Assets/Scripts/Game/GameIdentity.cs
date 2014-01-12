@@ -129,6 +129,17 @@ public class GameIdentity : MonoBehaviour {
 
     }
 
+    public void SetScore(int score)
+    {
+
+        int delta = score - Score;
+
+        Score = score;
+
+        NotifyScore(delta);
+
+    }
+
     public void ResetScore()
     {
 
