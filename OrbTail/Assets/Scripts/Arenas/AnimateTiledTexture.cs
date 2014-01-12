@@ -52,11 +52,9 @@ class AnimateTiledTexture : MonoBehaviour
     void AnimateTiledTexture_EventStart(object sender, int countdown)
     {
 
-        //CHECKTHIS
         var player = game.ActivePlayer;
 
-        player.GetComponentInChildren<ProximityHandler>().EventOnProximityEnter += AnimateTiledTexture_EventOnProximityEnter;
-        //
+        player.GetComponent<Tail>().OnEventOrbAttached += AnimateTiledTexture_OnEventOrbAttached;
 
         game.EventTick += game_EventTick;
 
@@ -64,21 +62,10 @@ class AnimateTiledTexture : MonoBehaviour
 
     }
 
-    void AnimateTiledTexture_EventOnProximityEnter(object sender, Collider other)
+    void AnimateTiledTexture_OnEventOrbAttached(object sender, GameObject orb, GameObject ship)
     {
 
-        //CHECKTHIS
-
-        Debug.Log(collider.gameObject.name);
-
-        /*
-        if (collider.gameObject.tag.Equals(Tags.Ship) ||
-            collider.gameObject.tag.Equals(Tags.Orb))
-        {
-        */
-            Flash(flash_color);
-        
-        //}
+        Flash(flash_color);
 
     }
 
