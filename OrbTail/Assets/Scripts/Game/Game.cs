@@ -351,6 +351,9 @@ public class Game : MonoBehaviour {
         if (countdown == 0)
         {
 
+
+            GetComponent<PowerGenerator>().enabled = true;
+
             if (NetworkHelper.IsServerSide())
             {
 
