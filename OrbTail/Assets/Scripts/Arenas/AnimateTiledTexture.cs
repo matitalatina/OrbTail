@@ -88,9 +88,7 @@ class AnimateTiledTexture : MonoBehaviour
         {
 
             material_color = Color.Lerp(material_color, rest, Time.deltaTime * decay);
-
-            Debug.Log(Time.deltaTime * decay);
-
+            
             renderer.material.color = material_color;
 
             yield return new WaitForEndOfFrame();
