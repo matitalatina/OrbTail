@@ -7,7 +7,7 @@ public class Missile : Power
 
     public const string missile_prefab_path = "Prefabs/Power/MissileRocket";
     private const float power_time = 7.0f;
-	private const float missileforwardOffset = 3f;
+	private const float missileforwardOffset = 5f;
 	private AudioClip launchSound;
 
     public Missile() : base(PowerGroups.Main, float.MaxValue, "Missile") { 
