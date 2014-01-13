@@ -440,6 +440,8 @@ public class Game : MonoBehaviour {
 		yield return new WaitForSeconds(restartTime);
 		Destroy(GameObject.FindGameObjectWithTag(Tags.Master));
 
+        GameObjectFactory.Instance.Purge();
+
         //Okay, good game, let's go home...
         Network.Disconnect();
 
