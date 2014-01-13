@@ -1,0 +1,99 @@
+fileFormatVersion: 2
+guid: df356a4afa39d48d19e37d7796c17895
+TextureImporter:
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -2
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: -1
+    aniso: 1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: AtlasTutorial_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 646
+        width: 237
+        height: 237
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: AtlasTutorial_1
+      rect:
+        serializedVersion: 2
+        x: 265
+        y: 653
+        width: 895
+        height: 230
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: AtlasTutorial_2
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 428
+        width: 492
+        height: 183
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: AtlasTutorial_3
+      rect:
+        serializedVersion: 2
+        x: 557
+        y: 472
+        width: 120
+        height: 91
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: AtlasTutorial_4
+      rect:
+        serializedVersion: 2
+        x: 738
+        y: 494
+        width: 180
+        height: 69
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: AtlasTutorial_5
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 0
+        width: 667
+        height: 379
+      alignment: 0
+      pivot: {x: .5, y: .5}
+  spritePackingTag: 
+  userData: 
