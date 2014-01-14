@@ -9,6 +9,7 @@ public class OrbController : MonoBehaviour {
 	private float forceSpring = 3f;
 	private float minDistance = 1.0f;
 	private float maxDistance = 1.0f;
+	private float shipDistance = 2.5f;
 	private bool isLinked;
 
 
@@ -42,6 +43,12 @@ public class OrbController : MonoBehaviour {
 		joint.spring = forceSpring;
 		joint.minDistance = minDistance;
 		joint.maxDistance = maxDistance;
+
+		if (target.tag == Tags.Ship) {
+			joint.minDistance += shipDistance;
+			joint.maxDistance += shipDistance;
+		}
+
 		joint.autoConfigureConnectedAnchor = false;
 		joint.anchor = Vector3.zero;
 		joint.connectedAnchor = Vector3.zero;
