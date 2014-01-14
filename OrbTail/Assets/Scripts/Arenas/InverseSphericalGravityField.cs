@@ -10,7 +10,7 @@ using UnityEngine;
 public class InverseSphericalGravityField: IGravityField
 {
        
-    public const float hoverForce = 9.8f;
+    public const float hoverForce = 50f;
     public const float hoverDampen = 5f;
 
     /// <summary>
