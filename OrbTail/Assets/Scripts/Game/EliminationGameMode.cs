@@ -38,6 +38,9 @@ public class EliminationGameMode: BaseGameMode
         Tail tail;
         var tails = new List<Tail>();
 
+        var orbs = new Queue<GameObject>(GameObject.FindGameObjectsWithTag(Tags.Orb));
+        int orbs_per_player = orbs.Count / Game.ShipsInGame.Count();
+
         foreach (GameObject ship in Game.ShipsInGame)
         {
 
@@ -45,29 +48,21 @@ public class EliminationGameMode: BaseGameMode
 
             tail.OnEventOrbDetached += EliminationGameMode_OnEventOrbDetached;
             tail.OnEventOrbAttached += tail_OnEventOrbAttached;
-            tails.Add(tail);
 
-            ship.GetComponent<GameIdentity>().ResetScore();
-            
-        }
-
-        //Give some orbs to all ships
-        if (NetworkHelper.IsServerSide())
-        {
-
-            var orbs = GameObject.FindGameObjectsWithTag(Tags.Orb);
-
-            for (int orb_index = 0; orb_index < orbs.Length; orb_index++)
+            if (NetworkHelper.IsServerSide())
             {
 
-                tail = tails[orb_index % tails.Count];
+                for (int i = 0; i < orbs_per_player; i++)
+                {
 
-                tail.AttachOrb(orbs[orb_index]);
+                    tail.AttachOrb(orbs.Dequeue());
 
-                Debug.Log(tail.gameObject.GetComponent<GameIdentity>().Color);
+                }
 
             }
 
+            ship.GetComponent<GameIdentity>().ResetScore();
+            
         }
 
         //We just need the first event
