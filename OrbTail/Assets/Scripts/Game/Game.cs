@@ -128,6 +128,11 @@ public class Game : MonoBehaviour {
     public int CountdownDuration = 3;
 
     /// <summary>
+    /// Seconds the user have to wait when it has been destroyed
+    /// </summary>
+    public float kSpectatorModeDelay = 3f;
+
+    /// <summary>
     /// The current game mode
     /// </summary>
     public int GameMode = -1;
@@ -230,9 +235,31 @@ public class Game : MonoBehaviour {
 
         ships_.Remove(ship);
 
+        //Enables the spectator mode
+        if (ship == ActivePlayer)
+        {
+
+            StartCoroutine(ActivateSpectatorMode());
+
+        }
+
+        ship.SetActive(false);
+
+        //TODO: Add an explosion??
+
         NotifyShipEliminated(ship);
+        
+    }
+    
+    private IEnumerator ActivateSpectatorMode()
+    {
+
+        yield return new WaitForSeconds(kSpectatorModeDelay);
+
+        Camera.GetComponent<SpectatorMode>().enabled = true;
 
     }
+
 
 	// Use this for initialization
 	void Start () {

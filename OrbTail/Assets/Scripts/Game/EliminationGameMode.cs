@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -157,25 +158,9 @@ public class EliminationGameMode: BaseGameMode
             //The ship should be eliminated
             Game.RemoveShip(ship);
 
-            //Enables the spectator mode
-            if (ship == Game.ActivePlayer)
-            {
-
-                Game.Camera.GetComponent<SpectatorMode>().enabled = true;
-
-            }
-            
-            ship.SetActive(false);
-
-            //TODO: Add an explosion??
-
-
         }
 
-
-
     }
-
 
     void tail_OnEventOrbAttached(object sender, GameObject orb, GameObject ship)
     {
