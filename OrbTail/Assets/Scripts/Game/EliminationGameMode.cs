@@ -46,6 +46,8 @@ public class EliminationGameMode: BaseGameMode
 
             tail = ship.GetComponent<Tail>();
 
+            tail.DetachOrbs(int.MaxValue);
+
             tail.OnEventOrbDetached += EliminationGameMode_OnEventOrbDetached;
             tail.OnEventOrbAttached += tail_OnEventOrbAttached;
 
