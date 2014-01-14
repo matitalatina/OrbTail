@@ -36,7 +36,6 @@ public class GUIServerClient : GUIMenuChoose {
 			
 		}
 		else if (target.tag == Tags.BackButton) {
-			Destroy(GameObject.FindGameObjectWithTag(Tags.Master));
 			Application.LoadLevel("MenuMain");
 		}
 	}

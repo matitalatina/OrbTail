@@ -24,7 +24,6 @@ public class GUIChooseGameMode : GUIMenuChoose {
 			
 		}
 		else if (target.tag == Tags.BackButton) {
-			Destroy(GameObject.FindGameObjectWithTag(Tags.Master));
 			Application.LoadLevel("MenuMain");
 		}
 	}

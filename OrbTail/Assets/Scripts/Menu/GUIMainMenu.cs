@@ -13,6 +13,10 @@ public class GUIMainMenu : GUIMenuChoose {
 
 		master = GameObject.FindGameObjectWithTag(Tags.Master);
 
+		if (master == null) {
+			master = GameObject.Instantiate(Resources.Load("Prefabs/Master")) as GameObject;
+		}
+
 		multiplayer_button = GameObject.Find("MultiPlayerButton");
 		
 		single_player_button = GameObject.Find("SinglePlayerButton");
