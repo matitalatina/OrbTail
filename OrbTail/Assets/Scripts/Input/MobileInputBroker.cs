@@ -14,7 +14,7 @@ public class MobileInputBroker: IInputBroker
 
     private const float kSteeringExponent = 2f;
 
-	private const float kBoostThreshold = 4.0f;
+	private const float kBoostThreshold = 3.0f;
 
 	private const float kMaxOffsetAcceleration = 0.6f;
 
@@ -24,6 +24,8 @@ public class MobileInputBroker: IInputBroker
         //Standard position, with the phone in landscape position and the bottom on the right.
 		zOffsetAcceleration = 0f;
 		Calibrate();
+		HUDButtonsHandler hudButtonsHandler = GameObject.FindGameObjectWithTag(Tags.HUD).GetComponent<HUDButtonsHandler>();
+		hudButtonsHandler.EventOnMissileButtonSelect += OnPowerButtonSelect;
 
     }
 	
@@ -80,11 +82,6 @@ public class MobileInputBroker: IInputBroker
 
 		}
 
-		if (Input.touchCount > 0 ) {
-
-			fired_power_ups_.Add(PowerGroups.Main);
-
-		}
 
 		// TODO: to enhance 
 		if (Input.acceleration.sqrMagnitude > kBoostThreshold) {
@@ -95,6 +92,10 @@ public class MobileInputBroker: IInputBroker
 
 
     }
+
+	private void OnPowerButtonSelect(object sender, GameObject button) {
+		fired_power_ups_.Add(PowerGroups.Main);
+	}
 
     private IList<int> fired_power_ups_ = new List<int>();
 

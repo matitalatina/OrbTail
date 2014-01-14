@@ -22,5 +22,7 @@ public class Tags {
 	public const string BackButton = "BackButton";
 	public const string MenuSelector = "MenuSelector";
 	public const string PageTutorial = "PageTutorial";
+
+	public const string PowerButton = "PowerButton";
 	
 }
