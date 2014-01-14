@@ -22,6 +22,8 @@ public class GUIMainMenu : GUIMenuChoose {
 
 
 	protected override void OnSelect(GameObject target) {
+		base.OnSelect(target);
+
 		if (target == single_player_button)
 		{
 			StartSinglePlayer();
@@ -31,6 +33,9 @@ public class GUIMainMenu : GUIMenuChoose {
 		{
 			StartMultiPlayer();
 			
+		}
+		else if (target.name == "ExitButton") {
+			Application.Quit();
 		}
 	}
 	
