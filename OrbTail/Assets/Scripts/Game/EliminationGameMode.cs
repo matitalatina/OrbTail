@@ -48,26 +48,23 @@ public class EliminationGameMode: BaseGameMode
             tails.Add(tail);
 
             ship.GetComponent<GameIdentity>().ResetScore();
-
+            
         }
 
         //Give some orbs to all ships
         if (NetworkHelper.IsServerSide())
         {
 
-            int i = 0;
+            var orbs = GameObject.FindGameObjectsWithTag(Tags.Orb);
 
-            foreach (GameObject orb in GameObject.FindGameObjectsWithTag(Tags.Orb))
+            for (int orb_index = 0; orb_index < orbs.Length; orb_index++)
             {
 
-                if (orb != null)
-                {
+                tail = tails[orb_index % tails.Count];
 
-                    tails[i].AttachOrb(orb);
+                tail.AttachOrb(orbs[orb_index]);
 
-                    i = ++i % Game.ShipsInGame.Count();
-
-                }
+                Debug.Log(tail.gameObject.GetComponent<GameIdentity>().Color);
 
             }
 
@@ -75,21 +72,6 @@ public class EliminationGameMode: BaseGameMode
 
         //We just need the first event
         Game.EventStart -= game_EventStart;       
-
-    }
-
-
-    ~EliminationGameMode()
-    {
-
-        //Game.EventTick -= game_EventTick;
-
-        foreach (GameObject ship in Game.ShipsInGame)
-        {
-
-            //ship.GetComponent<Tail>().OnEventOrbDetached -= EliminationGameMode_OnEventOrbDetached;
-
-        }
 
     }
 

@@ -5,7 +5,9 @@ using System.Linq;
 
 public class Game : MonoBehaviour {
 
-	private float restartTime = 6f;
+	private float restart_time = 6f;
+
+    public const string explosion_prefab_path = "Prefabs/Power/Explosion";
 
     #region Events
 
@@ -243,12 +245,27 @@ public class Game : MonoBehaviour {
 
         }
 
+        //Deactivate the ship
         ship.SetActive(false);
 
-        //TODO: Add an explosion??
+        StartCoroutine(ShipExplosion());
 
         NotifyShipEliminated(ship);
         
+    }
+
+    private IEnumerator ShipExplosion()
+    {
+        
+        GameObject explosion = GameObject.Instantiate(explosion_resource_, this.gameObject.transform.position, Quaternion.identity) as GameObject;
+
+        AudioSource.PlayClipAtPoint(explosion_sound_, transform.position);
+
+        // Delayed for GFX
+        yield return new WaitForSeconds(1.0f);
+
+        Destroy(explosion);
+
     }
     
     private IEnumerator ActivateSpectatorMode()
@@ -264,6 +281,9 @@ public class Game : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
+        //Graphics stuff
+        explosion_sound_ = Resources.Load<AudioClip>("Sounds/Powers/Explosion");
+        explosion_resource_ = Resources.Load<GameObject>(explosion_prefab_path);
 
         var master = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
 
@@ -464,7 +484,7 @@ public class Game : MonoBehaviour {
 	/// Restarts the game. Temporary method
 	/// </summary>
 	private IEnumerator RestartGame() {
-		yield return new WaitForSeconds(restartTime);
+		yield return new WaitForSeconds(restart_time);
 		Destroy(GameObject.FindGameObjectWithTag(Tags.Master));
 
         GameObjectFactory.Instance.Purge();
@@ -550,5 +570,8 @@ public class Game : MonoBehaviour {
     private GameObject active_camera_ = null;
     
     private BaseGameMode game_mode_;
+
+    AudioClip explosion_sound_;
+    GameObject explosion_resource_;
 
 }
