@@ -10,13 +10,16 @@ public class GameBuilder : MonoBehaviour {
     public enum BuildMode{
 
         SinglePlayer,
-        RemoteHost,
-        RemoteGuest,
-        LocalHost,
-        LocalGuest
+        Host,
+        Client
 
     }
 
+    public bool LocalMasterServer = false;
+    public string LocalMasterServerAddress = "127.0.0.1";
+    public int LocalMasterServerPort = 23466;
+    public int NATFacilitatorPort = 50005;
+    
     public const int kMaxPlayerCount = 4;
     public const int kServerPort = 6059;
     public const string kGameTypeName = "OrbTail";
@@ -151,19 +154,33 @@ public class GameBuilder : MonoBehaviour {
                 gameObject.AddComponent<SinglePlayerBuilder>();
                 break;
 
-            case BuildMode.RemoteHost:
+            case BuildMode.Host:
 
                 NetworkBuilder = gameObject.AddComponent<HostBuilder>();
-                
+
+                NetworkBuilder.LocalMasterServer = LocalMasterServer;
+                NetworkBuilder.LocalMasterServerAddress = LocalMasterServerAddress;
+                NetworkBuilder.LocalMasterServerPort = LocalMasterServerPort;
+                NetworkBuilder.NATFacilitatorPort = NATFacilitatorPort;
+
+                NetworkBuilder.Setup();
+
                 Application.LoadLevel("MenuMatchmaking");
 				
 				NetworkBuilder.EventDisconnected += NetworkBuilder_EventDisconnected;
 
                 break;
 
-            case BuildMode.RemoteGuest:
+            case BuildMode.Client:
 
                 NetworkBuilder = gameObject.AddComponent<ClientBuilder>();
+
+                NetworkBuilder.LocalMasterServer = LocalMasterServer;
+                NetworkBuilder.LocalMasterServerAddress = LocalMasterServerAddress;
+                NetworkBuilder.LocalMasterServerPort = LocalMasterServerPort;
+                NetworkBuilder.NATFacilitatorPort = NATFacilitatorPort;
+
+                NetworkBuilder.Setup();
 
                 Application.LoadLevel("MenuMatchmaking");
 				
@@ -172,9 +189,7 @@ public class GameBuilder : MonoBehaviour {
                 break;
 
         }
-
-        
-        
+                
         this.enabled = false;
         
     }

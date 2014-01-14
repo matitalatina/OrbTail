@@ -49,7 +49,7 @@ public class GUIServerClient : GUIMenuChoose {
 		
 		var builder = master.GetComponent<GameBuilder>();
 
-		builder.Action = GameBuilder.BuildMode.RemoteHost;
+		builder.Action = GameBuilder.BuildMode.Host;
 
 		Application.LoadLevel("MenuChooseGameMode");
 
@@ -62,7 +62,7 @@ public class GUIServerClient : GUIMenuChoose {
 
 		var builder = master.GetComponent<GameBuilder>();
 
-		builder.Action = GameBuilder.BuildMode.RemoteGuest;
+		builder.Action = GameBuilder.BuildMode.Client;
 
 		Application.LoadLevel("MenuChooseGameMode");
 

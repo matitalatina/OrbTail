@@ -5,21 +5,28 @@ using System.Linq;
 
 public class ClientBuilder : NetworkPlayerBuilder {
 
+
+    public override void Setup()
+    {
+
+        if (LocalMasterServer)
+        {
+
+            //Setup the ip and the NAT facilitator
+
+            MasterServer.ipAddress = LocalMasterServerAddress;
+            MasterServer.port = LocalMasterServerPort;
+            Network.natFacilitatorIP = LocalMasterServerAddress;
+            Network.natFacilitatorPort = NATFacilitatorPort;
+
+        }
+
+        MasterServer.RequestHostList(GameBuilder.kGameTypeName);   
+
+    }
+
 	// Use this for initialization
 	void Start () {
-
-        if (!LocalMasterServer)
-        {
-            
-            MasterServer.RequestHostList(GameBuilder.kGameTypeName);
-            
-        }
-        else
-        {
-
-            //Ask the local master server
-
-        }
 
 	}
 
@@ -142,5 +149,5 @@ public class ClientBuilder : NetworkPlayerBuilder {
     /// List of all hosts found so far
     /// </summary>
     private Stack<HostData> hosts_found_;
-	
+
 }

@@ -5,9 +5,9 @@ using System.Linq;
 
 public class HostBuilder : NetworkPlayerBuilder
 {
-  
-	// Use this for initialization
-	void Start () {
+
+    public override void Setup()
+    {
 
         //Initialize the internal status
         available_ids_ = new Stack<int>();
@@ -22,7 +22,7 @@ public class HostBuilder : NetworkPlayerBuilder
         EventPlayerUnregistered += HostBuilder_EventPlayerUnregistered;
 
         //Store the available ids
-        for (int i = GameBuilder.kMaxPlayerCount; i > 0 ; i--)
+        for (int i = GameBuilder.kMaxPlayerCount; i > 0; i--)
         {
 
             available_ids_.Push(i - 1);
@@ -35,30 +35,34 @@ public class HostBuilder : NetworkPlayerBuilder
 
         Debug.Log("Registering to master server...");
 
-        //Register the match
-        if (!LocalMasterServer)
+        if (LocalMasterServer)
         {
 
-            //Asks the remote master server
+            //Setup the ip and the NAT facilitator
 
-            System.Random random = new System.Random();
-
-            Network.InitializeServer(GameBuilder.kMaxPlayerCount - 1,
-                                     GameBuilder.kServerPort,
-                                     !Network.HavePublicAddress());
-
-            MasterServer.RegisterHost(GameBuilder.kGameTypeName,
-                                      GetComponent<GameBuilder>().ArenaName);
-
-        }
-        else
-        {
-
-            //Asks the local master server
-            //TODO: not yet implemented
+            MasterServer.ipAddress = LocalMasterServerAddress;
+            MasterServer.port = LocalMasterServerPort;
+            Network.natFacilitatorIP = LocalMasterServerAddress;
+            Network.natFacilitatorPort = NATFacilitatorPort;
 
         }
 
+        Network.InitializeServer(GameBuilder.kMaxPlayerCount - 1,
+                                    GameBuilder.kServerPort,
+                                    !Network.HavePublicAddress());
+
+
+
+        MasterServer.RegisterHost(GameBuilder.kGameTypeName,
+                                    GetComponent<GameBuilder>().ArenaName);
+
+
+    }
+  
+	// Use this for initialization
+	void Start () {
+
+     
 	}
 
     void HostBuilder_EventPlayerUnregistered(object sender, int id)

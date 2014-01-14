@@ -3,13 +3,28 @@ using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 
-public class NetworkPlayerBuilder : MonoBehaviour
+public abstract class NetworkPlayerBuilder : MonoBehaviour
 {
 
     /// <summary>
     /// Is the player using a local master server?
     /// </summary>
     public bool LocalMasterServer = false;
+
+    /// <summary>
+    /// The local master server address
+    /// </summary>
+    public string LocalMasterServerAddress;
+
+    /// <summary>
+    /// The NAT facilitator port
+    /// </summary>
+    public int NATFacilitatorPort;
+
+    /// <summary>
+    /// The local master server port
+    /// </summary>
+    public int LocalMasterServerPort;
 
     /// <summary>
     /// Is the game loading the proper arena yet?
@@ -157,6 +172,10 @@ public class NetworkPlayerBuilder : MonoBehaviour
     }
     
     #endregion
+
+
+    public abstract void Setup();
+
 
     /// <summary>
     /// Set the ready value for this client
