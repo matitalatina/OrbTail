@@ -41,7 +41,7 @@ public class EliminationGameMode: BaseGameMode
         var orbs = new Queue<GameObject>(GameObject.FindGameObjectsWithTag(Tags.Orb));
         int orbs_per_player = orbs.Count / Game.ShipsInGame.Count();
 
-        foreach (GameObject ship in Game.ShipsInGame)
+        foreach (GameObject ship in new List<GameObject>( Game.ShipsInGame ))
         {
 
             tail = ship.GetComponent<Tail>();

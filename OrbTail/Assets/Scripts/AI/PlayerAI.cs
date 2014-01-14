@@ -292,7 +292,7 @@ public class PlayerAI : MonoBehaviour {
 		
 		gameObject.GetComponent<Tail>().OnEventOrbAttached -= OnEventOrbAttached;
 		// Attaching field of view notification
-		GetComponentInChildren<AIFieldOfView>().EventOnFieldOfViewEnter -= OnFieldOfViewEnter;
+		//GetComponentInChildren<AIFieldOfView>().EventOnFieldOfViewEnter -= OnFieldOfViewEnter;
 	}
 	
 	
