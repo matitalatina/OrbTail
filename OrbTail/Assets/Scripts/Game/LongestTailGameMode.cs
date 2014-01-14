@@ -27,8 +27,14 @@ public class LongestTailGameMode: BaseGameMode
     {
 
         game.EventTick += game_EventTick;
+        game.EventStart += game_EventStart;
 
-        foreach (GameObject ship in game.ShipsInGame)
+    }
+
+    void game_EventStart(object sender, int countdown)
+    {
+
+        foreach (GameObject ship in Game.ShipsInGame)
         {
 
             ship.GetComponent<Tail>().OnEventOrbAttached += LongestTailGameMode_OnEventOrbAttached;
@@ -37,6 +43,9 @@ public class LongestTailGameMode: BaseGameMode
             ship.GetComponent<GameIdentity>().ResetScore();
 
         }
+
+        //
+        Game.EventStart -= game_EventStart;
 
     }
 

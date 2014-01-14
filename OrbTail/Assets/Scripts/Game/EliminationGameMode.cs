@@ -27,18 +27,24 @@ public class EliminationGameMode: BaseGameMode
     {
 
         game.EventTick += game_EventTick;
+        game.EventStart += game_EventStart;
+
+    }
+
+    void game_EventStart(object sender, int countdown)
+    {
 
         Tail tail;
         var tails = new List<Tail>();
 
-        foreach (GameObject ship in game.ShipsInGame)
+        foreach (GameObject ship in Game.ShipsInGame)
         {
 
             tail = ship.GetComponent<Tail>();
 
             tail.OnEventOrbDetached += EliminationGameMode_OnEventOrbDetached;
             tail.OnEventOrbAttached += tail_OnEventOrbAttached;
-            tails.Add( tail ) ;
+            tails.Add(tail);
 
             ship.GetComponent<GameIdentity>().ResetScore();
 
@@ -58,13 +64,16 @@ public class EliminationGameMode: BaseGameMode
 
                     tails[i].AttachOrb(orb);
 
-                    i = ++i % game.ShipsInGame.Count();
+                    i = ++i % Game.ShipsInGame.Count();
 
                 }
-                
+
             }
 
         }
+
+        //We just need the first event
+        Game.EventStart -= game_EventStart;       
 
     }
 

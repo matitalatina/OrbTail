@@ -51,10 +51,16 @@ public class ArcadeGameMode: BaseGameMode
     {
 
         game.EventTick += game_EventTick;
+        game.EventStart += game_EventStart;
 
-        Debug.Log("Ships in da game: " + game.ShipsInGame.Count());
+    }
 
-        foreach (GameObject ship in game.ShipsInGame)
+    void game_EventStart(object sender, int countdown)
+    {
+
+        Debug.Log("Ships in da game: " + Game.ShipsInGame.Count());
+
+        foreach (GameObject ship in Game.ShipsInGame)
         {
 
             Debug.Log(ship.name);
@@ -65,10 +71,8 @@ public class ArcadeGameMode: BaseGameMode
 
         }
 
-    }
-
-    ~ArcadeGameMode()
-    {
+        //
+        Game.EventStart -= game_EventStart;
 
     }
 
