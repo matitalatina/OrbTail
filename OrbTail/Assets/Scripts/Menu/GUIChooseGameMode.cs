@@ -33,10 +33,10 @@ public class GUIChooseGameMode : GUIMenuChoose {
 		GameObject randomButton = GameObject.Find("-1");
 
 		switch (builder.Action) {
-		case GameBuilder.BuildMode.RemoteGuest:
+		case GameBuilder.BuildMode.Client:
 				randomButton.GetComponent<TextMesh>().text = "Any";
 			break;
-		case GameBuilder.BuildMode.RemoteHost:
+		case GameBuilder.BuildMode.Host:
 			randomButton.renderer.enabled = false;
 			randomButton.collider.enabled = false;
 			break;
