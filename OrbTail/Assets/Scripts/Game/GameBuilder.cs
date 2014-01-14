@@ -35,7 +35,48 @@ public class GameBuilder : MonoBehaviour {
     /// Fired when the game has been properly built
     /// </summary>
     public event DelegateGameBuilt EventGameBuilt;
-    
+
+    public void Restore()
+    {
+
+        //Disconnects everything from anythig :D
+        Network.Disconnect();
+
+        //Removes all player identities
+        foreach (PlayerIdentity identity in GetComponents<PlayerIdentity>())
+        {
+
+            identity.enabled = false;
+            Destroy(identity);
+
+        }
+
+        //Destroy the host builder (if any)
+        var host = GetComponent<HostBuilder>();
+
+        if (host != null)
+        {
+
+            host.enabled = false;
+            Destroy(host);
+
+        }
+
+        //Destroy the client builder (if any)
+        var client = GetComponent<ClientBuilder>();
+
+        if (client != null)
+        {
+
+            client.enabled = false;
+            Destroy(client);
+
+        }
+
+        this.enabled = true;
+
+    }
+
     public void NotifyGameBuilt()
     {
 
@@ -194,18 +235,6 @@ public class GameBuilder : MonoBehaviour {
         
     }
 
-    void OnDestroy()
-    {
-
-        if (Action != BuildMode.SinglePlayer)
-        {
-
-            NetworkBuilder.EventDisconnected -= NetworkBuilder_EventDisconnected;
-
-        }
-        
-    }
-
     void NetworkBuilder_EventDisconnected(object sender, string message)
     {
 
@@ -231,5 +260,6 @@ public class GameBuilder : MonoBehaviour {
     {
 
     }
+
 
 }

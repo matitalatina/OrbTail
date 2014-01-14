@@ -188,7 +188,11 @@ public class GUIMatchmaking : GUIMenuChoose {
 
 		// TODO: to fix... It doesn't work
 		if (target.tag == Tags.BackButton) {
-			//Application.LoadLevel("MenuChooseShip");
+
+            GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>().Restore();
+
+			Application.LoadLevel("MenuChooseShip");
+
 		}
 	}
 			
