@@ -248,18 +248,18 @@ public class Game : MonoBehaviour {
         //Deactivate the ship
         ship.SetActive(false);
 
-        StartCoroutine(ShipExplosion());
+        StartCoroutine(ShipExplosion(ship.transform.position));
 
         NotifyShipEliminated(ship);
         
     }
 
-    private IEnumerator ShipExplosion()
+    private IEnumerator ShipExplosion(Vector3 position)
     {
-        
-        GameObject explosion = GameObject.Instantiate(explosion_resource_, this.gameObject.transform.position, Quaternion.identity) as GameObject;
 
-        AudioSource.PlayClipAtPoint(explosion_sound_, transform.position);
+        GameObject explosion = GameObject.Instantiate(explosion_resource_, position, Quaternion.identity) as GameObject;
+
+        AudioSource.PlayClipAtPoint(explosion_sound_, position);
 
         // Delayed for GFX
         yield return new WaitForSeconds(1.0f);
