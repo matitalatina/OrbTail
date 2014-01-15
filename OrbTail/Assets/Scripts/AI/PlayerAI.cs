@@ -36,7 +36,6 @@ public class PlayerAI : MonoBehaviour {
 	
 	private void OnFieldOfViewEnter(object sender, Collider other) {
 		GameObject colObject = other.gameObject;
-		
 		if (target == null || IsPatrolling()) {
 			StopCoroutine("GiveUpHandler");
 

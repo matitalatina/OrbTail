@@ -35,7 +35,9 @@ public class OrbController : MonoBehaviour {
 	/// </summary>
 	/// <param name="destination">Target.</param>
 	public void LinkTo(GameObject target) {
-		// Unlink();
+		Unlink();
+		isLinked = true;
+
 		SpringJoint joint = this.gameObject.AddComponent<SpringJoint>();
 		joint.connectedBody = target.rigidbody;
 		joint.damper = dampSpring;
@@ -51,7 +53,6 @@ public class OrbController : MonoBehaviour {
 		joint.autoConfigureConnectedAnchor = false;
 		joint.anchor = Vector3.zero;
 		joint.connectedAnchor = Vector3.zero;
-		isLinked = true;
 		
 	}
 	
@@ -61,14 +62,10 @@ public class OrbController : MonoBehaviour {
 	/// </summary>
 	public void Unlink() {
 
-//		foreach (SpringJoint jointToRemove in this.GetComponents<SpringJoint>()) {
-//            //TODO: remove this 
-//
-//			Object.Destroy(jointToRemove);
-//		}
+		foreach (SpringJoint jointToRemove in this.GetComponents<SpringJoint>()) {
+			Destroy(jointToRemove);
+		}
 
-
-		Destroy(GetComponent<SpringJoint>());
 		isLinked = false;
 		
 	}

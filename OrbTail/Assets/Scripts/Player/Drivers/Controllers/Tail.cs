@@ -68,6 +68,13 @@ public class Tail : MonoBehaviour {
 	/// </summary>
 	/// <param name="orb">The orb to attach</param>
 	public void AttachOrb(GameObject orb) {
+
+		var orbController = orb.GetComponent<OrbController>();
+
+		if (orbController.IsAttached()) {
+			Debug.Log("Already attached!");
+			return;
+		}
         
         //First removes the randompowerattacher
         var power_attacher = orb.GetComponent<RandomPowerAttacher>();
@@ -101,7 +108,7 @@ public class Tail : MonoBehaviour {
 
         orbStack.Push(orb);
 
-        orb.GetComponent<OrbController>().LinkTo(target);
+		orbController.LinkTo(target);
 
 
         if (OnEventOrbAttached != null)
