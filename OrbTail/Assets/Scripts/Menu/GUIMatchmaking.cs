@@ -88,25 +88,8 @@ public class GUIMatchmaking : GUIMenuChoose {
         //Update the interface showing ready players
         var icon = player_icons[id];
 
-        Vector3 scale = kLocalScale;
-
-        Color color;
-
-        if( value ){
-
-            scale *= kReadyScale;
-            color = Color.white;
-
-        }else{
-
-            scale /= kReadyScale;
-            color = kDisabledColor;
-
-        }
-
-        iTween.ScaleTo(icon, scale, kScalingTime);
-
-        iTween.ColorTo(icon, color, kScalingTime);
+        icon.GetComponent<SmoothAnimation>().Color = value ? Color.white : kDisabledColor;
+        icon.GetComponent<SmoothAnimation>().Scale = value ? kLocalScale * kReadyScale : kLocalScale;
 
     }
 
@@ -115,7 +98,8 @@ public class GUIMatchmaking : GUIMenuChoose {
 
         var icon = player_icons[id];
 
-        iTween.ScaleTo(icon, Vector3.zero, kScalingTime);
+        icon.GetComponent<SmoothAnimation>().Color = kDisabledColor;
+        icon.GetComponent<SmoothAnimation>().Scale = Vector3.zero;
 
     }
 
@@ -129,10 +113,10 @@ public class GUIMatchmaking : GUIMenuChoose {
         icon.GetComponent<SpriteRenderer>().sprite = icon_resource;
 
         icon.renderer.material.color = kDisabledColor;
-
         icon.transform.localScale = Vector3.zero;
 
-        iTween.ScaleTo(icon, kLocalScale / kReadyScale, kScalingTime);
+        icon.GetComponent<SmoothAnimation>().Color = kDisabledColor;
+        icon.GetComponent<SmoothAnimation>().Scale = kLocalScale;
 
     }
 
@@ -185,8 +169,6 @@ public class GUIMatchmaking : GUIMenuChoose {
 
 		}
 	}
-			
-
 
 
 }
