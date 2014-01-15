@@ -69,7 +69,7 @@ public class OwnershipManager : MonoBehaviour {
         else
         {
 
-            networkView.RPC("RPCChangeOwnership", owner, target_view_id, view_id, true);
+            networkView.RPC("RPCChangeOwnership", RPCMode.All, target_view_id, view_id, false);
 
         }
         
