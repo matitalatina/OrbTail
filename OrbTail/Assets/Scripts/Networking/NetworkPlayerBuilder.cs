@@ -39,7 +39,7 @@ public abstract class NetworkPlayerBuilder : MonoBehaviour
     /// <summary>
     /// The id of this device
     /// </summary>
-    public int Id { get; private set; }
+    public int? Id { get; private set; }
 
     #region Event
 
@@ -176,6 +176,12 @@ public abstract class NetworkPlayerBuilder : MonoBehaviour
 
     public abstract void Setup();
 
+    void Start()
+    {
+
+        Id = null;
+
+    }
 
     /// <summary>
     /// Set the ready value for this client
@@ -212,7 +218,7 @@ public abstract class NetworkPlayerBuilder : MonoBehaviour
     }
 
     /// <summary>
-    /// Called when a new player has been registered
+    /// Called when a player has been unregistered
     /// </summary>
     [RPC]
     protected void RPCPlayerUnregistered(int id)
@@ -293,8 +299,8 @@ public abstract class NetworkPlayerBuilder : MonoBehaviour
         identity.CopyTo(player.GetComponent<PlayerIdentity>());
 
         //TODO: fix this
-        player.networkView.RPC("RPCSetGameId", RPCMode.All, Id);
-        player.GetComponent<GameIdentity>().Id = Id;
+        player.networkView.RPC("RPCSetGameId", RPCMode.All, Id.Value);
+        player.GetComponent<GameIdentity>().Id = Id.Value;
 
         Destroy(identity);
 
@@ -307,7 +313,7 @@ public abstract class NetworkPlayerBuilder : MonoBehaviour
         else
         {
 
-            RPCPlayerCreated(Id, player.networkView.viewID);
+            RPCPlayerCreated(Id.Value, player.networkView.viewID);
 
         }
         

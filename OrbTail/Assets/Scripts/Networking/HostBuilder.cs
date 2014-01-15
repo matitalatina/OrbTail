@@ -66,7 +66,7 @@ public class HostBuilder : NetworkPlayerBuilder
 
     void HostBuilder_EventPlayerUnregistered(object sender, int id)
     {
-
+        
         GetComponent<GameBuilder>().NotifyPlayerLeft(id);
         
     }
@@ -168,8 +168,13 @@ public class HostBuilder : NetworkPlayerBuilder
     void OnLevelWasLoaded(int level)
     {
 
-        ArenaLoaded(Id);
+        if (Registered)
+        {
 
+            ArenaLoaded(Id.Value);
+
+        }
+        
     }
 
     private void HostBuilder_EventErrorOccurred(object sender, string message)
