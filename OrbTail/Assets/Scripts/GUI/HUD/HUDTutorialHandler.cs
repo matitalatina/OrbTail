@@ -71,6 +71,7 @@ public class HUDTutorialHandler : GUIMenuChoose
 			GameObject tutorial = (GameObject) GameObject.Instantiate(Resources.Load(prefabPath));
 			tutorial.transform.parent = gameObject.transform;
 			tutorial.transform.localPosition = Vector3.zero;
+			tutorial.transform.localRotation = Quaternion.identity;
 		}
 
 		private void ActivateTab (string tabName)
