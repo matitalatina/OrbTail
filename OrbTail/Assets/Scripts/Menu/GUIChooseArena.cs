@@ -9,6 +9,7 @@ public class GUIChooseArena : GUIMenuChoose {
 		base.Start();
 
 		builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
+		manageRandomButton();
 	}
 
 
@@ -25,6 +26,20 @@ public class GUIChooseArena : GUIMenuChoose {
 		}
 		else if (target.tag == Tags.BackButton) {
 			Application.LoadLevel("MenuChooseGameMode");
+		}
+	}
+
+	private void manageRandomButton() {
+		GameObject randomButton = GameObject.Find("Arenas/Any");
+		
+		switch (builder.Action) {
+		case GameBuilder.BuildMode.Client:
+			randomButton.GetComponent<TextMesh>().text = "Any";
+			break;
+		case GameBuilder.BuildMode.Host:
+			randomButton.renderer.enabled = false;
+			randomButton.collider.enabled = false;
+			break;
 		}
 	}
 }

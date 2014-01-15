@@ -63,7 +63,6 @@ public class HUDTutorialHandler : GUIMenuChoose
 				}
 
 			GameObject tutorial = (GameObject) GameObject.Instantiate(Resources.Load(prefabPath));
-			Quaternion prevRotation = tutorial.transform.rotation;
 			tutorial.transform.parent = gameObject.transform;
 			tutorial.transform.localPosition = Vector3.zero;
 		}
