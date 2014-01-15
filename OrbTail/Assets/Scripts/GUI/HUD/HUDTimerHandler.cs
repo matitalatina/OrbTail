@@ -3,13 +3,15 @@ using System.Collections;
 
 public class HUDTimerHandler : MonoBehaviour {
 	private TextMesh textMesh;
-	private const float animationTime = 1f;
+	private const float animationTime = 0.4f;
 	private const float factorScale = 0.05f;
 	private GameBuilder builder;
+	private Vector3 originalScale;
 	private Game game;
 
 	// Use this for initialization
 	void Start () {
+		originalScale = gameObject.transform.localScale;
 		textMesh = gameObject.GetComponent<TextMesh>();
 		builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
 		builder.EventGameBuilt += OnGameBuilt;
@@ -43,9 +45,18 @@ public class HUDTimerHandler : MonoBehaviour {
 		textMesh.text = string.Format("{0:00}:{1:00}", min, sec);
 
 		if (timeLeft <= 10 && timeLeft > 0) {
-			iTween.ScaleFrom(gameObject, Vector3.one * factorScale, animationTime);
-			iTween.ColorFrom(gameObject, Color.red, animationTime);
+			iTween.ValueTo(this.gameObject, iTween.Hash(
+				"from", 0f,
+				"to", 1f,
+				"time", animationTime,
+				"easeType", iTween.EaseType.easeOutCirc,
+				"onUpdate","PulseTimer"));
 		}
+	}
+
+	private void PulseTimer(float value) {
+		gameObject.transform.localScale = Vector3.Lerp(Vector3.one * factorScale, originalScale, value);
+		textMesh.color = Color.Lerp(Color.white, Color.red, value);
 	}
 
 	private void OnEnd(object sender, GameObject winner, int info) {
