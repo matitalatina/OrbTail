@@ -8,7 +8,7 @@ public class HostFetcher : MonoBehaviour
 
     #region Events
 
-    public delegate void DelegateGameFound(object sender, bool arcade, bool longest_tail, bool elimination);
+    public delegate void DelegateGameFound(object sender, IEnumerable<int> game_modes);
 
     public event DelegateGameFound EventGameFound;
 
@@ -67,11 +67,17 @@ public class HostFetcher : MonoBehaviour
 
             if (EventGameFound != null)
             {
+                
+                HashSet<int> modes = new HashSet<int>();
 
-                EventGameFound(this,
-                               hosts_found_.Any((string[] h) => { return h[0] == GameModes.Arcade.ToString(); }),
-                               hosts_found_.Any((string[] h) => { return h[0] == GameModes.LongestTail.ToString(); }),
-                               hosts_found_.Any((string[] h) => { return h[0] == GameModes.Elimination.ToString(); }));
+                foreach (var host in hosts_found_)
+                {
+
+                    modes.Add(int.Parse(host[1]));
+
+                }
+
+                EventGameFound(this, modes);
 
             }
 
