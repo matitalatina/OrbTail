@@ -235,6 +235,29 @@ public class GameBuilder : MonoBehaviour {
         
     }
 
+    /// <summary>
+    /// Initializes the fetcher
+    /// </summary>
+    /// <returns></returns>
+    public HostFetcher SetupFetcher()
+    {
+
+        var fetcher = gameObject.AddComponent<HostFetcher>();
+
+        if( LocalMasterServer ){
+
+            fetcher.Fetch( LocalMasterServerAddress, LocalMasterServerPort, NATFacilitatorPort );
+
+        }else{
+
+            fetcher.Fetch();
+
+        }
+
+        return fetcher;
+        
+    }
+
     void NetworkBuilder_EventDisconnected(object sender, string message)
     {
 
@@ -260,6 +283,5 @@ public class GameBuilder : MonoBehaviour {
     {
 
     }
-
 
 }

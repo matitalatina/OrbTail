@@ -3,7 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class HostFetcher : MonoBehaviour {
+public class HostFetcher : MonoBehaviour
+{
+
+    #region Events
+
+    public delegate void DelegateGameFound(object sender, bool arcade, bool longest_tail, bool elimination);
+
+    public event DelegateGameFound EventGameFound;
+
+    #endregion 
 
     public void Fetch()
     {
@@ -26,6 +35,19 @@ public class HostFetcher : MonoBehaviour {
 
     }
 
+    public bool HasArena(int game_mode, string arena_name)
+    {
+
+        return hosts_found_.Any((string[] h) =>
+        {
+            
+            return h[0] == arena_name &&
+                   h[1] == game_mode.ToString();
+
+        });
+
+    }
+
     void OnMasterServerEvent(MasterServerEvent server_event)
     {
 
@@ -36,22 +58,33 @@ public class HostFetcher : MonoBehaviour {
 
             var all_hosts = MasterServer.PollHostList();
 
-            //Only non-full servers
-            hosts_found_ = new Stack<HostData>(all_hosts.Where((HostData h) =>
+            hosts_found_ = from host in all_hosts
+                           where host.connectedPlayers < host.playerLimit
+                           select host.gameName.Split(';');
+
+            if (EventGameFound != null)
             {
 
-                return h.connectedPlayers < h.playerLimit;
+                EventGameFound(this,
+                               hosts_found_.Any((string[] h) => { return h[0] == GameModes.Arcade.ToString(); }),
+                               hosts_found_.Any((string[] h) => { return h[0] == GameModes.LongestTail.ToString(); }),
+                               hosts_found_.Any((string[] h) => { return h[0] == GameModes.Elimination.ToString(); }));
 
-            }));
+            }
+
+        }
+        else {
+
+            Debug.LogError("No server!");
 
         }
 
     }
 
     /// <summary>
-    /// List of all hosts found so far
+    /// List of all hosts found so far arena-game mode
     /// </summary>
-    private Stack<HostData> hosts_found_;
+    private IEnumerable<string[]> hosts_found_;
     
 
 }
