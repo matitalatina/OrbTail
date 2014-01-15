@@ -481,7 +481,9 @@ public class Game : MonoBehaviour {
 	/// Restarts the game. Temporary method
 	/// </summary>
 	private IEnumerator RestartGame() {
-		yield return new WaitForSeconds(restart_time);
+		
+        yield return new WaitForSeconds(restart_time);
+
 		Destroy(GameObject.FindGameObjectWithTag(Tags.Master));
 
         GameObjectFactory.Instance.Purge();

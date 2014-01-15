@@ -14,12 +14,6 @@ public class HostFetcher : MonoBehaviour
 
     #endregion 
 
-    public void Purge()
-    {
-        hosts_found_ = null;
-
-    }
-
     public void Fetch()
     {
 
@@ -41,14 +35,17 @@ public class HostFetcher : MonoBehaviour
 
     }
 
-    public bool HasArena(int game_mode, string arena_name)
+    public bool HasArena(string arena_name)
     {
+
+        int game_mode = GetComponent<GameBuilder>().GameMode;
 
         return hosts_found_.Any((string[] h) =>
         {
             
             return h[0] == arena_name &&
-                   h[1] == game_mode.ToString();
+                   (h[1] == game_mode.ToString() ||
+                    game_mode == -1);
 
         });
 
