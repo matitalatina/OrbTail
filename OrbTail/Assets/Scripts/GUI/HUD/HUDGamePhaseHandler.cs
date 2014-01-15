@@ -7,10 +7,12 @@ public class HUDGamePhaseHandler : MonoBehaviour {
 	private TextMesh textMeshCountdown;
 	private Light mainLight;
 	private float initialLightPower = 0.01f;
+	private float blankOverlayFinalAlpha = 0.8f;
 	private int fontBigSize = 130;
 	private float standardLightPower;
 	private GameBuilder builder;
 	private Game game;
+	private GameObject blankOverlay;
 	
 	// Use this for initialization
 	void Start () {
@@ -22,6 +24,11 @@ public class HUDGamePhaseHandler : MonoBehaviour {
 
 		builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
 		builder.EventGameBuilt += OnGameBuilt;
+		blankOverlay = Instantiate(Resources.Load("Prefabs/HUD/BlankOverlay")) as GameObject;
+		blankOverlay.renderer.material.color = new Color(0,0,0,0);
+		blankOverlay.transform.parent = transform;
+		blankOverlay.transform.localPosition = Vector3.forward * 40f;
+		blankOverlay.SetActive(false);
 	}
 	
 	// Update is called once per frame
@@ -70,6 +77,8 @@ public class HUDGamePhaseHandler : MonoBehaviour {
 	}
 
 	private void OnGameOver(object sender, GameObject winner, int info) {
+		blankOverlay.SetActive(true);
+		iTween.FadeTo(blankOverlay, blankOverlayFinalAlpha, 2f);
 		textMeshCountdown.text = "Game Over";
 		iTween.ValueTo(this.gameObject, iTween.Hash(
 			"from", 0f,
