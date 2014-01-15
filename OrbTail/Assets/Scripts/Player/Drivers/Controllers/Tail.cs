@@ -69,6 +69,8 @@ public class Tail : MonoBehaviour {
 	/// <param name="orb">The orb to attach</param>
 	public void AttachOrb(GameObject orb) {
 
+        Debug.Log("Attaching something");
+
 		var orbController = orb.GetComponent<OrbController>();
 
 		if (orbController.IsAttached()) {
@@ -151,8 +153,7 @@ public class Tail : MonoBehaviour {
 
         var color = Color.Lerp(kOrbDeactiveColor, game_identity.Color, orbStack.Count / kOrbColorThreshold);
         myOrbMaterial.color = color;
-
-		
+        		
 	}
 
     private void DecolorizeOrbs(List<GameObject> orbs)
@@ -184,6 +185,9 @@ public class Tail : MonoBehaviour {
 	/// <returns>The list of the orbs detached. It can be less than the number of the passed parameter.</returns>
 	/// <param name="nOrbs">Number of orbs to deatch.</param>
 	public List<GameObject> DetachOrbs(int nOrbs) {
+
+        Debug.Log("Detaching something");
+
 
 		List<GameObject> detachedOrbs = new List<GameObject>();
 
