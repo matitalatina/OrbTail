@@ -14,6 +14,12 @@ public class HostFetcher : MonoBehaviour
 
     #endregion 
 
+    public void Purge()
+    {
+        hosts_found_ = null;
+
+    }
+
     public void Fetch()
     {
 

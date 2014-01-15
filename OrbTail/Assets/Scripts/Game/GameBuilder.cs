@@ -73,6 +73,19 @@ public class GameBuilder : MonoBehaviour {
 
         }
 
+        /*
+        //Destroy the fetcher
+        var fetcher = GetComponent<HostFetcher>();
+
+        if (fetcher != null)
+        {
+
+            fetcher.enabled = false;
+            Destroy(fetcher);
+
+        }
+        */
+
         this.enabled = true;
 
     }
@@ -242,7 +255,14 @@ public class GameBuilder : MonoBehaviour {
     public HostFetcher SetupFetcher()
     {
 
-        var fetcher = gameObject.AddComponent<HostFetcher>();
+        var fetcher = GetComponent<HostFetcher>();
+
+        if (fetcher == null)
+        {
+
+            fetcher = gameObject.AddComponent<HostFetcher>();
+
+        }
 
         if( LocalMasterServer ){
 
