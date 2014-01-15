@@ -7,6 +7,7 @@ public class GUIChooseGameMode : GUIMenuChoose {
 	private GameBuilder builder;
 	private Dictionary<string, GameObject> gameModeButtons = new Dictionary<string, GameObject>();
 	private HostFetcher hostFetcher;
+	private GameObject fetchMessage;
 	
 	// Use this for initialization
 	public override void Start () {
@@ -16,6 +17,9 @@ public class GUIChooseGameMode : GUIMenuChoose {
 		manageRandomButton();
 
 		if (builder.Action == GameBuilder.BuildMode.Client) {
+			fetchMessage = Instantiate(Resources.Load("Prefabs/Menu/MenuLabel")) as GameObject;
+			fetchMessage.GetComponent<TextMesh>().text = "looking for matches...";
+			fetchMessage.transform.position = new Vector3(0, -2, 0);
 			FetchGameModeButtons();
 			DisableAllGameModeButtons();
 			hostFetcher = builder.SetupFetcher();
@@ -60,6 +64,10 @@ public class GUIChooseGameMode : GUIMenuChoose {
 
 		if (game_modes.Count() > 0) {
 			gameModeButtons["-1"].SetActive(true);
+			fetchMessage.SetActive(false);
+		}
+		else {
+			fetchMessage.GetComponent<TextMesh>().text = "no matches are found...";
 		}
 
 		hostFetcher.EventGameFound -= OnEventGameFound;
