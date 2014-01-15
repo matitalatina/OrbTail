@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 public class GUIChooseGameMode : GUIMenuChoose {
+	private Color enabledButtonColor = new Color(0, 0, 0, 1f);
+	private Color disabledButtonColor = new Color(0, 0, 0, 0.1f);
 	private GameBuilder builder;
 	private Dictionary<string, GameObject> gameModeButtons = new Dictionary<string, GameObject>();
 	private HostFetcher hostFetcher;
@@ -68,11 +70,11 @@ public class GUIChooseGameMode : GUIMenuChoose {
 
 	private void OnEventGameFound(object sender, IEnumerable<int> game_modes) {
 		foreach (int gameMode in game_modes) {
-			gameModeButtons[gameMode.ToString()].SetActive(true);
+			setActiveButton(gameModeButtons[gameMode.ToString()], true);
 		}
 
 		if (game_modes.Count() > 0) {
-			gameModeButtons["-1"].SetActive(true);
+			setActiveButton(gameModeButtons["-1"], true);
 			fetchMessage.SetActive(false);
 		}
 		else {
@@ -90,8 +92,13 @@ public class GUIChooseGameMode : GUIMenuChoose {
 
 	private void DisableAllGameModeButtons() {
 		foreach (KeyValuePair<string, GameObject> pair in gameModeButtons) {
-			pair.Value.SetActive(false);
+			setActiveButton(pair.Value, false);
 		}
+	}
+
+	private void setActiveButton(GameObject button, bool activated) {
+		button.collider.enabled = activated;
+		button.GetComponent<TextMesh>().color = (activated ? enabledButtonColor :  disabledButtonColor);
 	}
 	
 }

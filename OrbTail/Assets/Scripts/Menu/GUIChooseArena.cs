@@ -3,6 +3,7 @@ using System.Collections;
 
 public class GUIChooseArena : GUIMenuChoose {
 	private GameBuilder builder;
+	private float disabledAlpha = 0.1f;
 
 	// Use this for initialization
 	public override void Start () {
@@ -60,7 +61,8 @@ public class GUIChooseArena : GUIMenuChoose {
 
 		foreach (GameObject arenaButton in GameObject.FindGameObjectsWithTag(Tags.ArenaSelector)) {
 			if (!hostFetcher.HasArena(arenaButton.name)) {
-				arenaButton.SetActive(false);
+				arenaButton.collider.enabled = false;
+				arenaButton.renderer.material.color = new Color(255, 255, 255, disabledAlpha);
 			}
 			else {
 				oneIsActive = true;
