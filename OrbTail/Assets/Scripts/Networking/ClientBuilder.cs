@@ -25,16 +25,6 @@ public class ClientBuilder : NetworkPlayerBuilder {
 
     }
 
-	// Use this for initialization
-	void Start () {
-
-	}
-
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
     void OnConnectedToServer()
     {
 
@@ -74,7 +64,7 @@ public class ClientBuilder : NetworkPlayerBuilder {
 
             Debug.Log("Fetching hosts...");
 
-            string arena_name = GetComponent<GameBuilder>().ArenaName;
+            var builder = GetComponent<GameBuilder>();
 
             var all_hosts = MasterServer.PollHostList();
 
@@ -82,10 +72,15 @@ public class ClientBuilder : NetworkPlayerBuilder {
             hosts_found_ = new Stack<HostData>(all_hosts.Where((HostData h) =>
             {
 
-                //TODO: filter by game mode
+                var bits = h.gameName.Split(';');
+
+                string host_arena = bits[0];
+                int host_game = int.Parse(bits[1]);
+
                 return h.connectedPlayers < h.playerLimit &&
-                       (h.gameName == arena_name ||
-                       arena_name == ""); 
+                       (builder.ArenaName == "" || builder.ArenaName == host_arena) &&
+                       (builder.GameMode == -1 || builder.GameMode == host_game);
+
             } ));
 
             Debug.Log("Found " + hosts_found_.Count() + " games out of " + all_hosts.Count());
@@ -127,8 +122,15 @@ public class ClientBuilder : NetworkPlayerBuilder {
         if (hosts_found_.Count > 0)
         {
 
+            var builder = GetComponent<GameBuilder>();
+
             var host = hosts_found_.Pop();
 
+            var bits = host.gameName.Split(';');
+
+            builder.ArenaName = bits[0];
+            builder.GameMode = int.Parse(bits[1]);
+            
             Debug.Log("Connecting...");
 
             Network.Connect(host);

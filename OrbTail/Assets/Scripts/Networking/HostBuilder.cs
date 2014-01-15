@@ -51,12 +51,11 @@ public class HostBuilder : NetworkPlayerBuilder
                                     GameBuilder.kServerPort,
                                     !Network.HavePublicAddress());
 
-
+        var builder = GetComponent<GameBuilder>();
 
         MasterServer.RegisterHost(GameBuilder.kGameTypeName,
-                                    GetComponent<GameBuilder>().ArenaName);
-
-
+                                    builder.ArenaName + ";" + builder.GameMode.ToString());
+        
     }
   
 	// Use this for initialization
