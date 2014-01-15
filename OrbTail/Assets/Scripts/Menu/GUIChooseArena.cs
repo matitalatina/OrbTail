@@ -10,6 +10,10 @@ public class GUIChooseArena : GUIMenuChoose {
 
 		builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
 		manageRandomButton();
+
+		if (builder.Action == GameBuilder.BuildMode.Client) {
+			ManageClientArenaButtons();
+		}
 	}
 
 
@@ -24,10 +28,17 @@ public class GUIChooseArena : GUIMenuChoose {
 			Application.LoadLevel("MenuChooseShip");
 			
 		}
+		else if (target.name == "Any") {
+			GameObject[] gameModesButtons = GameObject.FindGameObjectsWithTag(Tags.ArenaSelector);
+			int randomArenaNumber = Random.Range(0, gameModesButtons.Length - 1);
+			builder.ArenaName = gameModesButtons[randomArenaNumber].name;
+			Application.LoadLevel("MenuChooseShip");
+		}
 		else if (target.tag == Tags.BackButton) {
 			Application.LoadLevel("MenuChooseGameMode");
 		}
 	}
+
 
 	private void manageRandomButton() {
 		GameObject randomButton = GameObject.Find("Arenas/Any");
@@ -40,6 +51,24 @@ public class GUIChooseArena : GUIMenuChoose {
 			randomButton.renderer.enabled = false;
 			randomButton.collider.enabled = false;
 			break;
+		}
+	}
+
+	private void ManageClientArenaButtons() {
+		HostFetcher hostFetcher = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<HostFetcher>();
+		bool oneIsActive = false;
+
+		foreach (GameObject arenaButton in GameObject.FindGameObjectsWithTag(Tags.ArenaSelector)) {
+			if (!hostFetcher.HasArena(arenaButton.name)) {
+				arenaButton.SetActive(false);
+			}
+			else {
+				oneIsActive = true;
+			}
+		}
+
+		if (!oneIsActive) {
+			GameObject.Find("Arenas/Any").SetActive(false);
 		}
 	}
 }

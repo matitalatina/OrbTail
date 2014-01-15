@@ -1,8 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class GUIChooseGameMode : GUIMenuChoose {
 	private GameBuilder builder;
+	private Dictionary<string, GameObject> gameModeButtons = new Dictionary<string, GameObject>();
+	private HostFetcher hostFetcher;
 	
 	// Use this for initialization
 	public override void Start () {
@@ -10,6 +14,13 @@ public class GUIChooseGameMode : GUIMenuChoose {
 		builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
 
 		manageRandomButton();
+
+		if (builder.Action == GameBuilder.BuildMode.Client) {
+			FetchGameModeButtons();
+			DisableAllGameModeButtons();
+			hostFetcher = builder.SetupFetcher();
+			hostFetcher.EventGameFound += OnEventGameFound;
+		}
 	}
 
 
@@ -41,4 +52,29 @@ public class GUIChooseGameMode : GUIMenuChoose {
 			break;
 		}
 	}
+
+	private void OnEventGameFound(object sender, IEnumerable<int> game_modes) {
+		foreach (int gameMode in game_modes) {
+			gameModeButtons[gameMode.ToString()].SetActive(true);
+		}
+
+		if (game_modes.Count() > 0) {
+			gameModeButtons["-1"].SetActive(true);
+		}
+
+		hostFetcher.EventGameFound -= OnEventGameFound;
+	}
+
+	private void FetchGameModeButtons() {
+		foreach (GameObject arenaButton in GameObject.FindGameObjectsWithTag(Tags.GameModeSelector)) {
+			gameModeButtons.Add(arenaButton.name, arenaButton);
+		}
+	}
+
+	private void DisableAllGameModeButtons() {
+		foreach (KeyValuePair<string, GameObject> pair in gameModeButtons) {
+			pair.Value.SetActive(false);
+		}
+	}
+	
 }
