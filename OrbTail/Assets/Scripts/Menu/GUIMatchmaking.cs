@@ -76,30 +76,20 @@ public class GUIMatchmaking : GUIMenuChoose {
     {
 
         //Toggle the ready button
-        if (id == network_builder.Id)
+        if (network_builder.Id.HasValue &&
+            id == network_builder.Id.Value )
         {
-
-            if (value)
-            {
-
-                ready_button.SetActive(false);
-
-            }
-            else
-            {
-
-                ready_button.SetActive(true);
-
-            }
-
-            not_ready_button.SetActive( !ready_button.activeSelf );
-
+            
+            ready_button.SetActive( !value );
+            not_ready_button.SetActive( value );
+            
         }
 
         //Update the interface showing ready players
         var icon = player_icons[id];
 
         Vector3 scale = kLocalScale;
+
         Color color;
 
         if( value ){
@@ -150,6 +140,7 @@ public class GUIMatchmaking : GUIMenuChoose {
     {
 
         ready_button.SetActive(true);
+        not_ready_button.SetActive(false);
 
     }
 
@@ -186,7 +177,6 @@ public class GUIMatchmaking : GUIMenuChoose {
 			
 		}
 
-		// TODO: to fix... It doesn't work
 		if (target.tag == Tags.BackButton) {
 
             GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>().Restore();

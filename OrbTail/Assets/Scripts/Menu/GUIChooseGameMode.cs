@@ -39,6 +39,15 @@ public class GUIChooseGameMode : GUIMenuChoose {
 			
 		}
 		else if (target.tag == Tags.BackButton) {
+
+            if (hostFetcher != null)
+            {
+
+                hostFetcher.enabled = false;
+                Destroy(hostFetcher);
+
+            }
+
 			Application.LoadLevel("MenuMain");
 		}
 	}
