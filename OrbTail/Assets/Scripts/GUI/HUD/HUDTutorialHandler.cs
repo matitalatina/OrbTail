@@ -6,7 +6,7 @@ using System.Linq;
 public class HUDTutorialHandler : GUIMenuChoose
 {
 		private GameBuilder builder;
-		private HUDPositionHandler HUDPositionHandler;
+		private HUDPositionHandler hudPositionHandler;
 		private List<GameObject> tabList;
 		private const string pathTutorial = "Prefabs/HUD/Tutorial/";
 		private const string arcadeTutorialPrefab = "TutorialArcade";
@@ -20,10 +20,7 @@ public class HUDTutorialHandler : GUIMenuChoose
 				base.Start ();
 		
 				builder = GameObject.FindGameObjectWithTag (Tags.Master).GetComponent<GameBuilder> ();
-				HUDPositionHandler = GameObject.FindGameObjectWithTag (Tags.HUD).GetComponent<HUDPositionHandler> ();
-				FetchGameModeTutorial();
-				tabList = new List<GameObject> (GameObject.FindGameObjectsWithTag (Tags.PageTutorial));
-				ActivateTab ("GameModeTab");
+				builder.EventGameBuilt += OnGameBuilt;
 
 		}
 	
@@ -33,7 +30,7 @@ public class HUDTutorialHandler : GUIMenuChoose
 
 				if (target.tag == Tags.MenuSelector) {
 						if (target.name == "Dismiss") {
-								HUDPositionHandler.enabled = true;
+								hudPositionHandler.enabled = true;
 								builder.PlayerReady ();
 								Destroy (gameObject);
 						} else if (target.name == "PowerUpButton") {
@@ -44,11 +41,20 @@ public class HUDTutorialHandler : GUIMenuChoose
 				}
 		}
 
+		private void OnGameBuilt(object sender) {
+			hudPositionHandler = GameObject.FindGameObjectWithTag (Tags.HUD).GetComponent<HUDPositionHandler> ();
+			FetchGameModeTutorial();
+			tabList = new List<GameObject> (GameObject.FindGameObjectsWithTag (Tags.PageTutorial));
+			ActivateTab ("GameModeTab");
+
+			builder.EventGameBuilt -= OnGameBuilt;
+		}
+
 		private void FetchGameModeTutorial()
 		{
 				string prefabPath = pathTutorial;
-
-				switch (builder.GameMode) {
+				Game game = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>();
+				switch (game.GameMode) {
 
 				case GameModes.Arcade:
 						prefabPath += arcadeTutorialPrefab;
