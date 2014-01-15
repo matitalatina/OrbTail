@@ -41,6 +41,9 @@ public class GUIMainMenu : GUIMenuChoose {
 		else if (target.name == "ExitButton") {
 			Application.Quit();
 		}
+		else if (target.name == "CreditsButton") {
+			Application.LoadLevel("MenuCredits");
+		}
 	}
 	
 	

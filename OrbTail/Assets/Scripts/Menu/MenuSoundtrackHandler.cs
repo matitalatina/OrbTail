@@ -5,6 +5,7 @@ public class MenuSoundtrackHandler : MonoBehaviour {
 	private const float battleSoundVolume = 0.3f;
 	private const float menuSoundVolume = 0.4f;
 	private const float fadeTime = 1f;
+	private const float longFadeTime = 4f;
 
 	private GameBuilder builder;
 	private GameObject battleSound;
@@ -35,7 +36,7 @@ public class MenuSoundtrackHandler : MonoBehaviour {
 	private void OnMatchEnd(object sender, GameObject winner, int info) {
 		iTween.AudioTo(battleSound, iTween.Hash(
 			"volume", 0f,
-			"time", fadeTime
+			"time", longFadeTime
 			));
 	}
 

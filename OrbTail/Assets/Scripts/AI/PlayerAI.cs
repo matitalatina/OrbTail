@@ -24,8 +24,8 @@ public class PlayerAI : MonoBehaviour {
 	private int minOrbsToStartFight = 5;
 	private float thresholdToGiveUp = 0.4f;
 	private float sqrCheckpointDistanceThreshold = 15f;
-	private float minTimeToGiveUp = 8f;
-	private float maxTimeToGiveUp = 15f;
+	private float minTimeToGiveUp = 20f;
+	private float maxTimeToGiveUp = 40f;
 
 	private HashSet<GameObject> checkpoints;
 	
