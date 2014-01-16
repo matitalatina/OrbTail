@@ -22,6 +22,9 @@ public class OwnershipMgr : MonoBehaviour {
 
 		var stack = view_id_table[player];
 
+		Debug.Log (player);
+		Debug.Log ("Null? " + player == null);
+
 		if( view_id_table.ContainsKey(player)){
 
 			Debug.LogError("OWNED! No player");
@@ -35,11 +38,7 @@ public class OwnershipMgr : MonoBehaviour {
 			
 		}
 
-		lock( stack ){
-
-			return stack.Pop();
-
-		}
+		return stack.Pop();
 
     }
 
@@ -75,6 +74,9 @@ public class OwnershipMgr : MonoBehaviour {
         if (!view_id_table.ContainsKey(player))
         {
 
+			Debug.Log ("Adding player " + player == null + "   " + player);
+
+
 			stack = new Stack<NetworkViewID>();
 
             view_id_table.Add(player, stack);
@@ -83,11 +85,7 @@ public class OwnershipMgr : MonoBehaviour {
 
 		stack = view_id_table[player];
 
-		lock( stack ){
-
-        	stack.Push(view_id);
-
-		}
+        stack.Push(view_id);
 
     }
 
