@@ -15,6 +15,8 @@ public class Tail : MonoBehaviour {
     private float detachForce = 0.06f;
     private float attachForce = 0.03f;
 
+    private OwnershipMgr ownership_mgr;
+
 	public delegate void DelegateOnOrbAttached(object sender, GameObject orb, GameObject ship);
 
     public delegate void DelegateOnOrbDetached(object sender, GameObject ship, int count);
@@ -50,6 +52,8 @@ public class Tail : MonoBehaviour {
         UpdateTailColor();
 
         game_identity.EventIdSet += game_identity_EventIdSet;
+
+        ownership_mgr = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<OwnershipMgr>();
 
 	}
 
@@ -114,10 +118,14 @@ public class Tail : MonoBehaviour {
         if (Network.isServer)
         {
 
-            networkView.RPC("RPCAttachOrb", 
-                            RPCMode.Others, 
-                            orb.networkView.viewID,
-                            GetComponent<OwnershipMgr>().FetchViewID(networkView.viewID.owner));
+            var old_id = orb.networkView.viewID;
+
+            orb.networkView.viewID = ownership_mgr.FetchViewID(networkView.viewID.owner);
+
+            networkView.RPC("RPCAttachOrb",
+                            RPCMode.Others,
+                            old_id,
+                            orb.networkView.viewID);
 
         }
 

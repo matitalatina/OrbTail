@@ -283,6 +283,13 @@ public class HostBuilder : NetworkPlayerBuilder
             if (ready_players_.Count == player_ids_.Count)
             {
 
+                for (int i = 0; i < kMaxViewId; i++)
+                {
+
+                    networkView.RPC("RPCSendViewID", RPCMode.All);
+
+                }
+
                 //Everyone loaded the arena, start intializing
                 ready_players_.Clear();
 
@@ -376,6 +383,8 @@ public class HostBuilder : NetworkPlayerBuilder
     private HashSet<int> ready_players_;
 
     private HashSet<NetworkPlayer> dismissed_tutorials_ = new HashSet<NetworkPlayer>();
+    
+    private const int kMaxViewId = 30;
 
     /// <summary>
     /// Is the host registered?

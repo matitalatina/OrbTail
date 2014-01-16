@@ -25,27 +25,31 @@ public class OwnershipMgr : MonoBehaviour {
     }
 
     [RPC]
-    private void SendViewID()
+    private void RPCSendViewID()
     {
+
+        Debug.Log("Sending crap");
 
         if (Network.isServer)
         {
 
-            ReceiveViewID(Network.player, Network.AllocateViewID());
+            RPCReceiveViewID(Network.player, Network.AllocateViewID());
 
         }
         else
         {
 
-            networkView.RPC("ReceiveViewID", RPCMode.Server, Network.AllocateViewID());
+            networkView.RPC("RPCReceiveViewID", RPCMode.Server,Network.player, Network.AllocateViewID());
 
         }
 
     }
 
     [RPC]
-    private void ReceiveViewID(NetworkPlayer player, NetworkViewID view_id)
+    private void RPCReceiveViewID(NetworkPlayer player, NetworkViewID view_id)
     {
+
+        Debug.Log("Receiving crap");
 
         if (!view_id_table.ContainsKey(player))
         {
