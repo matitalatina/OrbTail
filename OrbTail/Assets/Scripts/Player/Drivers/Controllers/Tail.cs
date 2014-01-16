@@ -5,8 +5,7 @@ using System.Collections.Generic;
 public class Tail : MonoBehaviour {
 
     private Stack<GameObject> orbStack = new Stack<GameObject>();
-    private OwnershipManager ownershipManager;
-
+    
     private GameIdentity game_identity = null;
     private float kOrbColorThreshold = 10;  //Number of orbs to have in order to have a full intensity tail
     private Color kOrbDeactiveColor;
@@ -45,9 +44,7 @@ public class Tail : MonoBehaviour {
 	void Start () {
 
         var game = GameObject.FindGameObjectWithTag(Tags.Game);
-		
-        ownershipManager = game.GetComponent<OwnershipManager>();
-       
+		       
         game_identity = GetComponent<GameIdentity>();
 
         UpdateTailColor();
@@ -70,11 +67,6 @@ public class Tail : MonoBehaviour {
 	public void AttachOrb(GameObject orb) {
 
 		var orbController = orb.GetComponent<OrbController>();
-
-		if (orbController.IsAttached()) {
-			Debug.Log("Already attached!");
-			return;
-		}
         
         //First removes the randompowerattacher
         var power_attacher = orb.GetComponent<RandomPowerAttacher>();
@@ -122,21 +114,15 @@ public class Tail : MonoBehaviour {
         if (Network.isServer)
         {
 
-            networkView.RPC("RPCAttachOrb", RPCMode.Others, orb.networkView.viewID);
+            networkView.RPC("RPCAttachOrb", 
+                            RPCMode.Others, 
+                            orb.networkView.viewID,
+                            GetComponent<OwnershipMgr>().FetchViewID(networkView.viewID.owner));
 
         }
 
         ColorizeOrb(orb);
-
-        //Acquire the ownership
-        if (networkView.isMine)
-        {
-
-            ownershipManager.AcquireOwnership(orb);
-
-        }
-
-               
+                       
 	}
 
     private void ColorizeOrb(GameObject orb)
@@ -169,13 +155,16 @@ public class Tail : MonoBehaviour {
     }
 
     [RPC]
-    private void RPCAttachOrb(NetworkViewID orb_view_id)
+    private void RPCAttachOrb(NetworkViewID orb_view_id, NetworkViewID new_view_id)
     {
 
-        AttachOrb(NetworkView.Find(orb_view_id).gameObject);
+        var orb = NetworkView.Find(orb_view_id).gameObject;
+
+        orb.networkView.viewID = new_view_id;
+
+        AttachOrb(orb);
 
     }
-
 
 	/// <summary>
 	/// Detachs the orbs.

@@ -363,16 +363,20 @@ public class Game : MonoBehaviour {
         var orbs = (from orb in disconnected_player.GetComponent<Tail>().DetachOrbs(int.MaxValue)
                     select orb);
 
-        //Restores the orbs ownership
-        var ownership_mgr = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<OwnershipManager>();
-
-        foreach (GameObject orb in orbs)
+        if (Network.isServer)
         {
 
-            ownership_mgr.RestoreOwnership(orb);
+            var ownership_mgr = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<OwnershipMgr>();
+
+            foreach (GameObject orb in orbs)
+            {
+
+                networkView.RPC("RPCChangeOwnership", RPCMode.All, orb.networkView.viewID, ownership_mgr.FetchViewID(Network.player));
+
+            }
 
         }
-
+        
         //Removes the disconnected player
         RemoveShip(disconnected_player);
 
@@ -542,6 +546,14 @@ public class Game : MonoBehaviour {
         } while (counter > 0);
 
         NotifyTick(counter);
+
+    }
+
+    [RPC]
+    private void RPCChangeOwnership(NetworkViewID old_view_id, NetworkViewID new_view_id)
+    {
+
+        NetworkView.Find(old_view_id).networkView.viewID = new_view_id;
 
     }
 
