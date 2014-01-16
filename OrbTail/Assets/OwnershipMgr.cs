@@ -20,7 +20,13 @@ public class OwnershipMgr : MonoBehaviour {
     public NetworkViewID FetchViewID(NetworkPlayer player)
     {
 
-        return view_id_table[player].Pop();
+		var stack = view_id_table[player];
+
+		lock( stack ){
+
+			return stack.Pop();
+
+		}
 
     }
 
@@ -51,14 +57,24 @@ public class OwnershipMgr : MonoBehaviour {
 
         Debug.Log("Receiving crap");
 
+		Stack<NetworkViewID> stack;
+
         if (!view_id_table.ContainsKey(player))
         {
 
-            view_id_table.Add(player, new Stack<NetworkViewID>());
+			stack = new Stack<NetworkViewID>();
+
+            view_id_table.Add(player, stack);
 
         }
 
-        view_id_table[player].Push(view_id);
+		stack = view_id_table[player];
+
+		lock( stack ){
+
+        	stack.Push(view_id);
+
+		}
 
     }
 
