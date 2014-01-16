@@ -22,6 +22,19 @@ public class OwnershipMgr : MonoBehaviour {
 
 		var stack = view_id_table[player];
 
+		if( view_id_table.ContainsKey(player)){
+
+			Debug.LogError("OWNED! No player");
+
+		}
+
+		
+		if( view_id_table[player].Count == 0){
+			
+			Debug.LogError("OWNED! No views");
+			
+		}
+
 		lock( stack ){
 
 			return stack.Pop();
