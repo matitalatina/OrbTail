@@ -14,6 +14,27 @@ public class OwnershipMgr : MonoBehaviour {
 	
 	}
     
+	public void StoreViewID(NetworkViewID view_id){
+
+		Stack<NetworkViewID> stack;
+
+		var player = view_id.owner;
+
+		if (!view_id_table.ContainsKey(player))
+		{
+			
+			stack = new Stack<NetworkViewID>();
+			
+			view_id_table.Add(player, stack);
+			
+		}
+		
+		stack = view_id_table[player];
+		
+		stack.Push(view_id);
+
+	}
+
     /// <summary>
     /// Return a free view ID owned by the given player
     /// </summary>
@@ -23,9 +44,8 @@ public class OwnershipMgr : MonoBehaviour {
 		var stack = view_id_table[player];
 
 		Debug.Log (player);
-		Debug.Log ("Null? " + player == null);
 
-		if( view_id_table.ContainsKey(player)){
+		if( !view_id_table.ContainsKey(player)){
 
 			Debug.LogError("OWNED! No player");
 
@@ -51,41 +71,23 @@ public class OwnershipMgr : MonoBehaviour {
         if (Network.isServer)
         {
 
-            RPCReceiveViewID(Network.player, Network.AllocateViewID());
+            RPCReceiveViewID(Network.AllocateViewID());
 
         }
         else
         {
 
-            networkView.RPC("RPCReceiveViewID", RPCMode.Server,Network.player, Network.AllocateViewID());
+            networkView.RPC("RPCReceiveViewID", RPCMode.Server, Network.AllocateViewID());
 
         }
 
     }
 
     [RPC]
-    private void RPCReceiveViewID(NetworkPlayer player, NetworkViewID view_id)
+    private void RPCReceiveViewID(NetworkViewID view_id)
     {
 
-        Debug.Log("Receiving crap");
-
-		Stack<NetworkViewID> stack;
-
-        if (!view_id_table.ContainsKey(player))
-        {
-
-			Debug.Log ("Adding player " + player == null + "   " + player);
-
-
-			stack = new Stack<NetworkViewID>();
-
-            view_id_table.Add(player, stack);
-
-        }
-
-		stack = view_id_table[player];
-
-        stack.Push(view_id);
+		StoreViewID(view_id);
 
     }
 

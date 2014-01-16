@@ -122,6 +122,8 @@ public class Tail : MonoBehaviour {
 
             orb.networkView.viewID = ownership_mgr.FetchViewID(networkView.viewID.owner);
 
+			ownership_mgr.StoreViewID( old_id );
+
             networkView.RPC("RPCAttachOrb",
                             RPCMode.Others,
                             old_id,
