@@ -44,6 +44,11 @@ public class Boost : Power
 
 			AudioSource.PlayClipAtPoint(launchSound, Owner.gameObject.transform.position, 0.2f);
 
+
+			if (SystemInfo.deviceType == DeviceType.Handheld) {
+				Handheld.Vibrate();
+			}
+
             return true;
         }
         else
