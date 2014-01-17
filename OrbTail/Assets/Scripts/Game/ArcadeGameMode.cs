@@ -14,7 +14,7 @@ public class ArcadeGameMode: BaseGameMode
 
     public const int kOrbAttachedScore = 10;
 
-    public const int kMinimumTailLength = 3;
+    public const int kMinimumTailLength = 0;
 
     public const int kAboveMinimumOrbScore = 5;
 
