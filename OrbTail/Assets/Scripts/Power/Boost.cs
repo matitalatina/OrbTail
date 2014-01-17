@@ -8,11 +8,13 @@ public class Boost : Power
     private float time_accumulator_to_reload = reload_power_time;
 	private float boost_force = 60.0f;
 	private AudioClip launchSound;
+	private GameObject activePlayer;
 
     private Deactivator deactivator;
 
     public Boost() : base(PowerGroups.Passive, float.MaxValue, "Boost") {
 		launchSound = Resources.Load<AudioClip>("Sounds/Powers/Boost");
+		activePlayer = GameObject.FindGameObjectWithTag(Tags.Game).GetComponent<Game>().ActivePlayer;
 	}
     
     public override float IsReady
@@ -42,11 +44,13 @@ public class Boost : Power
 
             Owner.GetComponent<Rigidbody>().AddForce(Owner.transform.forward * boost_force, ForceMode.Impulse);
 
-			AudioSource.PlayClipAtPoint(launchSound, Owner.gameObject.transform.position, 0.2f);
+			if (Owner == activePlayer) {
+				AudioSource.PlayClipAtPoint(launchSound, Owner.gameObject.transform.position, 0.2f);
 
 
-			if (SystemInfo.deviceType == DeviceType.Handheld) {
-				Handheld.Vibrate();
+				if (SystemInfo.deviceType == DeviceType.Handheld) {
+					Handheld.Vibrate();
+				}
 			}
 
             return true;
