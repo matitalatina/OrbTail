@@ -21,6 +21,11 @@ public class GUIMainMenu : GUIMenuChoose {
 		
 		single_player_button = GameObject.Find("SinglePlayerButton");
 
+		if (SystemInfo.deviceType == DeviceType.Handheld) {
+			Screen.sleepTimeout = SleepTimeout.SystemSetting;
+		}
+
+
 		
 	}
 
