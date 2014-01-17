@@ -121,7 +121,7 @@ public class LongestTailGameMode: BaseGameMode
         get
         {
 
-            return 180;
+            return 120;
 
         }
 
