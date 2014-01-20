@@ -30,12 +30,7 @@ public abstract class NetworkPlayerBuilder : MonoBehaviour
     /// Is the game loading the proper arena yet?
     /// </summary>
     public bool IsArenaLoading = false;
-    
-    /// <summary>
-    /// The delay between the last ready event and the actual match start
-    /// </summary>
-    public float MatchStartDelay{ get; set;}
-    
+        
     /// <summary>
     /// The id of this device
     /// </summary>

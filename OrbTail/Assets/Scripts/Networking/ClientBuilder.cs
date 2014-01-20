@@ -126,13 +126,13 @@ public class ClientBuilder : NetworkPlayerBuilder {
 
             var host = hosts_found_.Pop();
 
+            Debug.Log("Connecting to " + host.gameName);
+
             var bits = host.gameName.Split(';');
 
             builder.ArenaName = bits[0];
             builder.GameMode = int.Parse(bits[1]);
             
-            Debug.Log("Connecting...");
-
             Network.Connect(host);
 
         }

@@ -30,14 +30,31 @@ public class GUIChooseArena : GUIMenuChoose {
 			
 		}
 		else if (target.name == "Any") {
-			GameObject[] gameModesButtons = GameObject.FindGameObjectsWithTag(Tags.ArenaSelector);
-			int randomArenaNumber = Random.Range(0, gameModesButtons.Length - 1);
-			builder.ArenaName = gameModesButtons[randomArenaNumber].name;
+
+            if (builder.Action == GameBuilder.BuildMode.SinglePlayer)
+            {
+
+                GameObject[] gameModesButtons = GameObject.FindGameObjectsWithTag(Tags.ArenaSelector);
+                int randomArenaNumber = Random.Range(0, gameModesButtons.Length - 1);
+                builder.ArenaName = gameModesButtons[randomArenaNumber].name;
+
+            }
+            else if (builder.Action == GameBuilder.BuildMode.Client)
+            {
+
+                builder.ArenaName = "Any";
+
+            }
+            			
 			Application.LoadLevel("MenuChooseShip");
+
 		}
 		else if (target.tag == Tags.BackButton) {
+
 			Application.LoadLevel("MenuChooseGameMode");
+
 		}
+
 	}
 
 
