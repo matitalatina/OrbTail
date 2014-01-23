@@ -85,7 +85,7 @@ public class MissileBehavior : MonoBehaviour {
             if (collision.gameObject.tag == Tags.Ship)
             {
 
-                if (NetworkHelper.IsOwnerSide(networkView))
+                if (Network.peerType == NetworkPeerType.Disconnected)
                 {
 
                     OnImpact(collision.gameObject);
@@ -94,7 +94,7 @@ public class MissileBehavior : MonoBehaviour {
                 else
                 {
 
-                    networkView.RPC("RPCOnImpact", networkView.owner, collision.gameObject.networkView.viewID);
+                    networkView.RPC("RPCOnImpact", RPCMode.All, collision.gameObject.networkView.viewID);
 
                 }
 
@@ -132,12 +132,7 @@ public class MissileBehavior : MonoBehaviour {
 
         target.rigidbody.AddForce(transform.forward * explosionForce, ForceMode.Impulse);
 
-        if (NetworkHelper.IsOwnerSide(networkView))
-        {
-
-            RPCDestroyMissile();
-
-        }
+        StartCoroutine("DestroyMissile");
 
     }
 
@@ -147,16 +142,6 @@ public class MissileBehavior : MonoBehaviour {
 
         //Apply the force
         OnImpact(NetworkView.Find(target_id).gameObject);
-
-        //The owner will propagate the impact and request the missile destruction
-
-        if (networkView.isMine &&
-            NetworkHelper.IsConnected())
-        {
-
-            networkView.RPC("RPCOnImpact", RPCMode.Others, target_id);
-
-        }
 
     }
 
@@ -185,31 +170,19 @@ public class MissileBehavior : MonoBehaviour {
 
         Destroy(explosion);
 
-        if (NetworkHelper.IsOwnerSide(gameObject.networkView))
+        if (Network.peerType == NetworkPeerType.Disconnected)
         {
 
-            if (Network.peerType == NetworkPeerType.Disconnected)
-            {
-
-                Destroy(this.gameObject);
-
-            }
-            else
-            {
-
-                Network.Destroy(this.gameObject);
-
-            }        
+            Destroy(this.gameObject);
 
         }
-        else
+        else if (Network.peerType == NetworkPeerType.Server)
         {
 
-            //Disable it, the network will do the rest
-            this.gameObject.SetActive(false);
+            Network.Destroy(this.gameObject);
 
         }
-                
+
     }
 
 }

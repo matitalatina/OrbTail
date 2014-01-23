@@ -458,6 +458,8 @@ public class Game : MonoBehaviour {
     private void GameMode_EventEnd(BaseGameMode sender)
     {
 
+        GetComponent<PowerGenerator>().enabled = false;
+
         //Stops the coroutine
         StopCoroutine("UpdateGameTime");
 
