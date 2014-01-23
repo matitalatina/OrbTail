@@ -248,11 +248,7 @@ public class GameBuilder : MonoBehaviour {
         
     }
 
-    /// <summary>
-    /// Initializes the fetcher
-    /// </summary>
-    /// <returns></returns>
-    public HostFetcher SetupFetcher()
+    public HostFetcher GetFetcher()
     {
 
         var fetcher = GetComponent<HostFetcher>();
@@ -264,6 +260,19 @@ public class GameBuilder : MonoBehaviour {
 
         }
 
+        return fetcher;
+
+    }
+
+    /// <summary>
+    /// Initializes the fetcher
+    /// </summary>
+    /// <returns></returns>
+    public void SetupFetcher()
+    {
+
+        var fetcher = GetFetcher();
+
         if( LocalMasterServer ){
 
             fetcher.Fetch( LocalMasterServerAddress, LocalMasterServerPort, NATFacilitatorPort );
@@ -273,9 +282,7 @@ public class GameBuilder : MonoBehaviour {
             fetcher.Fetch();
 
         }
-
-        return fetcher;
-        
+                
     }
 
     void NetworkBuilder_EventDisconnected(object sender, string message)

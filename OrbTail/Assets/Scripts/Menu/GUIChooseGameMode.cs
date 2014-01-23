@@ -10,7 +10,8 @@ public class GUIChooseGameMode : GUIMenuChoose {
 	private Dictionary<string, GameObject> gameModeButtons = new Dictionary<string, GameObject>();
 	private HostFetcher hostFetcher;
 	private GameObject fetchMessage;
-	
+	private const float fetchDelay = 3.0f;
+
 	// Use this for initialization
 	public override void Start () {
 		base.Start();
@@ -19,15 +20,49 @@ public class GUIChooseGameMode : GUIMenuChoose {
 		manageRandomButton();
 
 		if (builder.Action == GameBuilder.BuildMode.Client) {
+
 			fetchMessage = Instantiate(Resources.Load("Prefabs/Menu/MenuLabel")) as GameObject;
-			fetchMessage.GetComponent<TextMesh>().text = "looking for matches...";
+		
 			fetchMessage.transform.position = new Vector3(0, -2, 0);
 			FetchGameModeButtons();
 			DisableAllGameModeButtons();
-			hostFetcher = builder.SetupFetcher();
+            hostFetcher = builder.GetFetcher();
 			hostFetcher.EventGameFound += OnEventGameFound;
+            hostFetcher.EventNoMaster += hostFetcher_EventNoMaster;
+
+            FetchHosts();
+
 		}
 	}
+
+    void hostFetcher_EventNoMaster(object sender)
+    {
+
+        fetchMessage.GetComponent<TextMesh>().text = "no master server...";
+
+    }
+
+    private void FetchHosts()
+    {
+
+        fetchMessage.GetComponent<TextMesh>().text = "looking for matches...";
+
+        builder.SetupFetcher();
+
+    }
+
+    private IEnumerator FetchHostDelayed()
+    {
+
+        yield return new WaitForSeconds(fetchDelay);
+
+        fetchMessage.GetComponent<TextMesh>().text = "retrying...";
+
+        yield return new WaitForSeconds(fetchDelay);
+
+        FetchHosts();
+
+    }
 
 
 	protected override void OnSelect (GameObject target)
@@ -36,7 +71,10 @@ public class GUIChooseGameMode : GUIMenuChoose {
 		{
 			
 			builder.GameMode = int.Parse(target.name);
-			
+
+            StopCoroutine("FetchHostDelayed");
+            hostFetcher.EventGameFound -= OnEventGameFound;
+
 			Application.LoadLevel("MenuChooseArena");
 			
 		}
@@ -50,8 +88,13 @@ public class GUIChooseGameMode : GUIMenuChoose {
 
             }
 
+            StopCoroutine("FetchHostDelayed");
+            hostFetcher.EventGameFound -= OnEventGameFound;
+
 			Application.LoadLevel("MenuMain");
+
 		}
+
 	}
 
 	private void manageRandomButton() {
@@ -74,14 +117,20 @@ public class GUIChooseGameMode : GUIMenuChoose {
 		}
 
 		if (game_modes.Count() > 0) {
-			setActiveButton(gameModeButtons["-1"], true);
+			
+            setActiveButton(gameModeButtons["-1"], true);
 			fetchMessage.SetActive(false);
+            hostFetcher.EventGameFound -= OnEventGameFound;
+
 		}
 		else {
-			fetchMessage.GetComponent<TextMesh>().text = "no matches are found...";
-		}
+			
+            fetchMessage.GetComponent<TextMesh>().text = "no matches found...";
 
-		hostFetcher.EventGameFound -= OnEventGameFound;
+            StartCoroutine(FetchHostDelayed());
+
+		}
+       	
 	}
 
 	private void FetchGameModeButtons() {

@@ -12,6 +12,11 @@ public class HostFetcher : MonoBehaviour
 
     public event DelegateGameFound EventGameFound;
 
+    public delegate void DelegateNoMaster(object sender);
+
+    public event DelegateNoMaster EventNoMaster;
+
+
     #endregion 
 
     public void Fetch()
@@ -50,6 +55,21 @@ public class HostFetcher : MonoBehaviour
         });
 
     }
+
+    void OnFailedToConnectToMasterServer(NetworkConnectionError info)
+    {
+        
+        Debug.Log("Could not connect to master server: " + info);
+
+        if (EventNoMaster != null)
+        {
+
+            EventNoMaster(this);
+
+        }
+
+    }
+
 
     void OnMasterServerEvent(MasterServerEvent server_event)
     {
