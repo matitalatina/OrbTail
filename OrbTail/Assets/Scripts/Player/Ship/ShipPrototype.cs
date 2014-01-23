@@ -73,8 +73,39 @@ public class ShipPrototype : MonoBehaviour {
     void Start()
     {
 
+        builder = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<GameBuilder>();
 
-
+        builder.EventGameBuilt += builder_EventGameBuilt;
+        
     }
 
+    void builder_EventGameBuilt(object sender)
+    {
+
+        //Colorize this ship
+        Material material = null;
+
+        foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
+        {
+
+            if (material == null)
+            {
+
+                material = renderer.material;
+                material.color = GetComponent<GameIdentity>().Color * 0.7f;
+
+            }
+
+            renderer.material = material;
+
+        }
+
+
+        builder.EventGameBuilt -= builder_EventGameBuilt;
+        
+    }
+
+    private GameBuilder builder;
+
+    
 }
