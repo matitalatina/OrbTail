@@ -13,7 +13,6 @@ public class MissileBehavior : MonoBehaviour {
     private const float timeToLive = 2.5f;
 	private const float smoothCurve = 10f;
 	private AudioClip explosionSound;
-    private bool destroying = false;
 
     public void SetTarget(GameObject target, GameObject owner)
     {
@@ -43,9 +42,11 @@ public class MissileBehavior : MonoBehaviour {
     void Start()
     {
 
-		if(NetworkHelper.IsOwnerSide(networkView))
+		if(NetworkHelper.IsServerSide())
 		{
+
 			StartCoroutine("DestroyMissileTTL");
+
 		}
 
 		explosionSound = Resources.Load<AudioClip>("Sounds/Powers/Explosion");
@@ -111,7 +112,18 @@ public class MissileBehavior : MonoBehaviour {
         //Delayed destrution
         yield return new WaitForSeconds(timeToLive);
 
-        RPCDestroyMissile();
+        if (Network.peerType == NetworkPeerType.Disconnected)
+        {
+
+            RPCDestroyMissile();
+
+        }
+        else
+        {
+
+            networkView.RPC("RPCDestroyMissile", RPCMode.All);
+
+        }
 
     }
 
@@ -152,24 +164,8 @@ public class MissileBehavior : MonoBehaviour {
     private void RPCDestroyMissile()
     {
 
-        if (!destroying)
-        {
+        StartCoroutine("DestroyMissile");
 
-            destroying = true;
-
-            StartCoroutine("DestroyMissile");
-
-            //The owner will destroy all others copies
-            if (networkView.isMine &&
-                NetworkHelper.IsConnected())
-            {
-
-                networkView.RPC("RPCDestroyMissile", RPCMode.Others);
-
-            }
-
-        }
-       
     }
 
     private IEnumerator DestroyMissile()
@@ -187,10 +183,33 @@ public class MissileBehavior : MonoBehaviour {
         // Delayed for GFX
         yield return new WaitForSeconds(1.0f);
 
-        //TODO: Fix this SH!T
         Destroy(explosion);
-        Destroy(this.gameObject);
-        
+
+        if (NetworkHelper.IsOwnerSide(gameObject.networkView))
+        {
+
+            if (Network.peerType == NetworkPeerType.Disconnected)
+            {
+
+                Destroy(this.gameObject);
+
+            }
+            else
+            {
+
+                Network.Destroy(this.gameObject);
+
+            }        
+
+        }
+        else
+        {
+
+            //Disable it, the network will do the rest
+            this.gameObject.SetActive(false);
+
+        }
+                
     }
 
 }

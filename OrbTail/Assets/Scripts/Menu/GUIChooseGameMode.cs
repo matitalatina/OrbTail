@@ -73,8 +73,14 @@ public class GUIChooseGameMode : GUIMenuChoose {
 			builder.GameMode = int.Parse(target.name);
 
             StopCoroutine("FetchHostDelayed");
-            hostFetcher.EventGameFound -= OnEventGameFound;
 
+            if (hostFetcher != null)
+            {
+
+                hostFetcher.EventGameFound -= OnEventGameFound;
+
+            }
+            
 			Application.LoadLevel("MenuChooseArena");
 			
 		}
@@ -89,7 +95,13 @@ public class GUIChooseGameMode : GUIMenuChoose {
             }
 
             StopCoroutine("FetchHostDelayed");
-            hostFetcher.EventGameFound -= OnEventGameFound;
+
+            if (hostFetcher != null)
+            {
+
+                hostFetcher.EventGameFound -= OnEventGameFound;
+
+            }
 
 			Application.LoadLevel("MenuMain");
 
