@@ -78,6 +78,7 @@ public class ClientBuilder : NetworkPlayerBuilder {
                 int host_game = int.Parse(bits[1]);
 
                 return h.connectedPlayers < h.playerLimit &&
+						h.comment == "open" &&
                        (builder.ArenaName == "Any" || builder.ArenaName == host_arena) &&
                        (builder.GameMode == -1 || builder.GameMode == host_game);
 

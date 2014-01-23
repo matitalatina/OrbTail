@@ -58,7 +58,7 @@ public class HostBuilder : NetworkPlayerBuilder
         Debug.Log("Registering " + game_name);
 
         MasterServer.RegisterHost(GameBuilder.kGameTypeName,
-                                  game_name);
+                                  game_name, "open");
 
 
         
@@ -227,7 +227,16 @@ public class HostBuilder : NetworkPlayerBuilder
 
             ready_players_.Clear();
 
+			var builder = GetComponent<GameBuilder>();
+			
+			var game_name = builder.ArenaName + ";" + builder.GameMode.ToString();
+			
+			Debug.Log("Registering " + game_name);
+			
+			MasterServer.RegisterHost(GameBuilder.kGameTypeName,
+			                          game_name, "closed");
 
+			Network.maxConnections = 0;
             //Every device should load the proper arena
             networkView.RPC("RPCLoadArena", RPCMode.All, GetComponent<GameBuilder>().ArenaName);
             

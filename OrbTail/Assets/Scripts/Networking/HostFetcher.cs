@@ -62,7 +62,7 @@ public class HostFetcher : MonoBehaviour
             var all_hosts = MasterServer.PollHostList();
 
             hosts_found_ = from host in all_hosts
-                           where host.connectedPlayers < host.playerLimit
+                           where host.connectedPlayers < host.playerLimit && host.comment == "open"
                            select host.gameName.Split(';');
 
             if (EventGameFound != null)
