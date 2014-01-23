@@ -73,7 +73,9 @@ public class EliminationGameMode: BaseGameMode
         }
 
         //We just need the first event
-        Game.EventStart -= game_EventStart;       
+        Game.EventStart -= game_EventStart;
+
+        start_of_match = true;
 
     }
 
@@ -115,6 +117,21 @@ public class EliminationGameMode: BaseGameMode
     private void game_EventTick(object sender, int time_left)
     {
 
+        if (start_of_match)
+        {
+
+            start_of_match = false;
+
+            foreach (var ship in Game.ShipsInGame)
+            {
+
+                NotifyShipScore(ship);
+
+            }
+
+
+        }
+
         if( !end_of_match &&
             (time_left <= 0 ||
              Game.ShipsInGame.Count() <= 1))
@@ -148,7 +165,14 @@ public class EliminationGameMode: BaseGameMode
 
     void tail_OnEventOrbAttached(object sender, GameObject orb, GameObject ship)
     {
-        
+
+        NotifyShipScore(ship);
+
+    }
+
+    void NotifyShipScore(GameObject ship)
+    {
+
         var identity = ship.GetComponent<GameIdentity>();
 
         identity.SetScore(ship.GetComponent<Tail>().GetOrbCount());
@@ -156,6 +180,8 @@ public class EliminationGameMode: BaseGameMode
     }
 
     private bool end_of_match = false;
+
+    private bool start_of_match = false;
 
 }
 
