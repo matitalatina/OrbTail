@@ -88,16 +88,21 @@ public class ShipPrototype : MonoBehaviour {
         foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
         {
 
-            if (material == null)
+            if (renderer.gameObject.tag.Equals(Tags.ShipDetail))
             {
 
-                material = renderer.material;
-                material.color = GetComponent<GameIdentity>().Color * 0.7f;
+                if (material == null)
+                {
+
+                    material = renderer.material;
+                    material.color = GetComponent<GameIdentity>().Color * 0.7f;
+
+                }
+
+                renderer.material = material;
 
             }
-
-            renderer.material = material;
-
+            
         }
 
 

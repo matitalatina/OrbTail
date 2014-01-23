@@ -15,6 +15,8 @@ public class Tags {
 	public const string MainLight = "MainLight";
 	public const string Master = "Master";
 
+    public const string ShipDetail = "ShipDetail";
+
 	/* Menu */
     public const string ShipSelector = "ShipSelector";
 	public const string ArenaSelector = "ArenaSelector";
@@ -24,5 +26,7 @@ public class Tags {
 	public const string PageTutorial = "PageTutorial";
 
 	public const string PowerButton = "PowerButton";
+
+    
 	
 }
