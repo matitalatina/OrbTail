@@ -8,6 +8,7 @@ public class GUIMatchmaking : GUIMenuChoose {
     private GameObject ready_button;
     private GameObject not_ready_button;
     private NetworkPlayerBuilder network_builder;
+    private GameObject error_message;
 
     private IList<GameObject> player_icons;
 
@@ -35,6 +36,9 @@ public class GUIMatchmaking : GUIMenuChoose {
 
         ready_button = GameObject.Find("ReadyButton");
         not_ready_button = GameObject.Find("NotReadyButton");
+        error_message = GameObject.Find("ErrorMessage");
+
+        error_message.SetActive(false);
 
         ready_button.SetActive(false);
         not_ready_button.SetActive(false);
@@ -50,22 +54,34 @@ public class GUIMatchmaking : GUIMenuChoose {
         network_builder.EventNoGame += network_builder_EventNoGame;
         network_builder.EventErrorOccurred += network_builder_EventErrorOccurred;
         network_builder.EventDisconnected += network_builder_EventDisconnected;
+
+        network_builder.EventErrorOccurred += network_builder_EventErrorOccurred;
+        network_builder.EventNoGame += network_builder_EventNoGame;
         
 	}
 
     void network_builder_EventDisconnected(object sender, string message)
     {
-        
+
+        error_message.GetComponent<TextMesh>().text = "disconnected";
+        error_message.SetActive(true);
+
     }
 
     void network_builder_EventErrorOccurred(object sender, string message)
     {
-        
+
+        error_message.GetComponent<TextMesh>().text = "error";
+        error_message.SetActive(true);
+
     }
 
     void network_builder_EventNoGame(object sender)
     {
-        
+
+        error_message.GetComponent<TextMesh>().text = "no game";
+        error_message.SetActive(true);
+
     }
 
     void network_builder_EventPlayerReady(object sender, int id, bool value)
