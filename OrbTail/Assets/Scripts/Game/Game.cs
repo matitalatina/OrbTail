@@ -338,57 +338,67 @@ public class Game : MonoBehaviour {
     {
 
         //This is called only on client-side
+        //If the end was fired we don't care about the server, we are going to terminate the match anyways
+        if (!event_end_fired_)
+        {
 
-        //Stops the coroutine
-        StopCoroutine("UpdateGameTime");
+            //Stops the coroutine
+            StopCoroutine("UpdateGameTime");
 
-        NotifyEnd(kInfoServerLeft);
+            NotifyEnd(kInfoServerLeft);
 
-        //Purges the instantiated objects
-        GameObjectFactory.Instance.Purge();
+            //Purges the instantiated objects
+            GameObjectFactory.Instance.Purge();
 
-        StartCoroutine("RestartGame");      
+            StartCoroutine("RestartGame");      
 
+        }
+        
     }
 
     void master_EventPlayerLeft(object sender, int id)
     {
 
-        //Restores the orbs
-        var disconnected_player = (from player in ShipsInGame
-                                   where player.GetComponent<GameIdentity>().Id == id
-                                   select player).First();
-
-        //Detaches all orbs from the player's tail
-        var orbs = (from orb in disconnected_player.GetComponent<Tail>().DetachOrbs(int.MaxValue)
-                    select orb);
-
-        if (Network.isServer)
+        if (!event_end_fired_)
         {
 
-            var ownership_mgr = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<OwnershipMgr>();
+            //Restores the orbs
+            var disconnected_player = (from player in ShipsInGame
+                                       where player.GetComponent<GameIdentity>().Id == id
+                                       select player).First();
 
-            foreach (GameObject orb in orbs)
+            //Detaches all orbs from the player's tail
+            var orbs = (from orb in disconnected_player.GetComponent<Tail>().DetachOrbs(int.MaxValue)
+                        select orb);
+
+            if (Network.isServer)
             {
 
-                networkView.RPC("RPCChangeOwnership", RPCMode.All, orb.networkView.viewID, ownership_mgr.FetchViewID(Network.player));
+                var ownership_mgr = GameObject.FindGameObjectWithTag(Tags.Master).GetComponent<OwnershipMgr>();
+
+                foreach (GameObject orb in orbs)
+                {
+
+                    networkView.RPC("RPCChangeOwnership", RPCMode.All, orb.networkView.viewID, ownership_mgr.FetchViewID(Network.player));
+
+                }
 
             }
 
-        }
-        
-        //Removes the disconnected player
-        RemoveShip(disconnected_player);
+            //Removes the disconnected player
+            RemoveShip(disconnected_player);
 
-        //Destroy the player who left
-        Network.RemoveRPCs(disconnected_player.networkView.owner);
-        Network.DestroyPlayerObjects(disconnected_player.networkView.owner);
-        
-        //There's only one player, he must have won
-        if (ShipsInGame.Count() <= 1)
-        {
+            //Destroy the player who left
+            Network.RemoveRPCs(disconnected_player.networkView.owner);
+            Network.DestroyPlayerObjects(disconnected_player.networkView.owner);
 
-            game_mode_.NotifyWin();
+            //There's only one player, he must have won
+            if (ShipsInGame.Count() <= 1)
+            {
+
+                game_mode_.NotifyWin();
+
+            }
 
         }
 
