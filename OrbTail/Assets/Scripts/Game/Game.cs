@@ -39,7 +39,6 @@ public class Game : MonoBehaviour {
 
     }
 
-    [RPC]
     private void NotifyEnd(int info)
     {
 
@@ -317,8 +316,14 @@ public class Game : MonoBehaviour {
         }
         
         //Ok the game has been built
+        if (NetworkHelper.IsServerSide())
+        {
 
-        game_mode_.EventWin += GameMode_EventEnd;
+            //Clients will rely on the server
+            game_mode_.EventWin += GameMode_EventEnd;
+
+        }
+        
         EventStart += Game_EventStart;
 
         EnableControls(false);
@@ -342,15 +347,17 @@ public class Game : MonoBehaviour {
         if (!event_end_fired_)
         {
 
+            GetComponent<PowerGenerator>().enabled = false;
+
             //Stops the coroutine
             StopCoroutine("UpdateGameTime");
+            StopCoroutine("UpdateCountdown");
+
+            EnableControls(false);
 
             NotifyEnd(kInfoServerLeft);
 
-            //Purges the instantiated objects
-            GameObjectFactory.Instance.Purge();
-
-            StartCoroutine("RestartGame");      
+            StartCoroutine("RestartGame");   
 
         }
         
@@ -468,28 +475,35 @@ public class Game : MonoBehaviour {
     private void GameMode_EventEnd(BaseGameMode sender)
     {
 
+        if (Network.isServer)
+        {
+
+            networkView.RPC("EndMatch", RPCMode.All);
+
+        }
+        else if(!Network.isClient)
+        {
+
+            EndMatch();
+
+        }
+
+    }
+
+    [RPC]
+    private void EndMatch(){
+
         GetComponent<PowerGenerator>().enabled = false;
 
         //Stops the coroutine
         StopCoroutine("UpdateGameTime");
+        StopCoroutine("UpdateCountdown");
 
         EnableControls(false);
 
-        //End of the game (only the server can declare the end of a match)
-        if (Network.isServer)
-        {
+        NotifyEnd(kInfoNone);
 
-            networkView.RPC("NotifyEnd", RPCMode.All, kInfoNone);
-
-        }
-        else
-        {
-
-            NotifyEnd(kInfoNone);
-
-        }
-
-		StartCoroutine("RestartGame");
+        StartCoroutine("RestartGame");
 
     }
 
@@ -575,8 +589,15 @@ public class Game : MonoBehaviour {
                 networkView.RPC("RPCSyncTime", RPCMode.Others, game_time_counter);
 
             }
+            else if (Network.isClient)
+            {
 
-        } while (game_time_counter > 0);
+                //This should prevent the end of the match to be fired from clients
+                game_time_counter = Mathf.Max(1.0f, game_time_counter);
+
+            }
+
+        } while (!(NetworkHelper.IsServerSide() && game_time_counter <= 0));
 
         NotifyTick(0);
 
