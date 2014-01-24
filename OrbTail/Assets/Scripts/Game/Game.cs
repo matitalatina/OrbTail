@@ -540,20 +540,26 @@ public class Game : MonoBehaviour {
     private IEnumerator UpdateGameTime()
     {
 
-        int counter = game_mode_.Duration;
+        float counter = game_mode_.Duration;
+
+        float beg, end;
 
         do
         {
 
-            NotifyTick(counter);
+            NotifyTick((int)counter);
+
+            beg = Time.realtimeSinceStartup;
 
             yield return new WaitForSeconds(1);
 
-            counter--;
+            end = Time.realtimeSinceStartup;
+
+            counter -= (end - beg);
 
         } while (counter > 0);
 
-        NotifyTick(counter);
+        NotifyTick(0);
 
     }
 
