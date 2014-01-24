@@ -125,6 +125,8 @@ public abstract class NetworkPlayerBuilder : MonoBehaviour
     protected void NotifyErrorOccurred(string message)
     {
 
+        Debug.Log(message);
+
         if (EventErrorOccurred != null)
         {
 
@@ -156,6 +158,8 @@ public abstract class NetworkPlayerBuilder : MonoBehaviour
 
     protected void NotifyNoGame()
     {
+
+        Debug.Log("No game!");
 
         if (EventNoGame != null)
         {
