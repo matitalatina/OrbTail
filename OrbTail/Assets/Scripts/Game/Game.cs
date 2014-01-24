@@ -534,20 +534,22 @@ public class Game : MonoBehaviour {
         
     }
 
+    float game_time_counter;
+
     /// <summary>
     /// Used to update the game time
     /// </summary>
     private IEnumerator UpdateGameTime()
     {
 
-        float counter = game_mode_.Duration;
+        game_time_counter = game_mode_.Duration;
 
         float beg, end;
 
         do
         {
 
-            NotifyTick((int)counter);
+            NotifyTick((int)game_time_counter);
 
             beg = Time.realtimeSinceStartup;
 
@@ -555,11 +557,26 @@ public class Game : MonoBehaviour {
 
             end = Time.realtimeSinceStartup;
 
-            counter -= (end - beg);
+            game_time_counter -= (end - beg);
 
-        } while (counter > 0);
+            if (Network.isServer)
+            {
+
+                networkView.RPC("RPCSyncTime", RPCMode.Others, game_time_counter);
+
+            }
+
+        } while (game_time_counter > 0);
 
         NotifyTick(0);
+
+    }
+
+    [RPC]
+    private void RPCSyncTime(float time)
+    {
+
+        game_time_counter = time;
 
     }
 
