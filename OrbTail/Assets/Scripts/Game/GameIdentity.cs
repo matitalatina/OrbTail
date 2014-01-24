@@ -126,9 +126,16 @@ public class GameIdentity : MonoBehaviour {
 
         NotifyScore(score);
 
+        if (Network.isServer)
+        {
+
+            networkView.RPC("SetScore", RPCMode.Others, Score);
+
+        }
 
     }
 
+    [RPC]
     public void SetScore(int score)
     {
 
@@ -137,6 +144,13 @@ public class GameIdentity : MonoBehaviour {
         Score = score;
 
         NotifyScore(delta);
+
+        if (Network.isServer)
+        {
+
+            networkView.RPC("SetScore", RPCMode.Others, Score);
+
+        }
 
     }
 
