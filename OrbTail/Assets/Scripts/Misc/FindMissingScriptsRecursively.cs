@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
-using UnityEditor;
+//using UnityEditor;
+
+/*
 public class FindMissingScriptsRecursively : EditorWindow 
 {
+
 	static int go_count = 0, components_count = 0, missing_count = 0;
 	
 	[MenuItem("Window/FindMissingScriptsRecursively")]
@@ -57,4 +60,7 @@ public class FindMissingScriptsRecursively : EditorWindow
 			FindInGO(childT.gameObject);
 		}
 	}
+     
 }
+
+*/

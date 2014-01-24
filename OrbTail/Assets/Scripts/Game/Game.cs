@@ -506,16 +506,22 @@ public class Game : MonoBehaviour {
     private IEnumerator UpdateCountdown()
     {
 
-        int counter = CountdownDuration;
+        float counter = CountdownDuration;
+
+        float beg, end;
 
         do
         {
 
-            NotifyStart(counter);
+            NotifyStart((int)counter);
+
+            beg = Time.realtimeSinceStartup;
 
             yield return new WaitForSeconds(1);
 
-            counter--;
+            end = Time.realtimeSinceStartup;
+
+            counter -= (end - beg);
 
         } while (counter > 0);
 
