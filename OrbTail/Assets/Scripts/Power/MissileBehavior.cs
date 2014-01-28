@@ -81,8 +81,9 @@ public class MissileBehavior : MonoBehaviour {
 
 		if(NetworkHelper.IsServerSide())
         {
+			GameObject objectCollided = collision.gameObject;
 
-            if (collision.gameObject.tag == Tags.Ship)
+			if (objectCollided.tag == Tags.Ship && objectCollided != Owner)
             {
 
                 if (Network.peerType == NetworkPeerType.Disconnected)
