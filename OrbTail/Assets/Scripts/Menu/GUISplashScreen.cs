@@ -26,6 +26,8 @@ public class GUISplashScreen : MonoBehaviour {
 
 	private IEnumerator changeSecondSplash() {
 		yield return new WaitForSeconds(timeOfSplash);
+		polimi.renderer.enabled = true;
+		menteZero.renderer.enabled = true;
 		iTween.FadeTo(radiance, 0f, fadeTime);
 		iTween.FadeTo(polimi, 1f, fadeTime);
 		iTween.FadeTo(menteZero, 1f, fadeTime);
